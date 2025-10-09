@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:linglong_store_flutter/pages/downloading_page/downloading_page.dart';
+import 'package:linglong_store_flutter/pages/main_pages/downloading_page/downloading_page.dart';
 import 'package:linglong_store_flutter/pages/main_pages/about_page/about_page.dart';
 import 'package:linglong_store_flutter/pages/main_pages/all_apps_page/all_apps_page.dart';
 import 'package:linglong_store_flutter/pages/main_pages/application_management/application_management.dart';
