@@ -1,16 +1,11 @@
-# linglong_store_flutter
+# 玲珑应用商店极速版
 
-A new Flutter project.
+跟官方的玲珑应用商店不同,这个玲珑商店砍掉了所有不必要的信息展示和功能,保留最简单的应用管理与升级功能,注重超快的启动速度与极致专注的体验
 
-## Getting Started
+当前使用的技术栈:
 
-This project is a starting point for a Flutter application.
+Flutter版本: 3.35.4
 
-A few resources to get you started if this is your first Flutter project:
+Dart版本: 3.9.2
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+宿主Linux发行版: Fedora GNU/Linux 42 x86-64

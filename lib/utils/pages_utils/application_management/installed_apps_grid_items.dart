@@ -77,16 +77,10 @@ class InstalledAppsGridItems {
                   Hero(
                     tag: "InstalledAppsGridItems_${installed_app_info[index].id}",
                     // 显示图片必须用FutureBuilder,不要因为加载图片延缓整个页面加载
-                    child: Image(
-                      width: 80,
-                      height: 80,
-                      image: ResizeImage(
-                        FastCachedImageProvider(installed_app_info[index].Icon!),
-                        width: 128,
-                        height: 128,
-                      ),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
+                    child: FastCachedImage(
+                      url: installed_app_info[index].Icon!,
+                      height: 80,width: 80,
+                      loadingBuilder: (context, loadingProgress) {
                         return Center(
                           child: SizedBox(
                             height: 80,

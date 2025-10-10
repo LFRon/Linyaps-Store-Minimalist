@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/application_management/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/application_management/installed_apps_grid_items.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/application_management/upgradable_app_grid_item.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/upgrade_all_button.dart';
@@ -105,7 +105,9 @@ class AppsManagementPageState extends State<AppsManagementPage> {
         }
       if (mounted)
         {
-          Provider.of<ApplicationState>(context,listen: false).updateInstalledAppsList(newAppsList);
+          setState(() {
+            Provider.of<ApplicationState>(context,listen: false).updateInstalledAppsList(newAppsList);
+          });
         }
       return;
     }
@@ -208,14 +210,16 @@ class AppsManagementPageState extends State<AppsManagementPage> {
 
         // 更新已安装的应用信息
         // await updateInstalledAppsList();
-        await setPageLoaded();
+        
         // 再更新应用图标
+        await setPageLoaded();
         await updateInstalledAppsIcon();
+        
       });
       // 再暴力异步加载可更新应用信息
       Future.delayed(Duration.zero).then((_) async {
         // 获取应用更新详情
-        // await updateUpgradableAppsList();
+        await ApplicationState().updateUpgradableAppsList_Online();
         // 设置可更新应用信息已完全加载
         setUpgradableAppLoaded();
       });

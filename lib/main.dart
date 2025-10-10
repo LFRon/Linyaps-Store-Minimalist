@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/application_management/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -32,6 +32,14 @@ void main() async {
   await appGlobalInfo.updateInstalledAppsList_Online();
 
   // 如果网络连接正常就后台加载应用可更新信息
+  Future.delayed(Duration.zero).then((_) async {
+    if (await CheckInternetConnectionStatus().staus_is_good())
+      {
+        await appGlobalInfo.updateInstalledAppsList_Online();
+      }
+  });
+
+  // 再加载应用升级信息
   Future.delayed(Duration.zero).then((_) async {
     if (await CheckInternetConnectionStatus().staus_is_good())
       {

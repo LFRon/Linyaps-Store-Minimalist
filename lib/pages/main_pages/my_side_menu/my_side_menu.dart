@@ -72,6 +72,15 @@ class _MySideMenuState extends State<MySideMenu> {
       borderRadius: 20,
       sideBarWidth: 190, 
       widthSwitch: 100,
+      // 强制指定字体用于修复Linux ARM下CJK字体渲染问题
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontFamily: "HarmonyOS Sans",
+        fontFamilyFallback: [
+          'Noto Color Emoji',
+        ],
+        fontSize: 16,
+      ),
       onTap: (page){
         try {
           pageController.jumpToPage(page);
