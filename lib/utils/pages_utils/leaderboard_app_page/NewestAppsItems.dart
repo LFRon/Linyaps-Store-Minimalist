@@ -66,7 +66,7 @@ class NewestAppGridItems {
                         children: [
                           // 先显示图片
                           Hero(
-                            tag: "NewestAppsGridItems_${appinfo.id}",
+                            tag: "NewestAppsGridItems_${appinfo.id}_${appinfo.version}",
                             child: FastCachedImage(
                               url: appinfo.Icon==null?"":appinfo.Icon!,
                               loadingBuilder: (context, url) => Center(
