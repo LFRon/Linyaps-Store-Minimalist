@@ -79,6 +79,7 @@ class InstalledAppsGridItems {
                     // 显示图片必须用FutureBuilder,不要因为加载图片延缓整个页面加载
                     child: FastCachedImage(
                       url: installed_app_info[index].Icon!,
+                      key: ValueKey('${installed_app_info[index].name}_${installed_app_info[index].IconUpdated}'),
                       height: 80,width: 80,
                       loadingBuilder: (context, loadingProgress) {
                         return Center(

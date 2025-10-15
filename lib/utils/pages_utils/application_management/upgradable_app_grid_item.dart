@@ -93,6 +93,8 @@ class UpgradableAppListItems {
                               // 如果图片无法加载就使用默认玲珑图标
                               errorBuilder: (context, error, stackTrace) => Center(
                                 child: Image(
+                                  height: 70,
+                                  width: 70,
                                   image: AssetImage(
                                     'assets/images/linyaps-generic-app.png',
                                   ),

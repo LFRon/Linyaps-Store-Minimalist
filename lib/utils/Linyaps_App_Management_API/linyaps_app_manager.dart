@@ -48,6 +48,7 @@ class LinyapsAppManagerApi {
               description: i['info']['description'], 
               arch: i['info']['arch'][0],
               Icon: IconUrl,
+              IconUpdated: 0,
             ),
           );
         }

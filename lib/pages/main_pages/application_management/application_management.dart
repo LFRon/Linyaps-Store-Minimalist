@@ -100,13 +100,14 @@ class AppsManagementPageState extends State<AppsManagementPage> {
               description: i.description, 
               arch: i.arch,
               Icon: cur_app_icon,
+              IconUpdated: 1,     // 设置图片已加载过
             )
           );
         }
       if (mounted)
         {
           setState(() {
-            Provider.of<ApplicationState>(context,listen: false).updateInstalledAppsList(newAppsList);
+            context.read<ApplicationState>().updateInstalledAppsList(newAppsList);
           });
         }
       return;
@@ -209,7 +210,7 @@ class AppsManagementPageState extends State<AppsManagementPage> {
       Future.delayed(Duration.zero).then((_) async {
 
         // 更新已安装的应用信息
-        // await updateInstalledAppsList();
+        await updateInstalledAppsList();
         
         // 再更新应用图标
         await setPageLoaded();
