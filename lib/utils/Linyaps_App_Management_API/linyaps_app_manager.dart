@@ -39,9 +39,11 @@ class LinyapsAppManagerApi {
       dynamic i;
       // 初始化待返回临时对象
       List<LinyapsPackageInfo> returnItems = [];
+      // 开始遍历本地的应用安装信息
       for (i in linyapsLocalInfo['layers'])
         {
           String IconUrl = "";
+          // 先检查已知的应用列表是否为空省去不必要的循环
           if (already_get_list.isEmpty)
             {
               returnItems.add(
@@ -56,9 +58,10 @@ class LinyapsAppManagerApi {
                 ),
               );
             }
-          else    // 如果已安装应用列表已初始化过则对比版本号是否发生变化
+          // 如果已安装应用列表已初始化过则对比版本号是否发生变化
+          else    
             {
-              // 看应用是否存在
+              // 先检查应用是否存在
               dynamic existingApp = already_get_list.firstWhere(
                 (app) => app.id == i['info']['id'],
                 orElse: () => LinyapsPackageInfo(
