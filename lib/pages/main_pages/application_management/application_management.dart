@@ -78,7 +78,7 @@ class AppsManagementPageState extends State<AppsManagementPage> {
   // 获取所有应用
   Future <void> updateInstalledAppsList () async 
     {
-      List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps();
+      List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(installed_apps_list);
       // 更新应用安装信息
       Provider.of<ApplicationState>(context,listen: false).updateInstalledAppsList(get_installed_apps);
       return;

@@ -29,13 +29,13 @@ void main() async {
   ApplicationState appGlobalInfo = ApplicationState();
 
   // 初始化统计应用安装信息
-  await appGlobalInfo.updateInstalledAppsList_Online();
+  await appGlobalInfo.updateInstalledAppsList_Online([]);
 
   // 如果网络连接正常就后台加载应用可更新信息
   Future.delayed(Duration.zero).then((_) async {
     if (await CheckInternetConnectionStatus().staus_is_good())
       {
-        await appGlobalInfo.updateInstalledAppsList_Online();
+        await appGlobalInfo.updateInstalledAppsList_Online([]);
       }
   });
 

@@ -27,9 +27,9 @@ class ApplicationState extends ChangeNotifier {
     }
 
   // 更新本地应用安装详情方法
-  Future <void> updateInstalledAppsList_Online () async 
+  Future <void> updateInstalledAppsList_Online (List <LinyapsPackageInfo> already_get_list) async 
     {
-      List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps();
+      List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(already_get_list);
       // 更新对应变量并触发页面重构
       _installedAppsList = get_installed_apps;
       notifyListeners();

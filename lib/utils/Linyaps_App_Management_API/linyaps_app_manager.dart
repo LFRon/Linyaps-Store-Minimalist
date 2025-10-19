@@ -27,7 +27,9 @@ class LinyapsAppManagerApi {
     }
 
   // 返回已经安装的应用抽象类列表
-  Future <List<LinyapsPackageInfo>> get_installed_apps () async
+  // 需要加入already_get_list是让重新扫描已安装应用时先获取当前已经安装的应用信息
+  // 然后没有的再往里加
+  Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async
     {
       // 先异步获取玲珑本地信息
       dynamic linyapsLocalInfo = await LinyapsCliHelper().get_linyaps_all_local_info();
@@ -40,17 +42,81 @@ class LinyapsAppManagerApi {
       for (i in linyapsLocalInfo['layers'])
         {
           String IconUrl = "";
-          returnItems.add(
-            LinyapsPackageInfo(
-              id: i['info']['id'], 
-              name: i['info']['name'], 
-              version: i['info']['version'], 
-              description: i['info']['description'], 
-              arch: i['info']['arch'][0],
-              Icon: IconUrl,
-              IconUpdated: 0,
-            ),
-          );
+          if (already_get_list.isEmpty)
+            {
+              returnItems.add(
+                LinyapsPackageInfo(
+                  id: i['info']['id'], 
+                  name: i['info']['name'], 
+                  version: i['info']['version'], 
+                  description: i['info']['description'], 
+                  arch: i['info']['arch'][0],
+                  Icon: IconUrl,     // 此时图标链接为空
+                  IconUpdated: 0,     // 设置图标未更新
+                ),
+              );
+            }
+          else    // 如果已安装应用列表已初始化过则对比版本号是否发生变化
+            {
+              // 看应用是否存在
+              dynamic existingApp = already_get_list.firstWhere(
+                (app) => app.id == i['info']['id'],
+                orElse: () => LinyapsPackageInfo(
+                  id: '',     // 找不到就返回空对象,下面检测也用这个空id作为识别
+                  name: '', 
+                  version: '', 
+                  description: '', 
+                  arch: '',
+                )
+              );
+              // 如果应用没有录入就进行录入
+              if (existingApp.id == '')
+                {
+                  returnItems.add(
+                    LinyapsPackageInfo(
+                      id: i['info']['id'], 
+                      name: i['info']['name'], 
+                      version: i['info']['version'], 
+                      description: i['info']['description'], 
+                      arch: i['info']['arch'][0],
+                      Icon: IconUrl,     // 此时图标链接为空
+                      IconUpdated: 0,     // 设置图标未更新
+                    ),
+                  );
+                }
+              // 如果发现录入了,就检查版本是否一致,不一致就更新版本
+              else
+                {
+                  if (existingApp.version != i['info']['version'])
+                    {
+                      returnItems.add(
+                        LinyapsPackageInfo(
+                          id: i['info']['id'], 
+                          name: i['info']['name'], 
+                          version: existingApp.version, 
+                          description: i['info']['description'], 
+                          arch: i['info']['arch'][0],
+                          Icon: existingApp.Icon,     // 此时图标链接为空
+                          IconUpdated: 1,     // 设置图标未更新
+                        ),
+                      );
+                    }
+                  else
+                    {
+                      returnItems.add(
+                        LinyapsPackageInfo(
+                          id: i['info']['id'], 
+                          name: i['info']['name'], 
+                          version: existingApp.version, 
+                          description: i['info']['description'], 
+                          arch: i['info']['arch'][0],
+                          Icon: existingApp.Icon,     // 此时图标链接为空
+                          IconUpdated: 1,     // 设置图标未更新
+                        ),
+                      );
+                    }
+                }
+            }
         }
       return returnItems;
     }
@@ -59,7 +125,7 @@ class LinyapsAppManagerApi {
   Future <List<LinyapsPackageInfo>> get_upgradable_apps () async 
     {
       // 先获取已安装应用
-      List <LinyapsPackageInfo> installed_apps = await get_installed_apps();
+      List <LinyapsPackageInfo> installed_apps = await get_installed_apps([]);
 
       // 初始化待返回应用抽象类列表
       List <LinyapsPackageInfo> upgradable_apps = [];
