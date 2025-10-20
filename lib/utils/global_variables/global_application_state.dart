@@ -19,12 +19,9 @@ class ApplicationState extends ChangeNotifier {
   // 初始化私有已安装应用列表
   List <LinyapsPackageInfo> _installedAppsList = [];
 
-  // 初始化私有正在排队下载安装的应用列表
-  List <LinyapsPackageInfo> _downloadingAppsQueue = [];
 
   List <LinyapsPackageInfo> get upgradable_apps_list => _upgradableAppsList;
   List <LinyapsPackageInfo> get installed_apps_list => _installedAppsList;
-  List <LinyapsPackageInfo> get download_apps_queue => _downloadingAppsQueue;
 
   // 在线更新应用更新状况
   // 更新待更新应用列表方法
@@ -59,10 +56,4 @@ class ApplicationState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 更新下载列表的应用
-  void updateDownloadingAppsList(List <LinyapsPackageInfo> newList) {
-    _downloadingAppsQueue = newList;
-    notifyListeners();
-  }
-  
 }

@@ -16,8 +16,6 @@ class UpgradableAppListItems {
   // 获取必要的父页面构建上下文
   BuildContext context;
 
-  
-
   // 通过回调函数将"升级"按钮传递给父页面进行控制
   Function (MyButton_Upgrade button_upgrade) exposeUpgradeButton;
 

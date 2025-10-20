@@ -103,6 +103,31 @@ class LinyapsCliHelper {
       return result.exitCode;    
     }
 
+  // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
+  Future <int> install_app_cli (String appId,String version,String? version_last) async 
+    {
+      ProcessResult result;
+      if (version_last == null)
+        {
+          // 进行应用强制安装
+          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
+        }
+      // 如果发现是升级版本
+      else if (VersionCompare(ver1: version, ver2: version_last).isFirstGreaterThanSec())
+        {
+          // 进行应用强制安装
+          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','-y']);
+        }
+      // 如果发现还是降级版本
+      else    
+        {
+          // 进行应用强制安装
+          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
+        }
+      // 返回命令退出码
+      return result.exitCode;    
+    }
+
   // 卸载玲珑应用的方法,代表这个应用在进行安装前在本地的版本
   Future <int> uninstall_app (String appId) async 
     {
