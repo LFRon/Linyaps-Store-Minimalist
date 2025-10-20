@@ -8,6 +8,7 @@ import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_help
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
+import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 
 class LinyapsAppManagerApi {
 
@@ -24,6 +25,14 @@ class LinyapsAppManagerApi {
         iconUrl = "";
       }
       return iconUrl;
+    }
+  
+  // 将待安装应用推送到安装队列里函数,而非直接安装
+  Future <void> install_app (LinyapsPackageInfo newApp) async 
+    {
+      // 将需要安装的应用统一推送
+      ApplicationState().addDownloadingApp(newApp);
+      return;
     }
 
   // 返回已经安装的应用抽象类列表

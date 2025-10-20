@@ -6,9 +6,11 @@
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/install_button.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/launch_app_button.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/fatal_warning_button.dart';
+import 'package:provider/provider.dart';
 
 class AppInfoView extends StatefulWidget {
 
@@ -23,7 +25,7 @@ class AppInfoView extends StatefulWidget {
 
   // 声明需要安装应用的回调函数
   // 之所以用回调是方便于父级页面让页面控件及时刷新
-  Future <void> Function(String appId,String version,String? cur_app_version,MyButton_Install button_install) install_app;
+  Future <void> Function(LinyapsPackageInfo app_info,MyButton_Install button_install) install_app;
 
   // 声明需要安装应用的回调函数
   Future <void> Function(String appId,MyButton_FatalWarning button_uninstall) uninstall_app;
@@ -51,6 +53,9 @@ class AppInfoViewState extends State<AppInfoView> {
 
   // 声明启动应用按钮对象
   late MyButton_LaunchApp button_launchapp;
+
+  // 拉下正在安装的应用列表
+  List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context,listen: false).downloading_apps_queue;
 
   // 该页面启动应用的方法
   void launch_app (String appId)
@@ -88,6 +93,26 @@ class AppInfoViewState extends State<AppInfoView> {
       );
 
       // 初始化安装按钮对象
+      DownloadState state = DownloadState.none;
+
+      // 先看看下载列表里有没有这个应用和对应版本
+      if (downloading_apps_queue.isNotEmpty)
+        { 
+          // 进行检查
+          LinyapsPackageInfo cur_downloading_app = downloading_apps_queue.firstWhere(
+            (app) => app.id == widget.app_info.id && app.version == widget.app_info.version,
+            // 没有就返回空对象
+            orElse: () => LinyapsPackageInfo(
+              id: '', 
+              name: '', 
+              version: '', 
+              description: '',
+               arch: '',
+            )
+          );
+          if (cur_downloading_app.id != '' && cur_downloading_app.downloadState == DownloadState.waiting) state = DownloadState.waiting;
+        } 
+
       button_install = MyButton_Install(
         text: Text(
           "安装",
@@ -96,13 +121,13 @@ class AppInfoViewState extends State<AppInfoView> {
             color: Colors.white,
           ),
         ), 
-        is_pressed: ValueNotifier<bool>(false),     // 初始化设置为按钮未被按下
+        
+        // 初始化按钮按下状态时检查其下载状态是不是在下载
+        is_pressed: state == DownloadState.waiting?ValueNotifier<bool>(true):ValueNotifier<bool>(false),
         indicator_width: 16, 
         onPressed: () async {
           await widget.install_app(
-            widget.app_info.id, 
-            widget.app_info.version,
-            widget.cur_installed_app_version,
+            widget.app_info,
             button_install,
           );
         },

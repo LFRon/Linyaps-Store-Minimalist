@@ -1,4 +1,12 @@
+// 下载页面
+
+// 关闭VSCode非必要报错
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
+import 'package:provider/provider.dart';
 
 class DownloadingPage extends StatefulWidget {
   const DownloadingPage({super.key});
@@ -7,11 +15,38 @@ class DownloadingPage extends StatefulWidget {
   State<DownloadingPage> createState() => _DownloadingPageState();
 }
 
-class _DownloadingPageState extends State<DownloadingPage> {
+class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+
+  // 覆写页面希望保持存在状态开关
+  @override
+  bool get wantKeepAlive => true; 
+
+  // 拿到应用下载列表
+  List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context).downloading_apps_queue;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.only(top: 20,left: 10,right: 10),
+        child: downloading_apps_queue.isNotEmpty
+        ? ListView.builder(
+          itemCount: downloading_apps_queue.length,
+          itemBuilder: (context,index) {
 
+          },
+        )
+        : Center(
+          child: Text(
+            '哎呀,看上去你还没有在下载的应用呢 :)',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.grey.shade600,
+            ),
+          ),
+        ),
+      )
     );
   }
 }

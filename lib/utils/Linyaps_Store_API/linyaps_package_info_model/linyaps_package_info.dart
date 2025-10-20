@@ -2,6 +2,15 @@
 
 // ignore_for_file: non_constant_identifier_names
 
+// 设置一个应用的下载状态枚举
+enum DownloadState {
+  waiting,    // 等待下载中
+  downloading,    // 下载中
+  completed,     // 下载完成
+  failed,     // 下载失败
+  none,      // 不在下载
+}
+
 class LinyapsPackageInfo {
 
   // 声明玲珑应用必须有的信息
@@ -13,6 +22,9 @@ class LinyapsPackageInfo {
 
   // 如果应用不是最新的,存储一下它当前版本,这用于检查应用更新用
   String? current_old_version;
+
+  // 下载状态
+  DownloadState? downloadState;
 
   String? Icon;    // 应用图标
   int? IconUpdated;     // 应用图标是否更新
@@ -51,6 +63,7 @@ class LinyapsPackageInfo {
     this.IconUpdated,
     this.repoName,
     this.current_old_version,
+    this.downloadState,
     this.channel,
     this.kind,
     this.module,

@@ -5,8 +5,10 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
+import 'package:toastification/toastification.dart';
 
 class LinyapsCliHelper {
 
@@ -81,6 +83,18 @@ class LinyapsCliHelper {
   // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
   Future <int> install_app (String appId,String version,String? version_last) async 
     {
+      // 显示全局通知开始安装
+      toastification.show(
+        title: Text(
+          '应用 $appId 开始安装',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        style: ToastificationStyle.flat,
+        type: ToastificationType.info,
+        autoCloseDuration: const Duration(seconds: 3),
+      );
       ProcessResult result;
       if (version_last == null)
         {
@@ -99,30 +113,35 @@ class LinyapsCliHelper {
           // 进行应用强制安装
           result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
         }
-      // 返回命令退出码
-      return result.exitCode;    
-    }
-
-  // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
-  Future <int> install_app_cli (String appId,String version,String? version_last) async 
-    {
-      ProcessResult result;
-      if (version_last == null)
+      if (result.exitCode == 0)
         {
-          // 进行应用强制安装
-          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
+          // 显示全局通知安装成功
+          toastification.show(
+            title: Text(
+              '应用 $appId 安装成功',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            style: ToastificationStyle.flat,
+            type: ToastificationType.success,
+            autoCloseDuration: const Duration(seconds: 3),
+          );
         }
-      // 如果发现是升级版本
-      else if (VersionCompare(ver1: version, ver2: version_last).isFirstGreaterThanSec())
+      else
         {
-          // 进行应用强制安装
-          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','-y']);
-        }
-      // 如果发现还是降级版本
-      else    
-        {
-          // 进行应用强制安装
-          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
+          // 显示全局通知安装失败
+          toastification.show(
+            title: Text(
+              '应用 $appId 安装失败',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            style: ToastificationStyle.flat,
+            type: ToastificationType.error,
+            autoCloseDuration: const Duration(seconds: 3),
+          );
         }
       // 返回命令退出码
       return result.exitCode;    

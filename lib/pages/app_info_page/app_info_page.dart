@@ -7,6 +7,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/AppListView/app_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
+import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
@@ -121,36 +122,22 @@ class AppInfoPageState extends State<AppInfoPage> {
 
   // 设置安装函数实现,用于被ListView.builder里的控件当回调函数调用
   // 该页面安装应用的方法,version代表当前安装的目标版本,cur_app_version代表如果有的本地安装版本
-  Future <void> install_app (String appId,String version,String? cur_app_version,MyButton_Install button_install) async
+  Future <void> install_app (LinyapsPackageInfo appInfo,MyButton_Install button_install) async
     {
       // 设置按钮被按下
       // 设置安装按钮被按下
       button_install.is_pressed.value = true;
-      int excute_result = await LinyapsCliHelper().install_app(appId,version,cur_app_version);
+      await LinyapsAppManagerApi().install_app(appInfo);
       // 设置安装按钮被释放
       button_install.is_pressed.value = false;
       // 如果启动失败设置启动按钮文字为"失败"提醒用户
-      if (excute_result !=0)
-        {
-          button_install.text = Text(
-            "失败",
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-            ),
-          );
-        }
-      // 如果成功则触发重构
-      else
-        {
-          print('Updating version from $cur_installed_version to $version');
-          if (mounted)
-            {
-              setState(() {
-                cur_installed_version = version;
-              });
-            }
-        }
+      button_install.text = Text(
+        "正在安装",
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+        ),
+      );
     }
   
   // 设置卸载函数实现,用于被ListView.builder里的控件当回调函数用
@@ -418,8 +405,8 @@ class AppInfoPageState extends State<AppInfoPage> {
                                                   app_info: cur_app_info[reversedIndex],
                                                   is_cur_version_installed: cur_app_info[reversedIndex].version == cur_installed_version?true:false,
                                                   cur_installed_app_version: cur_installed_version==''?null:cur_installed_version,
-                                                  install_app: (appId, version, cur_app_version, button_install) async {
-                                                    await install_app(appId, version, cur_app_version, button_install);
+                                                  install_app: (appInfo, button_install) async {
+                                                    await install_app(appInfo, button_install);
                                                   },
                                                   uninstall_app: (appId, button_uninstall) async {
                                                     await uninstall_app(appId, button_uninstall);
