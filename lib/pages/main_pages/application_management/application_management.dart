@@ -1,7 +1,7 @@
 // 应用管理页面
 
 // 忽略VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, use_build_context_synchronously, unnecessary_overrides
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
@@ -22,7 +22,11 @@ class AppsManagementPage extends StatefulWidget {
   State<AppsManagementPage> createState() => AppsManagementPageState();
 }
 
-class AppsManagementPageState extends State<AppsManagementPage> {
+class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+
+  // 覆写页面希望保持存在状态开关
+  @override
+  bool get wantKeepAlive => true; 
 
   // 判断页面是否加载完全的开关
   // 在这里页面加载只用于判断所有应用信息是否加载完成,而不涉及应用更新
@@ -71,7 +75,12 @@ class AppsManagementPageState extends State<AppsManagementPage> {
     {
       List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
       // 更新对应变量并触发页面重构
-      Provider.of<ApplicationState>(context,listen: false).updateUpgradableAppsList(get_upgradable_apps);
+      if (mounted)
+        {
+          setState(() {
+            context.read<ApplicationState>().updateUpgradableAppsList(get_upgradable_apps);
+          });
+        }
       return;
     }
   
@@ -190,6 +199,10 @@ class AppsManagementPageState extends State<AppsManagementPage> {
   void initState ()
     {
       super.initState();
+
+      // 添加页面观察者
+      WidgetsBinding.instance.addObserver(this);  
+
       // 初始化"一键升级"按钮对象
       button_all_upgrade = MyButton_UpgradeAll(
         text: Text(
@@ -220,14 +233,43 @@ class AppsManagementPageState extends State<AppsManagementPage> {
       // 再暴力异步加载可更新应用信息
       Future.delayed(Duration.zero).then((_) async {
         // 获取应用更新详情
-        await ApplicationState().updateUpgradableAppsList_Online();
+        await updateUpgradableAppsList();
         // 设置可更新应用信息已完全加载
         setUpgradableAppLoaded();
       });
     }
 
+  // 抽象出数据加载过程
+  Future <void> _refreshPageData () async 
+    {
+      // 更新已安装的应用信息
+      await updateInstalledAppsList();
+      await updateInstalledAppsIcon();
+      await updateUpgradableAppsList();
+    }
+  
+  // 当用户重新切回页面时执行函数
+  @override
+  void didChangeAppLifecycleState (AppLifecycleState state) async
+    {
+      super.didChangeAppLifecycleState(state);
+      if (state == AppLifecycleState.resumed)
+        {
+          await _refreshPageData();
+        }
+    }
+
+  @override
+  void dispose ()
+    {
+      // 销毁时移除观察者
+      WidgetsBinding.instance.removeObserver(this); 
+      super.dispose();
+    }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
 
     // 获取当前窗口的相对长宽
     double height = MediaQuery.of(context).size.height;
