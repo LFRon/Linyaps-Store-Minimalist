@@ -6,7 +6,9 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/upgrade_button.dart';
+import 'package:provider/provider.dart';
 
 class UpgradableAppListItems {
 
@@ -32,11 +34,21 @@ class UpgradableAppListItems {
   // 返回所有控件
   List <Widget> items () 
     {
+      // 拿到我们当前的下载列表
+      List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloading_apps_queue;
+      
       // 初始化要返回的控件列表
       List <Widget> returnItems = [];
       LinyapsPackageInfo i;
       for (i in upgradable_apps_info)
         {
+          // 先判断应用是否已经在下载,如果是,直接跳过渲染
+          final is_app_downloading = downloading_apps_queue.firstWhere(
+            (app) => i.id == app.id && i.version == app.version,
+            orElse: () => LinyapsPackageInfo(id: '', name: '', version: '', description: '', arch: ''), 
+          );
+          if (is_app_downloading.id != '') continue;
+          
           // 初始化升级按钮对象
           MyButton_Upgrade button_upgrade = MyButton_Upgrade(
             text: Text(

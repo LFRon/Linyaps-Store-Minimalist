@@ -74,38 +74,34 @@ class InstalledAppsGridItems {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // 先显示图片
-                  Hero(
-                    tag: "InstalledAppsGridItems_${installed_app_info[index].id}",
-                    // 显示图片必须用FutureBuilder,不要因为加载图片延缓整个页面加载
-                    child: FastCachedImage(
-                      url: installed_app_info[index].Icon!,
-                      key: ValueKey('${installed_app_info[index].name}_${installed_app_info[index].IconUpdated}'),
-                      height: 80,width: 80,
-                      loadingBuilder: (context, loadingProgress) {
-                        return Center(
-                          child: SizedBox(
-                            height: 80,
-                            width: 80,
-                            child: CircularProgressIndicator(
-                              color: Colors.grey,
-                              strokeWidth: 3.0,
-                            ),  // 加载时显示进度条
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) => Center(
+                  FastCachedImage(
+                    url: installed_app_info[index].Icon!,
+                    key: ValueKey('${installed_app_info[index].name}_${installed_app_info[index].IconUpdated}'),
+                    height: 80,width: 80,
+                    loadingBuilder: (context, loadingProgress) {
+                      return Center(
                         child: SizedBox(
-                          width: 80,
                           height: 80,
-                          child: Image(
-                            image: AssetImage(
-                              'assets/images/linyaps-generic-app.png',
-                            ),
+                          width: 80,
+                          child: CircularProgressIndicator(
+                            color: Colors.grey,
+                            strokeWidth: 3.0,
+                          ),  // 加载时显示进度条
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) => Center(
+                      child: SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/linyaps-generic-app.png',
                           ),
                         ),
                       ),
                     ),
-                    ),
+                  ),
                   // SizedBox(height:height*0.03,),    // 设置控件间间距
                   // 再显示应用名
                   Text(

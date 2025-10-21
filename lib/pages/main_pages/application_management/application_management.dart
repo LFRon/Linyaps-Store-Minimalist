@@ -135,7 +135,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
         }
       for (var i=upgradable_apps_list.length-1;i>=0;i--)
         {
-          if (await LinyapsCliHelper().install_app(upgradable_apps_list[i].id, upgradable_apps_list[i].version, upgradable_apps_list[i].current_old_version) != 0)
+          if (await LinyapsCliHelper().install_app(upgradable_apps_list[i].id, upgradable_apps_list[i].version, upgradable_apps_list[i].current_old_version,context) != 0)
             {
               button_upgrade_list[i].is_pressed.value = false;
               // 如果安装失败返回失败字样
@@ -170,7 +170,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     {
       // 更新当前按钮被按下状态
       button_upgrade.is_pressed.value = true;
-      if (await LinyapsCliHelper().install_app(cur_app_info.id, cur_app_info.version, cur_app_info.current_old_version) != 0)
+      if (await LinyapsCliHelper().install_app(cur_app_info.id, cur_app_info.version, cur_app_info.current_old_version,context) != 0)
         {
           button_upgrade.is_pressed.value = false;
           // 如果安装失败返回失败字样
@@ -270,6 +270,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // 拿到应用下载列表
+    List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloading_apps_queue;
 
     // 获取当前窗口的相对长宽
     double height = MediaQuery.of(context).size.height;

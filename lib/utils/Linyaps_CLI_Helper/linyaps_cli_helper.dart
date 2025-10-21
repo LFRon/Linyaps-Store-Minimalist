@@ -1,7 +1,7 @@
 // 用于通过命令读取用户的安装信息
 
 // 关闭VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names, unnecessary_string_interpolations
+// ignore_for_file: non_constant_identifier_names, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -81,12 +81,15 @@ class LinyapsCliHelper {
     }
   
   // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
-  Future <int> install_app (String appId,String version,String? version_last) async 
+  // 这里需要控件上下文,是为了显示应用安装成功亦或者失败的通知
+  Future <int> install_app (String appId,String version,String? version_last,BuildContext context) async 
     {
       // 显示全局通知开始安装
       toastification.show(
+        context: context,
+        applyBlurEffect: true,
         title: Text(
-          '应用 $appId 开始安装',
+          '当前应用开始安装',
           style: TextStyle(
             fontSize: 20,
           ),
@@ -117,8 +120,10 @@ class LinyapsCliHelper {
         {
           // 显示全局通知安装成功
           toastification.show(
+            context: context,
+            applyBlurEffect: true,
             title: Text(
-              '应用 $appId 安装成功',
+              '当前应用安装成功',
               style: TextStyle(
                 fontSize: 20,
               ),
@@ -132,8 +137,10 @@ class LinyapsCliHelper {
         {
           // 显示全局通知安装失败
           toastification.show(
+            context: context,
+            applyBlurEffect: true,
             title: Text(
-              '应用 $appId 安装失败',
+              '当前应用安装失败',
               style: TextStyle(
                 fontSize: 20,
               ),

@@ -127,17 +127,10 @@ class AppInfoPageState extends State<AppInfoPage> {
       // 设置按钮被按下
       // 设置安装按钮被按下
       button_install.is_pressed.value = true;
-      await LinyapsAppManagerApi().install_app(appInfo);
+      await LinyapsAppManagerApi().install_app(appInfo,context);
       // 设置安装按钮被释放
-      button_install.is_pressed.value = false;
-      // 如果启动失败设置启动按钮文字为"失败"提醒用户
-      button_install.text = Text(
-        "正在安装",
-        style: TextStyle(
-          fontSize: 15,
-          color: Colors.white,
-        ),
-      );
+      button_install.is_pressed.value = true;
+      if (mounted) setState(() {});
     }
   
   // 设置卸载函数实现,用于被ListView.builder里的控件当回调函数用

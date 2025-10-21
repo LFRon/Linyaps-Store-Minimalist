@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/pages_utils/downloading_page/downloading_app_list_item.dart';
 import 'package:provider/provider.dart';
 
 class DownloadingPage extends StatefulWidget {
@@ -20,13 +21,14 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
   // 覆写页面希望保持存在状态开关
   @override
   bool get wantKeepAlive => true; 
-
-  // 拿到应用下载列表
-  List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context).downloading_apps_queue;
-
+  
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // 拿到应用下载列表
+    List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloading_apps_queue;
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 20,left: 10,right: 10),
@@ -34,7 +36,9 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
         ? ListView.builder(
           itemCount: downloading_apps_queue.length,
           itemBuilder: (context,index) {
-
+            return DownloadingAppListItem(
+              cur_app_info: downloading_apps_queue[index],
+            );
           },
         )
         : Center(

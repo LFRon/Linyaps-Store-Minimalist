@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -30,7 +31,9 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => appGlobalInfo,
-      child: MyApp(),
+      child: ToastificationWrapper(
+        child: MyApp(),
+      ),
     )
   );
 }

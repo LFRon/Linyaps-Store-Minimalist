@@ -65,9 +65,11 @@ class ApplicationState extends ChangeNotifier {
 
   //// 对下载列表的更改
   // 更新正在下载的应用列表
-  void addDownloadingApp(LinyapsPackageInfo newApp) {
+  Future <void> addDownloadingApp(LinyapsPackageInfo newApp,BuildContext context) async {
     newApp.downloadState = DownloadState.waiting;
     _downloadingAppsQueue.add(newApp);
+    notifyListeners();  
+    processDownloadingQueue(context);
     notifyListeners();
   }
 
@@ -78,29 +80,38 @@ class ApplicationState extends ChangeNotifier {
   }
 
   // 处理下载队列方法
-  void processDownloadingQueue() async {
+  Future <void> processDownloadingQueue(BuildContext context) async {
     isProcessingQueue = true;
 
     // 拿到队列头部元素
     LinyapsPackageInfo? currentApp = _downloadingAppsQueue.first;
 
     // 进行应用安装并判断状态
-    if (
-      await LinyapsCliHelper().install_app(
-        currentApp.id, 
-        currentApp.version, 
-        currentApp.current_old_version,
-      ) == 0
-    ) {
-      // 安装成功
-      currentApp.downloadState = DownloadState.completed;
-      // 将其从列表中移除
-      _downloadingAppsQueue.remove(currentApp);
-    } else {
-      // 安装失败
-      currentApp.downloadState = DownloadState.failed;
-    }
-
+    while (_downloadingAppsQueue.isNotEmpty)
+      {
+        // 更新下载状态
+        currentApp.downloadState = DownloadState.downloading;
+        notifyListeners();
+        if (
+          await LinyapsCliHelper().install_app(
+            currentApp.id, 
+            currentApp.version, 
+            currentApp.current_old_version,
+            context
+          ) == 0
+        ) {
+          // 安装成功
+          currentApp.downloadState = DownloadState.completed;
+          // 将其从列表中移除
+          _downloadingAppsQueue.remove(currentApp);
+        } else {
+          // 安装失败
+          currentApp.downloadState = DownloadState.failed;
+          _downloadingAppsQueue.remove(currentApp);
+        }
+        notifyListeners();
+      }
+    isProcessingQueue = false;
     // 更新监听者
     notifyListeners();
     return;
