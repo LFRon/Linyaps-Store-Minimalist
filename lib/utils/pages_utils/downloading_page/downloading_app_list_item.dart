@@ -20,83 +20,81 @@ class DownloadingAppListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 85,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       child: Padding(
-        padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 25.0,right: 22.0),
+        padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 30.0,right: 35.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              width: 250,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  FastCachedImage(
-                    url: cur_app_info.Icon??"",
-                    loadingBuilder: (context, url) => Center(
-                      child: SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: SizedBox(
-                          height: 16,width: 16,
-                          child: CircularProgressIndicator(
-                            color: Colors.grey.shade300,
-                            strokeWidth:2.5,     // 设置加载条宽度
-                          ),
-                        ),  // 加载时显示进度条
-                      ),
+            Row(
+              children: [
+                FastCachedImage(
+                  url: cur_app_info.Icon??"",
+                  loadingBuilder: (context, url) => Center(
+                    child: SizedBox(
+                      height: 70,
+                      width: 70,
+                      child: CircularProgressIndicator(
+                        color: Colors.grey.shade300,
+                        strokeWidth:2.5,     // 设置加载条宽度
+                      ),  // 加载时显示进度条
                     ),
-                    // 如果图片无法加载就使用默认玲珑图标
-                    errorBuilder: (context, error, stackTrace) => Center(
-                      child: Image(
-                        height: 70,
-                        width: 70,
-                        image: AssetImage(
-                          'assets/images/linyaps-generic-app.png',
-                        ),
-                      ),
-                    ),
-                    height: 70,
-                    width: 70,
                   ),
-                  SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
+                  // 如果图片无法加载就使用默认玲珑图标
+                  errorBuilder: (context, error, stackTrace) => Center(
+                    child: Image(
+                      height: 70,
+                      width: 70,
+                      image: AssetImage(
+                        'assets/images/linyaps-generic-app.png',
+                      ),
+                    ),
+                  ),
+                  height: 70,
+                  width: 70,
+                ),
+                SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
+                Text(
+                  cur_app_info.name,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
+            cur_app_info.downloadState == DownloadState.downloading
+              ? Row(
+                children: [
+                  SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3.5,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  SizedBox(width: 30,),
                   Text(
-                    cur_app_info.name,
+                    '正在下载',
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                  cur_app_info.downloadState == DownloadState.downloading
-                    ? Row(
-                      children: [
-                        SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 4.5,
-                          ),
-                        ),
-                        Text(
-                          '正在下载',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    )
-                    : cur_app_info.downloadState == DownloadState.waiting
-                      ? Text(
-                        '正在等待下载',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      )
-                      : SizedBox(),
                 ],
-              ),
-            ),
+              )
+              : cur_app_info.downloadState == DownloadState.waiting
+                ? Text(
+                  '正在等待下载',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                )
+                : SizedBox(),
           ],
         ),
       ),

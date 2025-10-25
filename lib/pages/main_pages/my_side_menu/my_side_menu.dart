@@ -47,7 +47,7 @@ class _MySideMenuState extends State<MySideMenu> {
     SideBarItem(
       iconSelected: Icons.download,
       iconUnselected: Icons.download_outlined,
-      text: '下载管理',
+      text: '下载列表',
     ),
     SideBarItem(
       iconSelected: Icons.info,

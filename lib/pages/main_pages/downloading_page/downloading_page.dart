@@ -32,25 +32,25 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
         List <LinyapsPackageInfo> downloading_apps_queue = appState.downloadingAppsQueue;
         return Scaffold(
           body: Padding(
-            padding: EdgeInsets.only(top: 20,left: 10,right: 10),
+            padding: EdgeInsets.only(top: 20,left: 10,right: 30),
             child: downloading_apps_queue.isNotEmpty
-            ? ListView.builder(
-              itemCount: downloading_apps_queue.length,
-              itemBuilder: (context,index) {
-                return DownloadingAppListItem(
-                  cur_app_info: downloading_apps_queue[index],
-                );
-              },
-            )
-            : Center(
-              child: Text(
-                '哎呀,看上去你还没有在下载的应用呢 :)',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey.shade600,
+              ? ListView.builder(
+                itemCount: downloading_apps_queue.length,
+                itemBuilder: (context,index) {
+                  return DownloadingAppListItem(
+                    cur_app_info: downloading_apps_queue[index],
+                  );
+                },
+              )
+              : Center(
+                child: Text(
+                  '哎呀,看上去你还没有在下载的应用呢 :)',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
               ),
-            ),
           )
         );
       }
