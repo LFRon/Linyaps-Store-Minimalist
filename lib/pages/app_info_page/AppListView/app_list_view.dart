@@ -54,8 +54,8 @@ class AppInfoViewState extends State<AppInfoView> {
   // 声明启动应用按钮对象
   late MyButton_LaunchApp button_launchapp;
 
-  // 拉下正在安装的应用列表
-  List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context,listen: false).downloading_apps_queue;
+  // 得到正在安装的应用列表
+  // List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context,listen: false).downloadingAppsQueue;
 
   // 该页面启动应用的方法
   void launch_app (String appId)
@@ -91,15 +91,28 @@ class AppInfoViewState extends State<AppInfoView> {
           );
         },
       );
+      
+    }
 
-      // 初始化安装按钮对象
+  @override
+  Widget build(BuildContext context) {
+
+    // 传入app_info对象
+    LinyapsPackageInfo app_info = widget.app_info;
+
+    // 传入当前版本是否安装对象
+    bool is_cur_version_installed = widget.is_cur_version_installed;
+
+    return Consumer<ApplicationState>(
+      builder: (context, appState, child) {
+        // 初始化安装按钮对象
       DownloadState state = DownloadState.none;
 
       // 先看看下载列表里有没有这个应用和对应版本
-      if (downloading_apps_queue.isNotEmpty)
+      if (appState.downloadingAppsQueue.isNotEmpty)
         { 
           // 进行检查
-          LinyapsPackageInfo cur_downloading_app = downloading_apps_queue.firstWhere(
+          LinyapsPackageInfo cur_downloading_app = appState.downloadingAppsQueue.firstWhere(
             (app) => app.id == widget.app_info.id && app.version == widget.app_info.version,
             // 没有就返回空对象
             orElse: () => LinyapsPackageInfo(
@@ -113,97 +126,89 @@ class AppInfoViewState extends State<AppInfoView> {
           if (cur_downloading_app.id != '' && cur_downloading_app.downloadState == DownloadState.waiting) state = DownloadState.waiting;
         } 
 
-      button_install = MyButton_Install(
-        text: Text(
-          "安装",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-          ),
-        ), 
-        
-        // 初始化按钮按下状态时检查其下载状态是不是在下载
-        is_pressed: state == DownloadState.waiting?ValueNotifier<bool>(true):ValueNotifier<bool>(false),
-        indicator_width: 16, 
-        onPressed: () async {
-          await widget.install_app(
-            widget.app_info,
-            button_install,
-          );
-        },
-      );
+        // 初始化按钮
+        button_install = MyButton_Install(
+          text: Text(
+            "安装",
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+            ),
+          ), 
+          
+          // 初始化按钮按下状态时检查其下载状态是不是在下载
+          is_pressed: (state == DownloadState.waiting)?ValueNotifier<bool>(true):ValueNotifier<bool>(false),
+          indicator_width: 16, 
+          onPressed: () async {
+            await widget.install_app(
+              widget.app_info,
+              button_install,
+            );
+          },
+        );
 
-      // 初始化启动应用按钮对象
-      button_launchapp = MyButton_LaunchApp(
-        text: Text(
-          "启动",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-          ),
-        ), 
-        is_pressed: ValueNotifier<bool>(false),     // 初始化设置为按钮未被按下
-        indicator_width: 16, 
-        onPressed: () => launch_app(widget.app_info.id),
-      );
-    }
-
-  @override
-  Widget build(BuildContext context) {
-
-    // 传入app_info对象
-    LinyapsPackageInfo app_info = widget.app_info;
-
-    // 传入当前版本是否安装对象
-    bool is_cur_version_installed = widget.is_cur_version_installed;
-
-    return Padding(
-      padding: const EdgeInsets.only(right: 11.0),     // 微操避开右侧滚轮
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top:8.0,bottom: 8.0,left: 8.0,right: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "版本号: ${app_info.version}",
-                style: TextStyle(
-                  fontSize: 15,
-                ),
+        // 初始化启动应用按钮对象
+        button_launchapp = MyButton_LaunchApp(
+          text: Text(
+            "启动",
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+            ),
+          ), 
+          is_pressed: ValueNotifier<bool>(false),     // 初始化设置为按钮未被按下
+          indicator_width: 16, 
+          onPressed: () => launch_app(widget.app_info.id),
+        );
+        return Padding(
+          padding: const EdgeInsets.only(right: 11.0),     // 微操避开右侧滚轮
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top:8.0,bottom: 8.0,left: 8.0,right: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "版本号: ${app_info.version}",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text("分发模式: ${app_info.channel}"),
+                  Text("下载量: ${app_info.installCount==null?'未知':app_info.installCount}"),
+                  is_cur_version_installed
+                    ? SizedBox(
+                      height: 30,
+                      width: 80,
+                      child: button_uninstall,
+                    )
+                    : SizedBox(
+                      height: 30,
+                      width: 80,
+                    ),
+                  is_cur_version_installed
+                    ? SizedBox(
+                      height: 30,
+                      width: 80,
+                      child: button_launchapp,
+                    )
+                    : SizedBox(
+                      height: 30,
+                      width: 80,
+                      child: button_install,
+                    ),
+                ],
               ),
-              Text("分发模式: ${app_info.channel}"),
-              Text("下载量: ${app_info.installCount==null?'未知':app_info.installCount}"),
-              is_cur_version_installed
-                ? SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: button_uninstall,
-                )
-                : SizedBox(
-                  height: 30,
-                  width: 80,
-                ),
-              is_cur_version_installed
-                ? SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: button_launchapp,
-                )
-                : SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: button_install,
-                ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }

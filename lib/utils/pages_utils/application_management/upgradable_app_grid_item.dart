@@ -35,7 +35,7 @@ class UpgradableAppListItems {
   List <Widget> items () 
     {
       // 拿到我们当前的下载列表
-      List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloading_apps_queue;
+      List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloadingAppsQueue;
       
       // 初始化要返回的控件列表
       List <Widget> returnItems = [];
@@ -114,10 +114,15 @@ class UpgradableAppListItems {
                               width: 70,
                             ),
                             SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
-                            Text(
-                              i.name,
-                              style: TextStyle(
-                                fontSize: 20,
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                i.name,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],

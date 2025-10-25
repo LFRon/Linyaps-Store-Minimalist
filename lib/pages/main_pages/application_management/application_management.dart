@@ -28,17 +28,22 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   @override
   bool get wantKeepAlive => true; 
 
+  bool is_page_loading = false;
+
   // 判断页面是否加载完全的开关
   // 在这里页面加载只用于判断所有应用信息是否加载完成,而不涉及应用更新
   // 判断应用更新情况是否加载完成需要额外的开关
   bool is_page_loaded = false;
   bool is_upgradable_app_loaded = false;
 
-  // 初始化待更新应用抽象列表
-  List <LinyapsPackageInfo> get upgradable_apps_list => Provider.of<ApplicationState>(context,listen: false).upgradable_apps_list;
+  // 声明待更新应用抽象列表
+  List <LinyapsPackageInfo> upgradable_apps_list = [];
 
-  // 初始化所有本地应用抽象列表
-  List <LinyapsPackageInfo> get installed_apps_list => Provider.of<ApplicationState>(context,listen: false).installed_apps_list;
+  // 声明所有本地应用抽象列表
+  List <LinyapsPackageInfo> installed_apps_list = [];
+
+  // 声明全局应用列表对象
+  late ApplicationState globalAppState;
 
   // 声明"一键升级"按钮对象
   late MyButton_UpgradeAll button_all_upgrade;
@@ -78,7 +83,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       if (mounted)
         {
           setState(() {
-            context.read<ApplicationState>().updateUpgradableAppsList(get_upgradable_apps);
+            globalAppState.updateUpgradableAppsList(get_upgradable_apps);
           });
         }
       return;
@@ -89,7 +94,12 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     {
       List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(installed_apps_list);
       // 更新应用安装信息
-      Provider.of<ApplicationState>(context,listen: false).updateInstalledAppsList(get_installed_apps);
+      if (mounted)
+        {
+          setState(() {
+            globalAppState.updateInstalledAppsList(get_installed_apps);
+          });
+        }
       return;
     }
   
@@ -98,7 +108,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     {
       // 用于存储了带了AppIcon链接的Icon列表
       List<LinyapsPackageInfo> newAppsList = [];
-      for (LinyapsPackageInfo i in installed_apps_list)
+      for (LinyapsPackageInfo i in globalAppState.installedAppsList)
         {
           String cur_app_icon = await LinyapsAppManagerApi().getAppIcon(i.id);
           newAppsList.add(
@@ -116,7 +126,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       if (mounted)
         {
           setState(() {
-            context.read<ApplicationState>().updateInstalledAppsList(newAppsList);
+            globalAppState.updateInstalledAppsList(newAppsList);
           });
         }
       return;
@@ -193,6 +203,37 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       return;
     }
 
+  // 在initState周期之后调用拿到应用列表
+  @override 
+  void didChangeDependencies ()
+    {
+      super.didChangeDependencies();
+      // 初始化全局对象
+      // 剩下的事情交给didChangeDependencies来做
+      if(!is_page_loading)
+        {
+          is_page_loading = true;
+          // 拿到可更新应用和已安装应用的列表
+          globalAppState = context.watch<ApplicationState>();
+          installed_apps_list = globalAppState.installedAppsList;
+          
+          // 先暴力异步加载页面信息
+          Future.microtask(() async {
+            // 更新已安装的应用信息
+            await globalAppState.updateInstalledAppsList_Online(installed_apps_list);
+            await setPageLoaded();
+            await updateInstalledAppsIcon();
+          });
+
+          // 再暴力异步加载可更新应用信息
+          Future.microtask(() async {
+            // 获取应用更新详情
+            await globalAppState.updateUpgradableAppsList_Online();
+            // 设置可更新应用信息已完全加载
+            setUpgradableAppLoaded();
+          });
+        }
+    }
 
   // 覆写父类构造函数
   @override
@@ -202,6 +243,10 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
       // 添加页面观察者
       WidgetsBinding.instance.addObserver(this);  
+
+      
+      // upgradable_apps_list = Provider.of<ApplicationState>(context).upgradableAppsList;
+      
 
       // 初始化"一键升级"按钮对象
       button_all_upgrade = MyButton_UpgradeAll(
@@ -219,24 +264,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
         },
       );
 
-      // 先暴力异步加载页面信息
-      Future.delayed(Duration.zero).then((_) async {
-
-        // 更新已安装的应用信息
-        await updateInstalledAppsList();
-        
-        // 再更新应用图标
-        await setPageLoaded();
-        await updateInstalledAppsIcon();
-        
-      });
-      // 再暴力异步加载可更新应用信息
-      Future.delayed(Duration.zero).then((_) async {
-        // 获取应用更新详情
-        await updateUpgradableAppsList();
-        // 设置可更新应用信息已完全加载
-        setUpgradableAppLoaded();
-      });
     }
 
   // 抽象出数据加载过程
@@ -255,7 +282,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       super.didChangeAppLifecycleState(state);
       if (state == AppLifecycleState.resumed)
         {
-          await _refreshPageData();
+          if (!is_page_loading) await _refreshPageData();
         }
     }
 
@@ -272,7 +299,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     super.build(context);
 
     // 拿到应用下载列表
-    List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloading_apps_queue;
+    List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloadingAppsQueue;
 
     // 获取当前窗口的相对长宽
     double height = MediaQuery.of(context).size.height;
@@ -312,7 +339,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                   ),
                                 ),
                                 // 如果有可更新的应用则全部更新
-                                appState.upgradable_apps_list.isNotEmpty
+                                appState.upgradableAppsList.isNotEmpty
                                   ? SizedBox(
                                     height: 45,
                                     width: 120,
@@ -324,7 +351,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                           ),
                           // 根据是否有可更新应用输出不同内容
                           is_upgradable_app_loaded
-                            ? upgradable_apps_list.isEmpty
+                            ? appState.upgradableAppsList.isEmpty
                               ? SizedBox(
                                 height: 150,
                                 child: Center(
@@ -365,7 +392,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                   physics: NeverScrollableScrollPhysics(),    // 禁止滚动
                                   children: UpgradableAppListItems(
                                     // 进行列表的反转,让应用升级时可以直接从列表尾部操作省去不必要的图标错位问题等
-                                    upgradable_apps_info: upgradable_apps_list.reversed.toList(), 
+                                    upgradable_apps_info: appState.upgradableAppsList.reversed.toList(), 
                                     context: context,
                                     exposeUpgradeButton: (button_upgrade) {
                                       button_upgrade_list.add(button_upgrade);
@@ -418,7 +445,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                 crossAxisSpacing: width * 0.02,
                               ), 
                               children: InstalledAppsGridItems(
-                                installed_app_info: installed_apps_list, 
+                                installed_app_info: appState.installedAppsList, 
                                 context: context, 
                                 height: height, 
                                 width: width,

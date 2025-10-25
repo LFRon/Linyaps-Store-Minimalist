@@ -25,7 +25,7 @@ void main() async {
       await FastCachedImageConfig.init();
     }
 
-   // 创建一个共享的ApplicationState实例
+  // 创建一个共享的ApplicationState实例
   ApplicationState appGlobalInfo = ApplicationState();
 
   runApp(

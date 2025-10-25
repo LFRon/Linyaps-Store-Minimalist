@@ -353,8 +353,8 @@ class LinyapsStoreApiService {
                 arch: app_info_get[i]['arch'],
                 Icon: app_info_get[i]['icon'],  
               );
-              // 使用二分查找找到合适的插入位置
               
+              // 使用二分查找找到合适的插入位置
               if (cur_app_info.isEmpty) 
                 {
                   cur_app_info.add(wait_add_info);

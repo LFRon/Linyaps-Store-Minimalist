@@ -16,7 +16,7 @@ class DownloadingPage extends StatefulWidget {
   State<DownloadingPage> createState() => _DownloadingPageState();
 }
 
-class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, ChangeNotifier {
 
   // 覆写页面希望保持存在状态开关
   @override
@@ -26,31 +26,34 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
   Widget build(BuildContext context) {
     super.build(context);
 
-    // 拿到应用下载列表
-    List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloading_apps_queue;
-
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: 20,left: 10,right: 10),
-        child: downloading_apps_queue.isNotEmpty
-        ? ListView.builder(
-          itemCount: downloading_apps_queue.length,
-          itemBuilder: (context,index) {
-            return DownloadingAppListItem(
-              cur_app_info: downloading_apps_queue[index],
-            );
-          },
-        )
-        : Center(
-          child: Text(
-            '哎呀,看上去你还没有在下载的应用呢 :)',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.grey.shade600,
+    // 全局监听下载列表
+    return Consumer<ApplicationState>(
+      builder: (context, appState, child) {
+        List <LinyapsPackageInfo> downloading_apps_queue = appState.downloadingAppsQueue;
+        return Scaffold(
+          body: Padding(
+            padding: EdgeInsets.only(top: 20,left: 10,right: 10),
+            child: downloading_apps_queue.isNotEmpty
+            ? ListView.builder(
+              itemCount: downloading_apps_queue.length,
+              itemBuilder: (context,index) {
+                return DownloadingAppListItem(
+                  cur_app_info: downloading_apps_queue[index],
+                );
+              },
+            )
+            : Center(
+              child: Text(
+                '哎呀,看上去你还没有在下载的应用呢 :)',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey.shade600,
+                ),
+              ),
             ),
-          ),
-        ),
-      )
+          )
+        );
+      }
     );
   }
 }

@@ -15,26 +15,21 @@ import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_i
 class ApplicationState extends ChangeNotifier {
 
   // 初始化私有可更新应用列表
-  List <LinyapsPackageInfo> _upgradableAppsList = [];
+  List <LinyapsPackageInfo> upgradableAppsList = [];
 
   // 初始化私有已安装应用列表
-  List <LinyapsPackageInfo> _installedAppsList = [];
+  List <LinyapsPackageInfo> installedAppsList = [];
 
   // 初始化正在下载的应用列表
-  List <LinyapsPackageInfo> _downloadingAppsQueue = [];
+  List <LinyapsPackageInfo> downloadingAppsQueue = [];
   bool isProcessingQueue = false;   // 用于标记是否正在处理下载队列
-
-
-  List <LinyapsPackageInfo> get upgradable_apps_list => _upgradableAppsList;
-  List <LinyapsPackageInfo> get installed_apps_list => _installedAppsList;
-  List <LinyapsPackageInfo>  get downloading_apps_queue => _downloadingAppsQueue;
 
   // 在线更新应用更新状况方法
   Future <void> updateUpgradableAppsList_Online () async 
     {
       List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
       // 更新对应变量并触发页面重构
-      _upgradableAppsList = get_upgradable_apps;
+      upgradableAppsList = get_upgradable_apps;
       notifyListeners();
       return;
     }
@@ -45,20 +40,20 @@ class ApplicationState extends ChangeNotifier {
     {
       List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(already_get_list);
       // 更新对应变量并触发页面重构
-      _installedAppsList = get_installed_apps;
+      installedAppsList = get_installed_apps;
       notifyListeners();
       return;
     }
 
   // 这个离线方法需要传入新列表手动刷新
   void updateUpgradableAppsList(List <LinyapsPackageInfo> newList) {
-    _upgradableAppsList = newList;
+    upgradableAppsList = newList;
     notifyListeners();
   }
 
   // 这个离线方法需要手动传入新列表刷新本地已安装应用
   void updateInstalledAppsList(List <LinyapsPackageInfo> newList) {
-    _installedAppsList = newList;
+    installedAppsList = newList;
     notifyListeners();
   }
   ////
@@ -66,16 +61,21 @@ class ApplicationState extends ChangeNotifier {
   //// 对下载列表的更改
   // 更新正在下载的应用列表
   Future <void> addDownloadingApp(LinyapsPackageInfo newApp,BuildContext context) async {
+    // 设置新加入应用的下载状态为正在下载
     newApp.downloadState = DownloadState.waiting;
-    _downloadingAppsQueue.add(newApp);
+
+    print('Before add: ${downloadingAppsQueue.length}');
+    // 创建新列表实例以确保触发更新
+    downloadingAppsQueue = [...downloadingAppsQueue, newApp];
+    print('After add: ${downloadingAppsQueue.length}');
     notifyListeners();  
-    processDownloadingQueue(context);
-    notifyListeners();
+    // 如果流水线没有更新就进行启动更新流水线
+    if (!isProcessingQueue) processDownloadingQueue(context);
   }
 
   // 从正在下载的应用列表中移除应用
-  void removeDownloadingApp(LinyapsPackageInfo app) {
-    _downloadingAppsQueue.remove(app);
+  Future <void> removeDownloadingApp(LinyapsPackageInfo app) async {
+    downloadingAppsQueue.remove(app);
     notifyListeners();  
   }
 
@@ -84,10 +84,10 @@ class ApplicationState extends ChangeNotifier {
     isProcessingQueue = true;
 
     // 拿到队列头部元素
-    LinyapsPackageInfo? currentApp = _downloadingAppsQueue.first;
+    LinyapsPackageInfo? currentApp = downloadingAppsQueue.first;
 
     // 进行应用安装并判断状态
-    while (_downloadingAppsQueue.isNotEmpty)
+    while (downloadingAppsQueue.isNotEmpty)
       {
         // 更新下载状态
         currentApp.downloadState = DownloadState.downloading;
@@ -103,11 +103,11 @@ class ApplicationState extends ChangeNotifier {
           // 安装成功
           currentApp.downloadState = DownloadState.completed;
           // 将其从列表中移除
-          _downloadingAppsQueue.remove(currentApp);
+          downloadingAppsQueue.remove(currentApp);
         } else {
           // 安装失败
           currentApp.downloadState = DownloadState.failed;
-          _downloadingAppsQueue.remove(currentApp);
+          downloadingAppsQueue.remove(currentApp);
         }
         notifyListeners();
       }

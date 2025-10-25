@@ -10,6 +10,7 @@ import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_i
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
 import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
+import 'package:provider/provider.dart';
 
 class LinyapsAppManagerApi {
 
@@ -32,7 +33,7 @@ class LinyapsAppManagerApi {
   Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async 
     {
       // 将需要安装的应用统一推送
-      await ApplicationState().addDownloadingApp(newApp,context);
+      await Provider.of<ApplicationState>(context, listen: false).addDownloadingApp(newApp,context);
       return;
     }
 
