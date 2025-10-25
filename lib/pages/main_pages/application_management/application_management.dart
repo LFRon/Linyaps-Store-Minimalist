@@ -298,9 +298,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Widget build(BuildContext context) {
     super.build(context);
 
-    // 拿到应用下载列表
-    List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloadingAppsQueue;
-
     // 获取当前窗口的相对长宽
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
