@@ -107,11 +107,11 @@ class LinyapsAppManagerApi {
                         LinyapsPackageInfo(
                           id: i['info']['id'], 
                           name: i['info']['name'], 
-                          version: existingApp.version, 
+                          version: i['info']['version'], 
                           description: i['info']['description'], 
                           arch: i['info']['arch'][0],
                           Icon: existingApp.Icon,     // 此时图标链接为空
-                          IconUpdated: 1,     // 设置图标未更新
+                          IconUpdated: 1,     // 设置图标已更新
                         ),
                       );
                     }
@@ -125,7 +125,7 @@ class LinyapsAppManagerApi {
                           description: i['info']['description'], 
                           arch: i['info']['arch'][0],
                           Icon: existingApp.Icon,     // 此时图标链接为空
-                          IconUpdated: 1,     // 设置图标未更新
+                          IconUpdated: 1,     // 设置图标已更新
                         ),
                       );
                     }

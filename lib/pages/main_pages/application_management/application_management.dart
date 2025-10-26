@@ -36,11 +36,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   bool is_page_loaded = false;
   bool is_upgradable_app_loaded = false;
 
-  // 声明待更新应用抽象列表
-  List <LinyapsPackageInfo> upgradable_apps_list = [];
-
-  // 声明所有本地应用抽象列表
-  List <LinyapsPackageInfo> installed_apps_list = [];
 
   // 声明全局应用列表对象
   late ApplicationState globalAppState;
@@ -92,13 +87,11 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 获取所有应用
   Future <void> updateInstalledAppsList () async 
     {
-      List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(installed_apps_list);
+      await globalAppState.updateInstalledAppsList_Online(globalAppState.installedAppsList);
       // 更新应用安装信息
       if (mounted)
         {
-          setState(() {
-            globalAppState.updateInstalledAppsList(get_installed_apps);
-          });
+          setState(() {});
         }
       return;
     }
@@ -143,9 +136,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           // 设置按钮被按下状态为真
           i.is_pressed.value = true;
         }
-      for (var i=upgradable_apps_list.length-1;i>=0;i--)
+      for (var i=globalAppState.upgradableAppsList.length-1;i>=0;i--)
         {
-          if (await LinyapsCliHelper().install_app(upgradable_apps_list[i].id, upgradable_apps_list[i].name,upgradable_apps_list[i].version, upgradable_apps_list[i].current_old_version,context) != 0)
+          if (await LinyapsCliHelper().install_app(globalAppState.upgradableAppsList[i].id, globalAppState.upgradableAppsList[i].name, globalAppState.upgradableAppsList[i].version, globalAppState.upgradableAppsList[i].current_old_version,context) != 0)
             {
               button_upgrade_list[i].is_pressed.value = false;
               // 如果安装失败返回失败字样
@@ -164,11 +157,11 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
               if (mounted)
                 {
                   setState(() {
-                    LinyapsPackageInfo appToUpdate = installed_apps_list.firstWhere(
-                      (app)=>app.id==upgradable_apps_list[i].id,
+                    LinyapsPackageInfo appToUpdate = globalAppState.upgradableAppsList.firstWhere(
+                      (app)=>app.id==globalAppState.upgradableAppsList[i].id,
                     );     // 先找到要更新的应用
-                    appToUpdate.version = upgradable_apps_list[i].version;    // 直接升级版本
-                    upgradable_apps_list.removeAt(i);
+                    appToUpdate.version = globalAppState.upgradableAppsList[i].version;    // 直接升级版本
+                    globalAppState.upgradableAppsList.removeAt(i);
                   });
                 }
             }
@@ -215,12 +208,11 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           is_page_loading = true;
           // 拿到可更新应用和已安装应用的列表
           globalAppState = context.watch<ApplicationState>();
-          installed_apps_list = globalAppState.installedAppsList;
           
           // 先暴力异步加载页面信息
           Future.microtask(() async {
             // 更新已安装的应用信息
-            await globalAppState.updateInstalledAppsList_Online(installed_apps_list);
+            await globalAppState.updateInstalledAppsList_Online(globalAppState.upgradableAppsList);
             await setPageLoaded();
             await updateInstalledAppsIcon();
           });
@@ -243,10 +235,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
       // 添加页面观察者
       WidgetsBinding.instance.addObserver(this);  
-
-      
-      // upgradable_apps_list = Provider.of<ApplicationState>(context).upgradableAppsList;
-      
 
       // 初始化"一键升级"按钮对象
       button_all_upgrade = MyButton_UpgradeAll(
@@ -282,7 +270,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       super.didChangeAppLifecycleState(state);
       if (state == AppLifecycleState.resumed)
         {
-          if (!is_page_loading) await _refreshPageData();
+          await _refreshPageData();
         }
     }
 
