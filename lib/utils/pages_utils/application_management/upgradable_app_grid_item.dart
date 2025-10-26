@@ -80,8 +80,9 @@ class UpgradableAppListItems {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        width: 250,
+                      // 第一个Expanded放应用图标+名字
+                      Expanded(
+                        flex: 1,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -114,54 +115,37 @@ class UpgradableAppListItems {
                               width: 70,
                             ),
                             SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
-                            SizedBox(
-                              width: 150,
-                              child: Text(
-                                i.name,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                            Text(
+                              i.name,
+                              style: TextStyle(
+                                fontSize: 20,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            size: 30,
-                            color: Colors.lightGreen.withValues(alpha: 1.0),
-                            Icons.cloud_upload_outlined,
-                          ),
-                          SizedBox(width: 20,),
-                          Text(
-                            '版本升级信息: ',
-                            style: TextStyle(
-                              fontSize: 20,
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Icon(
+                              size: 30,
+                              color: Colors.lightGreen.withValues(alpha: 1.0),
+                              Icons.cloud_upload_outlined,
                             ),
-                          ),
-                          Text(
-                            i.current_old_version??'未知的旧版本',
-                            style: TextStyle(
-                              fontSize: 20,
+                            SizedBox(width: 20,),
+                            Text(
+                              '版本升级信息: ${i.current_old_version??'未知的旧版本'} -> ${i.version}',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          Text(
-                            ' -> ',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          Text(
-                            i.version,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 40,

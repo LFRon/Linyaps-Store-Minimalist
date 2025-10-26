@@ -93,6 +93,7 @@ class ApplicationState extends ChangeNotifier {
         if (
           await LinyapsCliHelper().install_app(
             currentApp.id, 
+            currentApp.name,
             currentApp.version, 
             currentApp.current_old_version,
             context

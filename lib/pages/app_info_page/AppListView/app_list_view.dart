@@ -103,6 +103,7 @@ class AppInfoViewState extends State<AppInfoView> {
     // 传入当前版本是否安装对象
     bool is_cur_version_installed = widget.is_cur_version_installed;
 
+    // 对ApplicationState实例进行实时监控
     return Consumer<ApplicationState>(
       builder: (context, appState, child) {
         // 初始化安装按钮对象

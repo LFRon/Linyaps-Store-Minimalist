@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
 import 'package:toastification/toastification.dart';
 
 class LinyapsCliHelper {
@@ -82,14 +81,14 @@ class LinyapsCliHelper {
   
   // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
   // 这里需要控件上下文,是为了显示应用安装成功亦或者失败的通知
-  Future <int> install_app (String appId,String version,String? version_last,BuildContext context) async 
+  Future <int> install_app (String appId,String appName,String version,String? version_last,BuildContext context) async 
     {
       // 显示全局通知开始安装
       toastification.show(
         context: context,
         applyBlurEffect: true,
         title: Text(
-          '当前应用开始安装',
+          '$appName开始安装',
           style: TextStyle(
             fontSize: 20,
           ),
@@ -99,23 +98,7 @@ class LinyapsCliHelper {
         autoCloseDuration: const Duration(seconds: 3),
       );
       ProcessResult result;
-      if (version_last == null)
-        {
-          // 进行应用强制安装
-          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
-        }
-      // 如果发现是升级版本
-      else if (VersionCompare(ver1: version, ver2: version_last).isFirstGreaterThanSec())
-        {
-          // 进行应用强制安装
-          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','-y']);
-        }
-      // 如果发现还是降级版本
-      else    
-        {
-          // 进行应用强制安装
-          result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force']);
-        }
+      result = await Process.run('pkexec',['ll-cli','install','$appId/$version','--force','-y']); 
       if (result.exitCode == 0)
         {
           // 显示全局通知安装成功
@@ -123,7 +106,7 @@ class LinyapsCliHelper {
             context: context,
             applyBlurEffect: true,
             title: Text(
-              '当前应用安装成功',
+              '$appName安装成功',
               style: TextStyle(
                 fontSize: 20,
               ),
@@ -140,7 +123,7 @@ class LinyapsCliHelper {
             context: context,
             applyBlurEffect: true,
             title: Text(
-              '当前应用安装失败',
+              '$appName安装失败',
               style: TextStyle(
                 fontSize: 20,
               ),
