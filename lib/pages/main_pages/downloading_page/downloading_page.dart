@@ -26,7 +26,7 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
     super.build(context);
 
     // 全局监听下载列表
-    return Consumer<ApplicationState>(
+    return Consumer <ApplicationState> (
       builder: (context, appState, child) {
         return Scaffold(
           body: Padding(
