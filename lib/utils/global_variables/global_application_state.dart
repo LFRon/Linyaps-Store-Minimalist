@@ -83,12 +83,10 @@ class ApplicationState extends ChangeNotifier {
   Future <void> processDownloadingQueue(BuildContext context) async {
     isProcessingQueue = true;
 
-    // 拿到队列头部元素
-    LinyapsPackageInfo? currentApp = downloadingAppsQueue.first;
-
     // 进行应用安装并判断状态
     while (downloadingAppsQueue.isNotEmpty)
       {
+        LinyapsPackageInfo currentApp = downloadingAppsQueue.first;
         // 更新下载状态
         currentApp.downloadState = DownloadState.downloading;
         notifyListeners();
@@ -104,10 +102,12 @@ class ApplicationState extends ChangeNotifier {
           currentApp.downloadState = DownloadState.completed;
           // 将其从列表中移除
           downloadingAppsQueue.remove(currentApp);
+          print(downloadingAppsQueue);
         } else {
           // 安装失败
           currentApp.downloadState = DownloadState.failed;
           downloadingAppsQueue.remove(currentApp);
+          print(downloadingAppsQueue);
         }
         notifyListeners();
       }

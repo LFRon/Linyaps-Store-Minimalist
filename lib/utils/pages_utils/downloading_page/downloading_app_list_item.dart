@@ -21,6 +21,7 @@ class DownloadingAppListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 85,
+      margin: EdgeInsets.symmetric(vertical: 6.0),    // 设置ListView.builder子控件间的间距
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).colorScheme.onPrimary,
@@ -28,73 +29,96 @@ class DownloadingAppListItem extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 30.0,right: 35.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                FastCachedImage(
-                  url: cur_app_info.Icon??"",
-                  loadingBuilder: (context, url) => Center(
-                    child: SizedBox(
-                      height: 70,
-                      width: 70,
-                      child: CircularProgressIndicator(
-                        color: Colors.grey.shade300,
-                        strokeWidth:2.5,     // 设置加载条宽度
-                      ),  // 加载时显示进度条
-                    ),
-                  ),
-                  // 如果图片无法加载就使用默认玲珑图标
-                  errorBuilder: (context, error, stackTrace) => Center(
-                    child: Image(
-                      height: 70,
-                      width: 70,
-                      image: AssetImage(
-                        'assets/images/linyaps-generic-app.png',
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  FastCachedImage(
+                    url: cur_app_info.Icon??"",
+                    loadingBuilder: (context, url) => Center(
+                      child: SizedBox(
+                        height: 70,
+                        width: 70,
+                        child: CircularProgressIndicator(
+                          color: Colors.grey.shade300,
+                          strokeWidth:2.5,     // 设置加载条宽度
+                        ),  // 加载时显示进度条
                       ),
                     ),
-                  ),
-                  height: 70,
-                  width: 70,
-                ),
-                SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
-                Text(
-                  cur_app_info.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
-            cur_app_info.downloadState == DownloadState.downloading
-              ? Row(
-                children: [
-                  SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3.5,
-                      color: Colors.grey.shade600,
+                    // 如果图片无法加载就使用默认玲珑图标
+                    errorBuilder: (context, error, stackTrace) => Center(
+                      child: Image(
+                        height: 70,
+                        width: 70,
+                        image: AssetImage(
+                          'assets/images/linyaps-generic-app.png',
+                        ),
+                      ),
                     ),
+                    height: 70,
+                    width: 70,
                   ),
-                  SizedBox(width: 30,),
+                  SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
                   Text(
-                    '正在下载',
+                    cur_app_info.name,
                     style: TextStyle(
                       fontSize: 20,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
-              )
-              : cur_app_info.downloadState == DownloadState.waiting
-                ? Text(
-                  '正在等待下载',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+              ),
+            ),
+
+            Expanded(
+              flex: 1,
+              child: Text(
+                '版本: ${cur_app_info.version}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            
+            Expanded(
+              flex: 1,
+              child: cur_app_info.downloadState == DownloadState.downloading
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3.5,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    SizedBox(width: 20,),
+                    Text(
+                      '正在下载',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
                 )
-                : SizedBox(),
+                : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    cur_app_info.downloadState == DownloadState.waiting
+                      ? Text(
+                        '正在等待下载',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )
+                      : SizedBox(),
+                  ],
+                ),
+            ),
           ],
         ),
       ),

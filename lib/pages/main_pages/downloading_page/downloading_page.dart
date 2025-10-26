@@ -29,16 +29,15 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
     // 全局监听下载列表
     return Consumer<ApplicationState>(
       builder: (context, appState, child) {
-        List <LinyapsPackageInfo> downloading_apps_queue = appState.downloadingAppsQueue;
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.only(top: 20,left: 10,right: 30),
-            child: downloading_apps_queue.isNotEmpty
+            child: appState.downloadingAppsQueue.isNotEmpty
               ? ListView.builder(
-                itemCount: downloading_apps_queue.length,
+                itemCount: appState.downloadingAppsQueue.length,
                 itemBuilder: (context,index) {
                   return DownloadingAppListItem(
-                    cur_app_info: downloading_apps_queue[index],
+                    cur_app_info: appState.downloadingAppsQueue[index],
                   );
                 },
               )

@@ -123,7 +123,8 @@ class AppInfoViewState extends State<AppInfoView> {
                arch: '',
             )
           );
-          if (cur_downloading_app.id != '' && cur_downloading_app.downloadState == DownloadState.waiting) state = DownloadState.waiting;
+          // 如果找到了对应应用实例
+          if (cur_downloading_app.id != '') state = cur_downloading_app.downloadState??DownloadState.none;
         } 
 
         // 初始化按钮
@@ -136,8 +137,8 @@ class AppInfoViewState extends State<AppInfoView> {
             ),
           ), 
           
-          // 初始化按钮按下状态时检查其下载状态是不是在下载
-          is_pressed: (state == DownloadState.waiting)?ValueNotifier<bool>(true):ValueNotifier<bool>(false),
+          // 初始化按钮按下状态时检查其下载状态是不是1.在下载 2.在下载的路上,如果是,就设置按钮被按下,因为你这应用的确在安装的路上
+          is_pressed: (state == DownloadState.waiting || state == DownloadState.downloading)?ValueNotifier<bool>(true):ValueNotifier<bool>(false),
           indicator_width: 16, 
           onPressed: () async {
             await widget.install_app(
