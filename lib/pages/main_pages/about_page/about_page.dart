@@ -24,11 +24,24 @@ class _AboutPageState extends State<AboutPage> {
                   'assets/images/linyaps_icon.png'
                 ),
                 const SizedBox(width: 60,),
-                Text(
-                  '玲珑应用商店极速版',
-                  style: TextStyle(
-                    fontSize: 50,
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      '玲珑应用商店极速版',
+                      style: TextStyle(
+                        fontSize: 40,
+                        color: Colors.grey.shade800
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Text(
+                      '极致简洁,快速可靠',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.grey.shade800
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
