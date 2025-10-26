@@ -34,20 +34,19 @@ class UpgradableAppListItems {
   // 返回所有控件
   List <Widget> items () 
     {
-      // 拿到我们当前的下载列表
-      List <LinyapsPackageInfo>  downloading_apps_queue = Provider.of<ApplicationState>(context).downloadingAppsQueue;
+      // 拿到我们当前的存储全局变量类的响应实例
+      ApplicationState appState = context.watch<ApplicationState>();
       
       // 初始化要返回的控件列表
       List <Widget> returnItems = [];
       LinyapsPackageInfo i;
       for (i in upgradable_apps_info)
         {
-          // 先判断应用是否已经在下载,如果是,直接跳过渲染
-          final is_app_downloading = downloading_apps_queue.firstWhere(
+          // 先判断应用是否已经在下载,如果是,用downloading_app用于存储当前下载中的应用对象
+          final downloading_app = appState.downloadingAppsQueue.firstWhere(
             (app) => i.id == app.id && i.version == app.version,
             orElse: () => LinyapsPackageInfo(id: '', name: '', version: '', description: '', arch: ''), 
           );
-          if (is_app_downloading.id != '') continue;
           
           // 初始化升级按钮对象
           MyButton_Upgrade button_upgrade = MyButton_Upgrade(
@@ -58,7 +57,8 @@ class UpgradableAppListItems {
                 fontSize: 20,
               ),
             ), 
-            is_pressed: ValueNotifier<bool>(false), 
+            // 如果应用正在升级,则直接设置按钮已被按下 (也就是提醒用户你已经正在升级)
+            is_pressed: (downloading_app.id != '') ? ValueNotifier<bool>(true) : ValueNotifier<bool>(false), 
             indicator_width: 20, 
             onPressed: () async {
               // await widget.exposeUpgradeButton(button_upgrade);

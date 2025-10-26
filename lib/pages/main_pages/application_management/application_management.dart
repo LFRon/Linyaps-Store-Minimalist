@@ -73,14 +73,10 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 更新待更新应用列表方法
   Future <void> updateUpgradableAppsList () async 
     {
-      List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
+      // List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
       // 更新对应变量并触发页面重构
-      if (mounted)
-        {
-          setState(() {
-            globalAppState.updateUpgradableAppsList(get_upgradable_apps);
-          });
-        }
+      await globalAppState.updateUpgradableAppsList_Online();
+      if (mounted) setState(() {});
       return;
     }
   
@@ -89,10 +85,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     {
       await globalAppState.updateInstalledAppsList_Online(globalAppState.installedAppsList);
       // 更新应用安装信息
-      if (mounted)
-        {
-          setState(() {});
-        }
+      if (mounted) setState(() {});
       return;
     }
   
@@ -129,42 +122,16 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> upgradeAllApp (MyButton_UpgradeAll button_upgradeAll,) async 
     {
       // 设置"一键升级"按钮为按下状态
-      button_upgradeAll.is_pressed.value = true;
+      // button_upgradeAll.is_pressed.value = true;
       // 经过迭代器让每个应用的"升级"按钮全部变成加载中
-      for (var i in button_upgrade_list)
-        {
+      // for (var i in button_upgrade_list)
+      //  {
           // 设置按钮被按下状态为真
-          i.is_pressed.value = true;
-        }
-      for (var i=globalAppState.upgradableAppsList.length-1;i>=0;i--)
+      //    i.is_pressed.value = true;
+      //  }
+      for (var i in globalAppState.upgradableAppsList)
         {
-          if (await LinyapsCliHelper().install_app(globalAppState.upgradableAppsList[i].id, globalAppState.upgradableAppsList[i].name, globalAppState.upgradableAppsList[i].version, globalAppState.upgradableAppsList[i].current_old_version,context) != 0)
-            {
-              button_upgrade_list[i].is_pressed.value = false;
-              // 如果安装失败返回失败字样
-              button_upgrade_list[i].text = Text(
-                "失败",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              );
-            }
-          // 如果对应应用升级成功
-          else 
-            {
-              // 更新完后进行页面信息的更新
-              if (mounted)
-                {
-                  setState(() {
-                    LinyapsPackageInfo appToUpdate = globalAppState.upgradableAppsList.firstWhere(
-                      (app)=>app.id==globalAppState.upgradableAppsList[i].id,
-                    );     // 先找到要更新的应用
-                    appToUpdate.version = globalAppState.upgradableAppsList[i].version;    // 直接升级版本
-                    globalAppState.upgradableAppsList.removeAt(i);
-                  });
-                }
-            }
+          await LinyapsAppManagerApi().install_app(i, context);
         }
     }
 
@@ -258,9 +225,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> _refreshPageData () async 
     {
       // 更新已安装的应用信息
+      await updateUpgradableAppsList();
       await updateInstalledAppsList();
       await updateInstalledAppsIcon();
-      await updateUpgradableAppsList();
     }
   
   // 当用户重新切回页面时执行函数
