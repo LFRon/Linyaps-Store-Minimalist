@@ -1,3 +1,5 @@
+// 关于页面
+
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatefulWidget {
