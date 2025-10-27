@@ -5,7 +5,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/pages_utils/application_management/installed_apps_grid_items.dart';
@@ -29,6 +28,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   bool get wantKeepAlive => true; 
 
   bool is_page_loading = false;
+
+  // 检查当前页面所有应用是否都在下载队列里,默认为真
+  bool is_apps_all_upgrading = true;
 
   // 判断页面是否加载完全的开关
   // 在这里页面加载只用于判断所有应用信息是否加载完成,而不涉及应用更新
@@ -136,30 +138,11 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     }
 
   // 进行应用更新 (通过ListView.builder控件按"升级"按钮进行触发)
-  Future <void> upgradeApp (MyButton_Upgrade button_upgrade, LinyapsPackageInfo cur_app_info) async
+  Future <void> upgradeApp (LinyapsPackageInfo cur_app_info) async
     {
-      // 更新当前按钮被按下状态
-      button_upgrade.is_pressed.value = true;
-      if (await LinyapsCliHelper().install_app(cur_app_info.id, cur_app_info.name, cur_app_info.version, cur_app_info.current_old_version,context) != 0)
-        {
-          button_upgrade.is_pressed.value = false;
-          // 如果安装失败返回失败字样
-          button_upgrade.text = Text(
-            "失败",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          );
-        }
-      // 如果更新成功就触发页面重构
-      else 
-        {
-          // 更新完后进行页面信息的更新
-          await updateInstalledAppsList();
-          await updateUpgradableAppsList();
-          button_upgrade.is_pressed.value = false;
-        }
+      // 将应用推入下载列表
+      await LinyapsAppManagerApi().install_app(cur_app_info, context);
+      if (mounted) setState(() {});
       return;
     }
 
@@ -203,31 +186,15 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       // 添加页面观察者
       WidgetsBinding.instance.addObserver(this);  
 
-      // 初始化"一键升级"按钮对象
-      button_all_upgrade = MyButton_UpgradeAll(
-        text: Text(
-          "一键升级",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        ), 
-        is_pressed: ValueNotifier<bool>(false), 
-        indicator_width: 20, 
-        onPressed: () async {
-          await upgradeAllApp(button_all_upgrade);
-        },
-      );
-
     }
 
   // 抽象出数据加载过程
   Future <void> _refreshPageData () async 
     {
       // 更新已安装的应用信息
-      await updateUpgradableAppsList();
       await updateInstalledAppsList();
-      await updateInstalledAppsIcon();
+      updateUpgradableAppsList();
+      updateInstalledAppsIcon();
     }
   
   // 当用户重新切回页面时执行函数
@@ -267,6 +234,45 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 使用Consumer对ApplicationState实例进行监听
     return Consumer <ApplicationState> (
       builder: (context, appState, child) {
+        // 先假设每个应用都在进行升级
+        is_apps_all_upgrading = true;
+        // 然后通过遍历下载中的列表来验证真的假的
+        for (var i in appState.upgradableAppsList)
+          {
+            // 寻找下载列表里有没有待升级应用
+            LinyapsPackageInfo cur_app = appState.downloadingAppsQueue.firstWhere(
+              (app) => app.id == i.id && app.version == i.version,
+              // 如果找不到就返回空对象
+              orElse: () => LinyapsPackageInfo(
+                id: '', 
+                name: '', 
+                version: '', 
+                description: '', 
+                arch: ''
+              ),
+            );
+            if (cur_app.id == '')
+              {
+                is_apps_all_upgrading = false;
+                break;
+              }
+          }
+        // 初始化"一键升级"按钮对象
+        button_all_upgrade = MyButton_UpgradeAll(
+          text: Text(
+            "一键升级",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ), 
+          // 若识别到所有应用都在下载队列里则直接显示为加载中
+          is_pressed: ValueNotifier<bool>(is_apps_all_upgrading), 
+          indicator_width: 20, 
+          onPressed: () async {
+            await upgradeAllApp(button_all_upgrade);
+          },
+        );
         return Scaffold(
           body: is_page_loaded
             ? Padding(
@@ -340,17 +346,16 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                               )
                               : Padding(    // 设置上下控件间距离
                                 padding: EdgeInsets.only(top:12.0,bottom: 15.0,right: width*0.01),
-                                child: ListView(    // 不使用ListView.builder方便按下
+                                child: ListView.builder(    // 不使用ListView.builder方便按下
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),    // 禁止滚动
-                                  children: UpgradableAppListItems(
-                                    // 进行列表的反转,让应用升级时可以直接从列表尾部操作省去不必要的图标错位问题等
-                                    upgradable_apps_info: appState.upgradableAppsList.reversed.toList(), 
-                                    context: context,
-                                    exposeUpgradeButton: (button_upgrade) {
-                                      button_upgrade_list.add(button_upgrade);
-                                    },
-                                  ).items(), 
+                                  itemCount: appState.upgradableAppsList.length,
+                                  itemBuilder:(context, index) {
+                                    return UpgradableAppListItems(
+                                      cur_upgradable_app_info: appState.upgradableAppsList[index], 
+                                      context: context, 
+                                    ).item();
+                                  }, 
                                 ),
                               )
                             // 如果应用可更新信息未加载完
