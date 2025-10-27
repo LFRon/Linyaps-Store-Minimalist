@@ -123,14 +123,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 更新全部应用的方法
   Future <void> upgradeAllApp (MyButton_UpgradeAll button_upgradeAll,) async 
     {
-      // 设置"一键升级"按钮为按下状态
-      // button_upgradeAll.is_pressed.value = true;
-      // 经过迭代器让每个应用的"升级"按钮全部变成加载中
-      // for (var i in button_upgrade_list)
-      //  {
-          // 设置按钮被按下状态为真
-      //    i.is_pressed.value = true;
-      //  }
       for (var i in globalAppState.upgradableAppsList)
         {
           await LinyapsAppManagerApi().install_app(i, context);
@@ -152,7 +144,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     {
       super.didChangeDependencies();
       // 初始化全局对象
-      // 剩下的事情交给didChangeDependencies来做
       if(!is_page_loading)
         {
           is_page_loading = true;
@@ -268,7 +259,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           ), 
           // 若识别到所有应用都在下载队列里则直接显示为加载中
           is_pressed: ValueNotifier<bool>(is_apps_all_upgrading), 
-          indicator_width: 20, 
+          indicator_width: 22, 
           onPressed: () async {
             await upgradeAllApp(button_all_upgrade);
           },
