@@ -2,7 +2,6 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable
 
 import 'dart:io';
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
@@ -21,8 +20,6 @@ void main() async {
       await WindowManager.instance.setTitle("玲珑应用商店");
       // 设置窗口最小大小
       await WindowManager.instance.setMinimumSize(const Size(1200,600));
-      // 初始化FastCachedImage
-      await FastCachedImageConfig.init();
     }
 
   // 创建一个共享的ApplicationState实例

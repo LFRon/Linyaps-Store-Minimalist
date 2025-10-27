@@ -3,7 +3,7 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: non_constant_identifier_names, file_names, avoid_function_literals_in_foreach_calls
 
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -56,9 +56,9 @@ class RecommendAppSliderItems {
               child: Column(
                 children: [
                   // 先显示图片
-                  FastCachedImage(
-                    url: app_info.Icon==null?"":app_info.Icon!,
-                    loadingBuilder: (context, url) => Center(
+                  CachedNetworkImage(
+                    imageUrl: app_info.Icon==null?"":app_info.Icon!,
+                    placeholder: (context, url) => Center(
                       child: SizedBox(
                         height: height*0.05,
                         width: height*0.05,
@@ -68,7 +68,7 @@ class RecommendAppSliderItems {
                       ),
                     ),
                     // 无法显示图片时显示错误
-                    errorBuilder: (context, error, stackTrace) => Center(
+                    errorWidget: (context, error, stackTrace) => Center(
                       child:Column(
                         children: [
                           SizedBox(

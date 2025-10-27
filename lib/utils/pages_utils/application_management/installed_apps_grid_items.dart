@@ -3,7 +3,7 @@
 // 关闭VSCode的非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_function_literals_in_foreach_calls, curly_braces_in_flow_control_structures, use_build_context_synchronously
 
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -74,11 +74,11 @@ class InstalledAppsGridItems {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // 先显示图片
-                  FastCachedImage(
-                    url: installed_app_info[index].Icon!,
+                  CachedNetworkImage(
+                    imageUrl: installed_app_info[index].Icon!,
                     key: ValueKey('${installed_app_info[index].name}_${installed_app_info[index].IconUpdated}'),
                     height: 80,width: 80,
-                    loadingBuilder: (context, loadingProgress) {
+                    placeholder: (context, loadingProgress) {
                       return Center(
                         child: SizedBox(
                           height: 80,
@@ -90,7 +90,7 @@ class InstalledAppsGridItems {
                         ),
                       );
                     },
-                    errorBuilder: (context, error, stackTrace) => Center(
+                    errorWidget: (context, error, stackTrace) => Center(
                       child: SizedBox(
                         width: 80,
                         height: 80,

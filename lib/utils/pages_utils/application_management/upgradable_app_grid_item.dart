@@ -3,7 +3,7 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
 
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
@@ -86,9 +86,9 @@ class UpgradableAppListItems {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            FastCachedImage(
-                              url: i.Icon??"",
-                              loadingBuilder: (context, url) => Center(
+                            CachedNetworkImage(
+                              imageUrl: i.Icon??"",
+                              placeholder: (context, url) => Center(
                                 child: SizedBox(
                                   height: 80,
                                   width: 80,
@@ -102,7 +102,7 @@ class UpgradableAppListItems {
                                 ),
                               ),
                               // 如果图片无法加载就使用默认玲珑图标
-                              errorBuilder: (context, error, stackTrace) => Center(
+                              errorWidget: (context, error, stackTrace) => Center(
                                 child: Image(
                                   height: 70,
                                   width: 70,

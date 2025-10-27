@@ -3,7 +3,7 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_print, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/AppListView/app_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
@@ -245,11 +245,11 @@ class AppInfoPageState extends State<AppInfoPage> {
                                       Column(    // 这个子行控件只是纯粹地用来控制图片显示到中央
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          FastCachedImage(
+                                          CachedNetworkImage(
                                             height: height*0.15,
                                             width: height*0.15,
-                                            url: cur_app_info[cur_app_info.length-1].Icon==null?"":cur_app_info[cur_app_info.length-1].Icon!,
-                                            loadingBuilder: (context, url) => Center(
+                                            imageUrl: cur_app_info[cur_app_info.length-1].Icon==null?"":cur_app_info[cur_app_info.length-1].Icon!,
+                                            placeholder: (context, url) => Center(
                                               child: SizedBox(
                                                 height: height*0.02,
                                                 width: height*0.02,
@@ -263,7 +263,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                               ),
                                             ),
                                             // 无法显示图片时显示错误
-                                            errorBuilder: (context, error, stackTrace) => Center(
+                                            errorWidget: (context, error, stackTrace) => Center(
                                               child: SizedBox(
                                                 width: height*0.14,
                                                 height: height*0.14,

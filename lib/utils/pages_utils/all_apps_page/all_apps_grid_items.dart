@@ -3,7 +3,7 @@
 // 关闭VSCode的非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_function_literals_in_foreach_calls
 
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -63,9 +63,9 @@ class AppGridItem {
                 // 先显示图片
                 Hero(
                   tag: "NewestAppsGridItems_${cur_app.id}",
-                  child: FastCachedImage(
-                    url: cur_app.Icon==null?"":cur_app.Icon!,
-                    loadingBuilder: (context, url) => Center(
+                  child: CachedNetworkImage(
+                    imageUrl: cur_app.Icon==null?"":cur_app.Icon!,
+                    placeholder: (context, url) => Center(
                       child: SizedBox(
                         height: 80,
                         width: 80,
@@ -75,7 +75,7 @@ class AppGridItem {
                       ),
                     ),
                     // 无法显示图片时显示错误
-                    errorBuilder: (context, error, stackTrace) => Center(
+                    errorWidget: (context, error, stackTrace) => Center(
                       child: SizedBox(
                         width: 80,
                         height: 80,
