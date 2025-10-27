@@ -2,7 +2,7 @@
 // 该中间件用于与商店API功能对接实现具体应用管理
 
 // 关闭VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
@@ -138,7 +138,6 @@ class LinyapsAppManagerApi {
   // 返回应用可更新列表
   Future <List<LinyapsPackageInfo>> get_upgradable_apps () async 
     {
-      // 先获取已安装应用
       List <LinyapsPackageInfo> installed_apps = await get_installed_apps([]);
 
       // 初始化待返回应用抽象类列表
@@ -150,8 +149,15 @@ class LinyapsAppManagerApi {
         {
           // 先尝试从商店获取当前应用信息
           List <LinyapsPackageInfo> app_info_from_store = await LinyapsStoreApiService().get_app_details(i.id);
-          // 如果找不到对应应用直接跳过
-          if (app_info_from_store.isEmpty) continue;
+          // 如果找不到对应应用,或者发现是base则直接跳过
+          if (
+            app_info_from_store.isEmpty || 
+            app_info_from_store[0].id == 'org.deepin.base' || 
+            app_info_from_store[0].id == 'org.deepin.foundation' ||
+            app_info_from_store[0].id == 'org.deepin.Runtime' ||
+            app_info_from_store[0].id == 'org.deepin.runtime.dtk' || 
+            app_info_from_store[0].id == 'org.deepin.runtime.gtk4'
+          ) continue;
           // 如果发现有更高版本
           if (
             VersionCompare(

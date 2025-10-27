@@ -260,7 +260,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 声明GridView网格视图中当前应该显示多少列对象(跟随屏幕像素改变而改变)
     late int gridViewCrossAxisCount;
     if (width > 1600) gridViewCrossAxisCount = 6;
-    else if (width > 1300) gridViewCrossAxisCount = 5;
+    else if (width > 1350) gridViewCrossAxisCount = 5;
     else if (width > 1100) gridViewCrossAxisCount = 4;
     else gridViewCrossAxisCount = 3;
 
