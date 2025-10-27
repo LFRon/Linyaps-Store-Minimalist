@@ -264,6 +264,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     else if (width > 1100) gridViewCrossAxisCount = 4;
     else gridViewCrossAxisCount = 3;
 
+    // 使用Consumer对ApplicationState实例进行监听
     return Consumer <ApplicationState> (
       builder: (context, appState, child) {
         return Scaffold(
