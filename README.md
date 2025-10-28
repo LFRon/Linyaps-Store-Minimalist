@@ -8,4 +8,4 @@ Flutter版本: 3.35.7
 
 Dart版本: 3.9.2
 
-宿主Linux发行版: Fedora GNU/Linux 42 x86-64
+宿主Linux发行版: Fedora GNU/Linux 43 x86-64
