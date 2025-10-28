@@ -162,6 +162,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           Future.microtask(() async {
             // 获取应用更新详情
             await globalAppState.updateUpgradableAppsList_Online();
+            // 在这里设置页面已完全加载
+            is_page_loading = false;
             // 设置可更新应用信息已完全加载
             setUpgradableAppLoaded();
           });
@@ -183,9 +185,18 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> _refreshPageData () async 
     {
       // 更新已安装的应用信息
-      await updateInstalledAppsList();
-      updateUpgradableAppsList();
-      updateInstalledAppsIcon();
+      if (!is_page_loading)
+        {
+          await updateInstalledAppsList();
+          await updateUpgradableAppsList();
+          updateInstalledAppsIcon();
+          if (mounted)
+            {
+              setState(() {
+                is_page_loading = false;
+              });
+            }
+        }
     }
   
   // 当用户重新切回页面时执行函数

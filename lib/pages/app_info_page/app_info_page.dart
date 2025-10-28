@@ -42,8 +42,11 @@ class AppInfoPageState extends State<AppInfoPage> {
   // 声明当前应用对象
   late List <LinyapsPackageInfo> cur_app_info;
 
+  // 由于商店目前不支持获取应用base信息,因此单开一个变量获取应用最新的base信息
+  String cur_app_base = '';
+
   // 声明存储当前应用安装的第几个版本,默认为字符串为空代表没有安装
-  String cur_installed_version = "";
+  String cur_installed_version = '';
 
   // 获取当前网络具体状况函数
   Future <void> get_connection_status () async
@@ -58,7 +61,16 @@ class AppInfoPageState extends State<AppInfoPage> {
         }
       return;
     }
-  
+
+  // 由于商店目前不支持获取应用base信息,因此单开一个函数获取应用最新的base信息
+  Future <void> getAppBase (String appId) async 
+    {
+      String get_app_base = await LinyapsStoreApiService().get_app_base(appId);
+      if (mounted)
+        {
+          cur_app_base = get_app_base;
+        }
+    }
 
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
   Future <bool> getAppDetails (String appId) async
@@ -178,6 +190,7 @@ class AppInfoPageState extends State<AppInfoPage> {
         await get_connection_status();
         if (is_connection_good)
           {
+            await getAppBase(widget.appId);
             // 先更新应用具体信息
             if (await getAppDetails(widget.appId))
               {
@@ -338,14 +351,16 @@ class AppInfoPageState extends State<AppInfoPage> {
                                               fontSize: 21,
                                             ),
                                           ),
+                                          
                                           SizedBox(height: height*0.02,),
                                           Text(
-                                            "应用基础环境: ${cur_app_info[cur_app_info.length-1].base}",
+                                            "应用基础环境: $cur_app_base",
                                             style: TextStyle(
                                               color: Colors.grey.shade800,
                                               fontSize: 21,
                                             ),
                                           ),
+                                          
                                           SizedBox(height: height*0.02,),
                                           Text(
                                             "应用运行环境: ${(cur_app_info[cur_app_info.length-1].runtime=='' || cur_app_info[cur_app_info.length-1].runtime=='null')?'无':cur_app_info[cur_app_info.length-1].runtime}",

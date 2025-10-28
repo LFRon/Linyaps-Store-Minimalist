@@ -309,7 +309,87 @@ class LinyapsStoreApiService {
       return returnItems;
     }
 
-  // 获取具体应用的详细信息
+  // 获取应用Base信息的方法
+  Future <String> get_app_base (String appId) async 
+    {
+      await update_os_arch();    // 更新系统架构信息
+      String serverUrl = '$serverHost_Repo/api/v0/apps/fuzzysearchapp';
+      Dio dio = Dio ();    // 创建Dio请求对象
+      int i=0;
+      Map <String,dynamic> upload_data = {    // 准备请求数据
+        "repoName": "stable",
+        "channel": "main",
+        "arch": repo_arch,
+        "appId": appId,
+      };
+      // 发送并获取返回信息
+      Response response = await dio.post(
+        serverUrl,
+        data: jsonEncode(upload_data),
+      );  
+      dio.close();
+      List <dynamic> app_info_get = response.data['data'];
+      List <LinyapsPackageInfo> app_info_sorted = [];
+      // 对版本号进行二叉树的升序排序
+      if (app_info_get.isNotEmpty)
+        {
+          for (i=0;i<app_info_get.length;i++)
+            {
+              LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(
+                id: app_info_get[i]['id']==null?app_info_get[i]['appId']:app_info_get[i]['id'], 
+                devName: app_info_get[i]['devName'],
+                name: app_info_get[i]['name'], 
+                base: app_info_get[i]['base'], 
+                installCount: app_info_get[i]['installCount'],
+                runtime: app_info_get[i]['runtime'],
+                repoName: app_info_get[i]['repoName'],
+                channel: app_info_get[i]['channel'],
+                module: app_info_get[i]['module'],
+                version: app_info_get[i]['version'], 
+                description: app_info_get[i]['description'], 
+                arch: app_info_get[i]['arch'],
+                Icon: app_info_get[i]['icon'],  
+              );
+              
+              // 使用二分查找找到合适的插入位置
+              if (app_info_sorted.isEmpty) 
+                {
+                  app_info_sorted.add(wait_add_info);
+                } 
+              else 
+                {
+                  // 使用二分法寻找待插入节点
+                  int left = 0;
+                  int right = app_info_sorted.length - 1;
+                  while (left<=right)
+                    {
+                      // 存储中间节点 (这里是整除)
+                      int m =(left + right) ~/ 2;
+                      // 如果中间节点大于待插入节点
+                      if (
+                        VersionCompare(
+                        ver1: app_info_sorted[m].version, 
+                        ver2: wait_add_info.version,
+                        ).isFirstGreaterThanSec()
+                      ) {
+                        right=m-1;
+                      }
+                      else left=m+1;
+                    }
+                  // 最后插入待插入节点
+                  // 特殊处理最后一个让用专用的插入函数,因为insert不支持在末尾追加,这样会导致原先的最后一个元素被往后挤
+                  if (left<app_info_sorted.length) app_info_sorted.insert(left,wait_add_info);
+                  else app_info_sorted.add(wait_add_info);
+                }    
+            }
+          // 返回对应信息
+          return app_info_sorted[app_info_sorted.length-1].base??'';
+        }
+      // 如果没有对应应用直接返回空列表
+      else return "";
+    }
+
+  // 获取具体应用的详细信息的方法
   Future <List<LinyapsPackageInfo>> get_app_details (String appId) async
     {
       await update_os_arch();   // 更新系统架构信息
