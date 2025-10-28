@@ -48,6 +48,30 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 用于存储ListView.builder里所有升级对象
   List <MyButton_Upgrade> button_upgrade_list = [];
 
+  // 更新页面加载状态为加载中的方法
+  Future <void> setPageLoading () async 
+    {
+      if (mounted)
+        {
+          setState(() {
+            is_page_loading = true;
+          });
+        }
+      return;
+    }
+  
+  // 更新页面加载状态为加载完成的方法
+  Future <void> setPageNotLoading () async 
+    {
+      if (mounted)
+        {
+          setState(() {
+            is_page_loading = true;
+          });
+        }
+      return;
+    }
+
   // 更新页面为加载完成的方法
   Future <void> setPageLoaded () async 
     {
@@ -146,12 +170,13 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       // 初始化全局对象
       if(!is_page_loading)
         {
-          is_page_loading = true;
           // 拿到可更新应用和已安装应用的列表
           globalAppState = context.watch<ApplicationState>();
           
           // 先暴力异步加载页面信息
           Future.microtask(() async {
+            // 更新当前页面状态为加载中
+            await setPageLoading();
             // 更新已安装的应用信息
             await globalAppState.updateInstalledAppsList_Online(globalAppState.upgradableAppsList);
             await setPageLoaded();
@@ -162,8 +187,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           Future.microtask(() async {
             // 获取应用更新详情
             await globalAppState.updateUpgradableAppsList_Online();
-            // 在这里设置页面已完全加载
-            is_page_loading = false;
+            // 在这里设置页面已加载完未在加载状态
+            await setPageNotLoading();
             // 设置可更新应用信息已完全加载
             setUpgradableAppLoaded();
           });
@@ -182,20 +207,21 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     }
 
   // 抽象出数据加载过程
+  // 且仅在页面状态为没有加载时进行加载
   Future <void> _refreshPageData () async 
     {
-      // 更新已安装的应用信息
+      // 如果页面当前处于暂停加载的状态
+      // 那么就更新已安装的应用信息
       if (!is_page_loading)
         {
+          // 先设置页面为加载中状态
+          await setPageLoading();
+          // 再执行具体更新函数功能
           await updateInstalledAppsList();
           await updateUpgradableAppsList();
-          updateInstalledAppsIcon();
-          if (mounted)
-            {
-              setState(() {
-                is_page_loading = false;
-              });
-            }
+          await updateInstalledAppsIcon();
+          // 设置页面更新状态为已完成
+          await setPageNotLoading();
         }
     }
   
@@ -204,7 +230,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   void didChangeAppLifecycleState (AppLifecycleState state) async
     {
       super.didChangeAppLifecycleState(state);
-      if (state == AppLifecycleState.resumed)
+      if (state == AppLifecycleState.resumed && !is_page_loading)
         {
           await _refreshPageData();
         }
