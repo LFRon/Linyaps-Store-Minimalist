@@ -4,6 +4,7 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, use_build_context_synchronously, unnecessary_overrides
 
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
@@ -27,6 +28,10 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   @override
   bool get wantKeepAlive => true; 
 
+  // 检查网络连接是否正常的开关,初始化为假
+  bool is_connection_good = false;
+
+  // 检查页面自身是否在加载的状态开关
   bool is_page_loading = false;
 
   // 检查当前页面所有应用是否都在下载队列里,默认为真
@@ -47,6 +52,18 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
   // 用于存储ListView.builder里所有升级对象
   List <MyButton_Upgrade> button_upgrade_list = [];
+
+  // 更新当前网络连接状态
+  Future <void> updateConnectionStatus () async 
+    {
+      bool get_connection_status = await CheckInternetConnectionStatus().staus_is_good();
+      if (mounted)
+        {
+          setState(() {
+            is_connection_good = get_connection_status;
+          });
+        }
+    }
 
   // 更新页面加载状态为加载中的方法
   Future <void> setPageLoading () async 
@@ -211,8 +228,10 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> _refreshPageData () async 
     {
       // 如果页面当前处于暂停加载的状态
-      // 那么就更新已安装的应用信息
-      if (!is_page_loading)
+      // 那就先检查网络连接状态
+      await updateConnectionStatus();
+      // 网络好的话那么就更新已安装的应用信息
+      if (!is_page_loading && is_connection_good)
         {
           // 先设置页面为加载中状态
           await setPageLoading();
