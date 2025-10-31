@@ -136,7 +136,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> updateInstalledAppsIcon () async 
     {
       // 用于存储了带了AppIcon链接的Icon列表
-      List<LinyapsPackageInfo> newAppsList = [];
+      List <LinyapsPackageInfo> newAppsList = [];
       for (LinyapsPackageInfo i in globalAppState.installedAppsList)
         {
           String cur_app_icon = await LinyapsAppManagerApi().getAppIcon(i.id);
