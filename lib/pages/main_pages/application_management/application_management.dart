@@ -249,7 +249,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   void didChangeAppLifecycleState (AppLifecycleState state) async
     {
       super.didChangeAppLifecycleState(state);
-      if (state == AppLifecycleState.resumed && !is_page_loading)
+      if (state == AppLifecycleState.resumed && !is_page_loading && await CheckInternetConnectionStatus().staus_is_good())
         {
           await _refreshPageData();
         }
