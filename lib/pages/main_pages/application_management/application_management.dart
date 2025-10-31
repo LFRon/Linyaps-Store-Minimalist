@@ -126,7 +126,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 获取所有应用
   Future <void> updateInstalledAppsList () async 
     {
-      await globalAppState.updateInstalledAppsList_Online(globalAppState.installedAppsList);
+      await globalAppState.updateInstalledAppsList_Online();
       // 更新应用安装信息
       if (mounted) setState(() {});
       return;
@@ -195,17 +195,17 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
             // 更新当前页面状态为加载中
             await setPageLoading();
             // 更新已安装的应用信息
-            await globalAppState.updateInstalledAppsList_Online(globalAppState.upgradableAppsList);
+            await updateInstalledAppsList();
             await setPageLoaded();
             await updateInstalledAppsIcon();
+            // 在这里设置页面已加载完未在加载状态
+            await setPageNotLoading();
           });
 
           // 再暴力异步加载可更新应用信息
           Future.microtask(() async {
             // 获取应用更新详情
             await globalAppState.updateUpgradableAppsList_Online();
-            // 在这里设置页面已加载完未在加载状态
-            await setPageNotLoading();
             // 设置可更新应用信息已完全加载
             setUpgradableAppLoaded();
           });
@@ -249,7 +249,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   void didChangeAppLifecycleState (AppLifecycleState state) async
     {
       super.didChangeAppLifecycleState(state);
-      if (state == AppLifecycleState.resumed && !is_page_loading && await CheckInternetConnectionStatus().staus_is_good())
+      if (state == AppLifecycleState.resumed && !is_page_loading)
         {
           await _refreshPageData();
         }
