@@ -83,7 +83,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       if (mounted)
         {
           setState(() {
-            is_page_loading = true;
+            is_page_loading = false;
           });
         }
       return;

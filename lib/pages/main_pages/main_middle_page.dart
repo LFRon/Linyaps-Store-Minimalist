@@ -8,6 +8,7 @@ import 'package:linglong_store_flutter/pages/main_pages/my_side_menu/my_side_men
 import 'package:linglong_store_flutter/pages/main_pages/recommend_app_page/recommend_app_page.dart';
 
 class MainMiddlePage extends StatefulWidget {
+  
   const MainMiddlePage({super.key});
 
   @override
@@ -16,8 +17,6 @@ class MainMiddlePage extends StatefulWidget {
 
 
 class _MainMiddlePageState extends State<MainMiddlePage> {
-
-  
 
   // 初始化会传入的中间页控制器
   PageController pageController=PageController();  // 传入当前页面控制器方便直接切换页面
