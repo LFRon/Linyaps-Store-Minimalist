@@ -328,6 +328,8 @@ class LinyapsStoreApiService {
         data: jsonEncode(upload_data),
       );  
       dio.close();
+      // 防止点开没有收录的应用而获取到null的base
+      if (response.data['data'] == null) return "";
       List <dynamic> app_info_get = response.data['data'];
       List <LinyapsPackageInfo> app_info_sorted = [];
       // 对版本号进行二叉树的升序排序
