@@ -13,11 +13,9 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
 
   @override
-  void initState ()
-    {
+  void initState () {
       super.initState();
-      
-    }
+  }
 
   @override
   Widget build(BuildContext context) {

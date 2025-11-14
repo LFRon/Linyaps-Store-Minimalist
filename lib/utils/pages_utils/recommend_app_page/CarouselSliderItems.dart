@@ -26,79 +26,77 @@ class RecommendAppSliderItems {
     required this.width,
   });
 
-  List <Widget> Items ()
-    {
-      List <Widget> returnItem = [];    // returnItem为最终返回的控件
-      // 循环加入控件
-      RecommendAppsList.forEach((app_info)
-        {
-          returnItem.add(
-            // 给每个控件加入按钮
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AppInfoPage(appId: app_info.id);
-                    },
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                // 关掉所有按钮特效
-                backgroundColor: Colors.transparent,
-                overlayColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                elevation: 0,
-                splashFactory: NoSplash.splashFactory,
+  List <Widget> Items () {
+    List <Widget> returnItem = [];    // returnItem为最终返回的控件
+    // 循环加入控件
+    RecommendAppsList.forEach((app_info) {
+      returnItem.add(
+        // 给每个控件加入按钮
+        ElevatedButton(
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AppInfoPage(appId: app_info.id);
+                },
               ),
-              child: Column(
-                children: [
-                  // 先显示图片
-                  CachedNetworkImage(
-                    imageUrl: app_info.Icon==null?"":app_info.Icon!,
-                    placeholder: (context, url) => Center(
-                      child: SizedBox(
-                        height: height*0.05,
-                        width: height*0.05,
-                        child: CircularProgressIndicator(
-                          color: Colors.grey.shade300,
-                        ),  // 加载时显示进度条,
-                      ),
-                    ),
-                    // 无法显示图片时显示错误
-                    errorWidget: (context, error, stackTrace) => Center(
-                      child:Column(
-                        children: [
-                          SizedBox(
-                            width: width*0.05,
-                            child: Icon(
-                              Icons.error_rounded,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    height: height*0.15,
-                    width: height*0.15,
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            // 关掉所有按钮特效
+            backgroundColor: Colors.transparent,
+            overlayColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            elevation: 0,
+            splashFactory: NoSplash.splashFactory,
+          ),
+          child: Column(
+            children: [
+              // 先显示图片
+              CachedNetworkImage(
+                imageUrl: app_info.Icon==null?"":app_info.Icon!,
+                placeholder: (context, url) => Center(
+                  child: SizedBox(
+                    height: height*0.05,
+                    width: height*0.05,
+                    child: CircularProgressIndicator(
+                      color: Colors.grey.shade300,
+                    ),  // 加载时显示进度条,
                   ),
-                  SizedBox(height:height*0.04,),
-                  // 再显示应用名
-                  Text(
-                    app_info.name,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: height*0.024,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                // 无法显示图片时显示错误
+                errorWidget: (context, error, stackTrace) => Center(
+                  child:Column(
+                    children: [
+                      SizedBox(
+                        width: width*0.05,
+                        child: Icon(
+                          Icons.error_rounded,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                height: height*0.15,
+                width: height*0.15,
               ),
-            ),
-          );
-        });
-      return returnItem;
-    }
+              SizedBox(height:height*0.04,),
+              // 再显示应用名
+              Text(
+                app_info.name,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: height*0.024,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+    return returnItem;
+  }
 }

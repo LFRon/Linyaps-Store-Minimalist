@@ -5,7 +5,7 @@
 
 
 // 关闭VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
@@ -25,26 +25,24 @@ class ApplicationState extends ChangeNotifier {
   bool isProcessingQueue = false;   // 用于标记是否正在处理下载队列
 
   // 在线更新应用更新状况方法
-  Future <void> updateUpgradableAppsList_Online () async 
-    {
-      List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
-      // 更新对应变量并触发页面重构
-      upgradableAppsList = get_upgradable_apps;
-      notifyListeners();
-      return;
-    }
+  Future <void> updateUpgradableAppsList_Online () async {
+    List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
+    // 更新对应变量并触发页面重构
+    upgradableAppsList = get_upgradable_apps;
+    notifyListeners();
+    return;
+  }
 
   //// 对本地应用变量更改
   // 更新本地应用安装详情方法
   // 返回值是列表是否需要更新
-  Future <void> updateInstalledAppsList_Online () async 
-    {
-      List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(installedAppsList);
-      // 更新对应变量并触发页面重构
-      installedAppsList = get_installed_apps;
-      notifyListeners();
-      return;
-    }
+  Future <void> updateInstalledAppsList_Online () async {
+    List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(installedAppsList);
+    // 更新对应变量并触发页面重构
+    installedAppsList = get_installed_apps;
+    notifyListeners();
+    return;
+  }
 
   // 这个离线方法需要传入新列表手动刷新
   void updateUpgradableAppsList(List <LinyapsPackageInfo> newList) {
@@ -84,34 +82,33 @@ class ApplicationState extends ChangeNotifier {
     isProcessingQueue = true;
 
     // 进行应用安装并判断状态
-    while (downloadingAppsQueue.isNotEmpty)
-      {
-        LinyapsPackageInfo currentApp = downloadingAppsQueue.first;
-        // 更新下载状态
-        currentApp.downloadState = DownloadState.downloading;
-        notifyListeners();
-        if (
-          await LinyapsCliHelper().install_app(
-            currentApp.id, 
-            currentApp.name,
-            currentApp.version, 
-            currentApp.current_old_version,
-            context
-          ) == 0
-        ) {
-          // 安装成功
-          currentApp.downloadState = DownloadState.completed;
-          // 将其从列表中移除
-          downloadingAppsQueue.remove(currentApp);
-          print(downloadingAppsQueue);
-        } else {
-          // 安装失败
-          currentApp.downloadState = DownloadState.failed;
-          downloadingAppsQueue.remove(currentApp);
-          print(downloadingAppsQueue);
-        }
-        notifyListeners();
+    while (downloadingAppsQueue.isNotEmpty) {
+      LinyapsPackageInfo currentApp = downloadingAppsQueue.first;
+      // 更新下载状态
+      currentApp.downloadState = DownloadState.downloading;
+      notifyListeners();
+      if (
+        await LinyapsCliHelper().install_app(
+          currentApp.id, 
+          currentApp.name,
+          currentApp.version, 
+          currentApp.current_old_version,
+          context
+        ) == 0
+      ) {
+        // 安装成功
+        currentApp.downloadState = DownloadState.completed;
+        // 将其从列表中移除
+        downloadingAppsQueue.remove(currentApp);
+        print('当前下载列表: $downloadingAppsQueue');
+      } else {
+        // 安装失败
+        currentApp.downloadState = DownloadState.failed;
+        downloadingAppsQueue.remove(currentApp);
+        print('当前下载列表: $downloadingAppsQueue');
       }
+      notifyListeners();
+    }
     isProcessingQueue = false;
     // 更新监听者
     notifyListeners();

@@ -66,25 +66,23 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   // 抽象出页面加载函数,方便用户选择看哪个排行榜时进行重载
-  Future <void> loadPage() async
-    {
-      // 先设置页面加载状态为假
-      if (mounted)
-        {
-          setState(() {
-            is_page_loaded = false;
-          });
-        }
-      // 再进行页面加载
-      // 先更新网络状态
-      await updateConnectionStatus();
-      if (is_connection_good) {
-        // 如果网络连接状态正常就更新应用列表
-        await updateAppsRakingList(radio_choice);
-      }
-      // 设置页面加载状态为完成
-      await setPageLoaded();
+  Future <void> loadPage() async {
+    // 先设置页面加载状态为假
+    if (mounted) {
+      setState(() {
+        is_page_loaded = false;
+      });
     }
+    // 再进行页面加载
+    // 先更新网络状态
+    await updateConnectionStatus();
+    if (is_connection_good) {
+      // 如果网络连接状态正常就更新应用列表
+      await updateAppsRakingList(radio_choice);
+    }
+    // 设置页面加载状态为完成
+    await setPageLoaded();
+  }
 
   // 覆写父类构造函数
   @override
@@ -107,14 +105,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
     // 声明GridView网格视图中当前应该显示多少列对象(跟随屏幕像素改变而改变)
     late int gridViewCrossAxisCount;
-    if (width > 1800)
-      gridViewCrossAxisCount = 6;
-    else if (width > 1550)
-      gridViewCrossAxisCount = 5;
-    else if (width > 1100)
-      gridViewCrossAxisCount = 4;
-    else
-      gridViewCrossAxisCount = 3;
+    if (width > 1800) gridViewCrossAxisCount = 6;
+    else if (width > 1550) gridViewCrossAxisCount = 5;
+    else if (width > 1100) gridViewCrossAxisCount = 4;
+    else gridViewCrossAxisCount = 3;
 
     return Scaffold(
       body: Padding(

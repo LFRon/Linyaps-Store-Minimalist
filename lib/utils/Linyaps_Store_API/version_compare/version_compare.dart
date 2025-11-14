@@ -15,21 +15,20 @@ class VersionCompare {
   });
 
   // 用于返回ver1是否大于ver2
-  bool isFirstGreaterThanSec ()
-    {
-      List <String> parted_ver1 = ver1.split('.');
-      List <String> parted_ver2 = ver2.split('.');
-      int parted1 = 0,parted2 = 0;
-      int i=0;   // 用于下放循环检查
-      for (i=0;i<parted_ver1.length;i++)
-        {
-          parted1 = int.tryParse(parted_ver1[i])!;
-          parted2 = int.tryParse(parted_ver2[i])!;
-          // 发现同级有大的直接返回判断
-          if (parted1>parted2) return true;
-          if (parted2>parted1) return false;
-        }
-      // 发现版本号一样也返回假
-      return false;
-    }
+  bool isFirstGreaterThanSec () {
+    List <String> parted_ver1 = ver1.split('.');
+    List <String> parted_ver2 = ver2.split('.');
+    int parted1 = 0,parted2 = 0;
+    int i=0;   // 用于下放循环检查
+    for (i=0;i<parted_ver1.length;i++)
+      {
+        parted1 = int.tryParse(parted_ver1[i])!;
+        parted2 = int.tryParse(parted_ver2[i])!;
+        // 发现同级有大的直接返回判断
+        if (parted1>parted2) return true;
+        if (parted2>parted1) return false;
+      }
+    // 发现版本号一样也返回假
+    return false;
+  }
 }

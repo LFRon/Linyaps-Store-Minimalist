@@ -52,175 +52,153 @@ class _AllAppsPageState extends State<AllAppsPage> {
   bool is_connection_good = false;
 
   // 刷新网络连接状态的函数
-  Future <void> update_connection_status () async
-    {
-      // 先异步获取网络连接状态
-      bool get_connection_status =  await CheckInternetConnectionStatus().staus_is_good();
-      // 刷新变量信息并触发页面重构
-      if (mounted)
-        {
-          setState(() {
-            is_connection_good = get_connection_status;
-          });
-        }
-      return;
+  Future <void> update_connection_status () async {
+    // 先异步获取网络连接状态
+    bool get_connection_status =  await CheckInternetConnectionStatus().staus_is_good();
+    // 刷新变量信息并触发页面重构
+    if (mounted) {
+      setState(() {
+        is_connection_good = get_connection_status;
+      });
     }
+    return;
+  }
   
   // 重置按钮按下后重置页面的函数
-  Future <void> reloadPage_all () async 
-    {
-      // 先重置curPage迭代器,cur_app_list列表里的应用信息
-      curPageStart = 1;
-      cur_app_list = [];
-      // 先重置页面加载状态
-      await resetPageStatus();
-      // 重新执行加载页面函数
-      await loadPage_allApps();
-      await setPageLoaded();
-      return;
-    }
+  Future <void> reloadPage_all () async {
+    // 先重置curPage迭代器,cur_app_list列表里的应用信息
+    curPageStart = 1;
+    cur_app_list = [];
+    // 先重置页面加载状态
+    await resetPageStatus();
+    // 重新执行加载页面函数
+    await loadPage_allApps();
+    await setPageLoaded();
+    return;
+  }
 
   // 搜索按钮按下后重置页面显示信息为搜索结果的函数
-  Future <void> reloadPage_searchResult () async
-    {
-      // 先重置页面加载状态
-      await resetPageStatus();
-      // 先更新网络连接状态
-      await update_connection_status();
-      if (is_connection_good)
-        {
-          // 调用具体函数更新应用更新状态
-          await getSearchResult(_controller_searchtext.text);
-        }     
-      await setPageLoaded();
-      return;
-    }
+  Future <void> reloadPage_searchResult () async {
+    // 先重置页面加载状态
+    await resetPageStatus();
+    // 先更新网络连接状态
+    await update_connection_status();
+    if (is_connection_good) {
+      // 调用具体函数更新应用更新状态
+      await getSearchResult(_controller_searchtext.text);
+    }     
+    await setPageLoaded();
+    return;
+  }
 
   // 显示底部的加载动画方法
-  Future <void> showMoreAppsLoadingPopWindow () async 
-    {
-      await BottomLoading_AllApps(
-        context: context,
-      ).show();
-      return;
-    }
+  Future <void> showMoreAppsLoadingPopWindow () async {
+    await BottomLoading_AllApps(context: context,).show();
+    return;
+  }
   // 隐藏底部的加载动画方法
-  Future <void> hideMoreAppsLoadingPopWindow () async 
-    {
-      if (Navigator.canPop(context))
-        {
-          Navigator.pop(context);
-        }
-      return;
-    }
+  Future <void> hideMoreAppsLoadingPopWindow () async {
+    if (Navigator.canPop(context)) Navigator.pop(context);
+    return;
+  }
 
   // 加载具体的应用信息方法
-  Future <void> updateAppList () async
-    {
-      // 声明新的变量用来承接新获得的应用信息
-      List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_app_list(
-        curPageStart, 
-        curPageSize, 
-      );
-      
-      // 触发页面重构并修改对应变量
-      if (mounted) setState(() {
-        // 将获得的元素信息加入cur_app_list
-        app_info_get.forEach((app_info){
-          cur_app_list.add(app_info);
-        });
-        // 起始页面信息后移
-        curPageStart++;
+  Future <void> updateAppList () async {
+    // 声明新的变量用来承接新获得的应用信息
+    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_app_list(
+      curPageStart, 
+      curPageSize, 
+    );
+    
+    // 触发页面重构并修改对应变量
+    if (mounted) setState(() {
+      // 将获得的元素信息加入cur_app_list
+      app_info_get.forEach((app_info){
+        cur_app_list.add(app_info);
       });
-      return;
-    }
+      // 起始页面信息后移
+      curPageStart++;
+    });
+    return;
+  }
 
   // 与后端中间件对接的搜索方法
-  Future <void> getSearchResult (String searchId) async
-    {
-      // 声明新的变量用来承接新获得的应用信息
-      List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_search_results(
-        searchId,
-      );
-      // 更新应用列表
-      if (mounted)
-        {
-          setState(() {
-            cur_app_list = app_info_get;
-          });
-        }
-      return;
+  Future <void> getSearchResult (String searchId) async {
+    // 声明新的变量用来承接新获得的应用信息
+    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_search_results(
+      searchId,
+    );
+    // 更新应用列表
+    if (mounted) {
+      setState(() {
+        cur_app_list = app_info_get;
+      });
     }
+    return;
+  }
   
   // 设置页面需要重载的方法
-  Future <void> resetPageStatus () async 
-    {
-      if (mounted)
-        {
-          setState(() {
-            is_page_loaded = false;
-          });
-        }
+  Future <void> resetPageStatus () async {
+    if (mounted) {
+      setState(() {
+        is_page_loaded = false;
+      });
     }
+  }
 
   // 设置页面信息加载已完成的方法
-  Future <void> setPageLoaded () async 
-    {
-      if (mounted)
-        {
-          setState(() {
-            is_page_loaded = true;
-          });
-        }
-      return;
+  Future <void> setPageLoaded () async {
+    if (mounted){
+      setState(() {
+        is_page_loaded = true;
+      });
     }
+    return;
+  }
 
   // 将加载全部应用页面的加载方法抽象出来,方便按下重置时快速重载
-  Future <void> loadPage_allApps () async
-    {
-      // 先更新网络连接状态
-      await update_connection_status();
-      if (is_connection_good)
-        {
-          await updateAppList();
-        }     
-      return;
+  Future <void> loadPage_allApps () async {
+    // 先更新网络连接状态
+    await update_connection_status();
+    // 如果网络正常就更新应用列表
+    if (is_connection_good) {
+      await updateAppList();   
     }
+    return;
+  }
 
   // 覆写父类构造函数
   @override
-  void initState ()
-    {
-      super.initState();
+  void initState () {
+    super.initState();
 
-      // 初始化滚动监听器
-      _scrollController = ScrollController()..addListener(() async {
-        if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-          // 立刻显示加载的动画
-          showMoreAppsLoadingPopWindow();
-          await updateAppList();
-          // 关闭加载动画
-          hideMoreAppsLoadingPopWindow();
-        }
-      });
-      
-      // 进行暴力异步同步信息
-      Future.delayed(Duration.zero).then((_) async {
-        // 进行页面加载
-        await loadPage_allApps();
-        // 异步设置加载完成
-        await setPageLoaded();
-      });
-    }
+    // 初始化滚动监听器
+    _scrollController = ScrollController()..addListener(() async {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        // 立刻显示加载的动画
+        showMoreAppsLoadingPopWindow();
+        await updateAppList();
+        // 关闭加载动画
+        hideMoreAppsLoadingPopWindow();
+      }
+    });
+    
+    // 进行暴力异步同步信息
+    Future.delayed(Duration.zero).then((_) async {
+      // 进行页面加载
+      await loadPage_allApps();
+      // 异步设置加载完成
+      await setPageLoaded();
+    });
+  }
 
   // 覆写父类析构函数
   @override
-  void dispose ()
-    {
-      // 先释放滚动监听器
-      _scrollController.dispose();
-      super.dispose();
-    }
+  void dispose () {
+    // 先释放滚动监听器
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,14 +239,10 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
     // 声明GridView网格视图中当前应该显示多少列对象(跟随屏幕像素改变而改变)
     late int gridViewCrossAxisCount;
-    if (width > 1800)
-      gridViewCrossAxisCount = 6;
-    else if (width > 1450)
-      gridViewCrossAxisCount = 5;
-    else if (width > 1100)
-      gridViewCrossAxisCount = 4;
-    else
-      gridViewCrossAxisCount = 3;
+    if (width > 1800)         gridViewCrossAxisCount = 6;
+    else if (width > 1450) gridViewCrossAxisCount = 5;
+    else if (width > 1100) gridViewCrossAxisCount = 4;
+    else                              gridViewCrossAxisCount = 3;
 
     return Scaffold(
       body: Padding(

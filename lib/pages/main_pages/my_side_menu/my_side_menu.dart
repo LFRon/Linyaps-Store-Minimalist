@@ -57,12 +57,11 @@ class _MySideMenuState extends State<MySideMenu> {
   ];
 
   @override
-  void initState ()
-    {
-      super.initState();
-      // 传入页面控制器
-      pageController=widget.pageController;
-    }
+  void initState () {
+    super.initState();
+    // 传入页面控制器
+    pageController=widget.pageController;
+  }
 
   @override
   Widget build(BuildContext context) {

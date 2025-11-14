@@ -39,10 +39,10 @@ class _MyButton_UpgradeAllState extends State<MyButton_UpgradeAll> {
               borderRadius: BorderRadius.circular(12),
           ),
           onPressed: () async {    // 设置按下之后触发的函数(方法)   
-            if (!value)    // 防止用户多次同时按下按钮,所以只允许按钮在is_pressed为假时才可以触发执行函数
-              {
-                widget.onPressed();
-              }
+          // 防止用户多次同时按下按钮,所以只允许按钮在is_pressed为假时才可以触发执行函数
+            if (!value) {
+              widget.onPressed();
+            }
           },  
           child: value     // 判断是否按钮被按下
           ? Center(

@@ -23,92 +23,90 @@ class WelcomeAppGridItems {
     required this.height,
     required this.width,
   });
-  List <Widget> Items ()
-    {
-      List <Widget> returnItem = [];    // returnItem为最终返回的控件
-      // 循环加入控件
-      WelcomeAppsList.forEach((appinfo)
-        {
-          returnItem.add(
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return AppInfoPage(appId: appinfo.id);
-                          },
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      // 关掉所有按钮特效
-                      backgroundColor: Colors.transparent,
-                      overlayColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      elevation: 0,
-                      splashFactory: NoSplash.splashFactory,
+  List <Widget> Items () {
+    List <Widget> returnItem = [];    // returnItem为最终返回的控件
+    // 循环加入控件
+    WelcomeAppsList.forEach((appinfo) {
+      returnItem.add(
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onPrimary,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AppInfoPage(appId: appinfo.id);
+                      },
                     ),
-                    child: Column(
-                      children: [
-                        // 先显示图片
-                        Hero(
-                          tag: "WelcomeAppGridItems_${appinfo.id}",
-                          child: CachedNetworkImage(
-                            imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
-                            placeholder: (context, url) => Center(
-                              child: SizedBox(
-                                height: height*0.02,
-                                width: height*0.02,
-                                child: CircularProgressIndicator(
-                                  color: Colors.grey.shade300,
-                                ),  // 加载时显示进度条
-                              ),
-                            ),
-                            // 无法显示图片时显示错误
-                            errorWidget: (context, error, stackTrace) => Center(
-                              child:Column(
-                                children: [
-                                  SizedBox(
-                                    width: width*0.05,
-                                    child: Icon(
-                                      Icons.error_rounded,
-                                      color: Colors.redAccent,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            height: height*0.1,
-                            width: height*0.1,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  // 关掉所有按钮特效
+                  backgroundColor: Colors.transparent,
+                  overlayColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  elevation: 0,
+                  splashFactory: NoSplash.splashFactory,
+                ),
+                child: Column(
+                  children: [
+                    // 先显示图片
+                    Hero(
+                      tag: "WelcomeAppGridItems_${appinfo.id}",
+                      child: CachedNetworkImage(
+                        imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
+                        placeholder: (context, url) => Center(
+                          child: SizedBox(
+                            height: height*0.02,
+                            width: height*0.02,
+                            child: CircularProgressIndicator(
+                              color: Colors.grey.shade300,
+                            ),  // 加载时显示进度条
                           ),
                         ),
-                        SizedBox(height:height*0.025,),
-                        // 再显示应用名
-                        Text(
-                          appinfo.name,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: height*0.02,
-                            fontWeight: FontWeight.bold,
+                        // 无法显示图片时显示错误
+                        errorWidget: (context, error, stackTrace) => Center(
+                          child:Column(
+                            children: [
+                              SizedBox(
+                                width: width*0.05,
+                                child: Icon(
+                                  Icons.error_rounded,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                        height: height*0.1,
+                        width: height*0.1,
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height:height*0.025,),
+                    // 再显示应用名
+                    Text(
+                      appinfo.name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: height*0.02,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        });
-      return returnItem;
-    }
+            ],
+          ),
+        ),
+      );
+    });
+    return returnItem;
+  }
 }

@@ -5,17 +5,15 @@
 
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-class CheckInternetConnectionStatus 
-  {
-    Future<bool> staus_is_good () async
-      {
-        // 新建网络检测对象
-        InternetConnection connection = InternetConnection.createInstance(
-          customCheckOptions: [
-            InternetCheckOption(uri: Uri.parse('https://www.baidu.com')),
-          ],
-        );
-        return await connection.hasInternetAccess;    // 判断其是否能正常连接网络
-      }
+class CheckInternetConnectionStatus {
+  Future<bool> staus_is_good () async {
+    // 新建网络检测对象
+    InternetConnection connection = InternetConnection.createInstance(
+      customCheckOptions: [
+        InternetCheckOption(uri: Uri.parse('https://www.baidu.com')),
+      ],
+    );
+    return await connection.hasInternetAccess;    // 判断其是否能正常连接网络
   }
+}
   

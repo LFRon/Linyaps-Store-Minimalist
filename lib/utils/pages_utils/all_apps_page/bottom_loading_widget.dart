@@ -22,43 +22,42 @@ class BottomLoading_AllApps {
       return showModalBottomSheet(
         context: context, 
         barrierColor: Colors.transparent,
-        builder: (context)
-          {
-            return Padding(
-              padding: EdgeInsets.only(bottom: height*0.01),
-              child: Container(
-                height: height*0.15,
-                width: width*0.2,
-                decoration: BoxDecoration(
-                  color:Colors.transparent,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: height*0.04,
-                        width: height*0.04,
-                        child: CircularProgressIndicator(
-                          strokeWidth: height*0.004,
-                          color: Colors.grey.shade700,
-                        ),
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: height*0.01),
+            child: Container(
+              height: height*0.15,
+              width: width*0.2,
+              decoration: BoxDecoration(
+                color:Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: height*0.04,
+                      width: height*0.04,
+                      child: CircularProgressIndicator(
+                        strokeWidth: height*0.004,
+                        color: Colors.grey.shade700,
                       ),
-                      SizedBox(height: height*0.02,),
-                      Text(
-                        "更多app正在加载中 ~",
-                        style: TextStyle(
-                          fontSize: height*0.025,
-                          color: Colors.grey.shade700,
-                        ),
+                    ),
+                    SizedBox(height: height*0.02,),
+                    Text(
+                      "更多app正在加载中 ~",
+                      style: TextStyle(
+                        fontSize: height*0.025,
+                        color: Colors.grey.shade700,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            );
-          }
+            ),
+          );
+        }
       );
     }
 }

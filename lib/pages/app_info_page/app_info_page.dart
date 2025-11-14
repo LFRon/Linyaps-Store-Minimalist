@@ -49,163 +49,141 @@ class AppInfoPageState extends State<AppInfoPage> {
   String cur_installed_version = '';
 
   // 获取当前网络具体状况函数
-  Future <void> get_connection_status () async
-    {
-      bool is_connection_good_get = await CheckInternetConnectionStatus().staus_is_good();
-      // 更新页面具体变量信息
-      if (mounted)
-        {
-          setState(() {
-            is_connection_good = is_connection_good_get;
-          });
-        }
-      return;
+  Future <void> get_connection_status () async {
+    bool is_connection_good_get = await CheckInternetConnectionStatus().staus_is_good();
+    // 更新页面具体变量信息
+    if (mounted) {
+      setState(() {
+        is_connection_good = is_connection_good_get;
+      });
     }
+    return;
+  }
 
   // 由于商店目前不支持获取应用base信息,因此单开一个函数获取应用最新的base信息
-  Future <void> getAppBase (String appId) async 
-    {
-      String get_app_base = await LinyapsStoreApiService().get_app_base(appId);
-      if (mounted)
-        {
-          cur_app_base = get_app_base;
-        }
-    }
+  Future <void> getAppBase (String appId) async {
+    String get_app_base = await LinyapsStoreApiService().get_app_base(appId);
+    if (mounted) cur_app_base = get_app_base;
+  }
 
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
-  Future <bool> getAppDetails (String appId) async
-    {
-      // 从玲珑后端API中获得玲珑应用数据
-      List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService().get_app_details(appId);
+  Future <bool> getAppDetails (String appId) async {
+    // 从玲珑后端API中获得玲珑应用数据
+    List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService().get_app_details(appId);
 
-      // 检查应用是否存在,不存在直接调商店没有此应用的对话框
-      if (get_app_info.isEmpty)
-        {
-          await showDialog(     // 这里用异步是直接阻断页面继续加载
-            context: context, 
-            barrierDismissible: false,    // 禁止用户按别的地方关闭
-            builder:(context) {
-              return MyDialog_AppNotExistInStore();
-            },
-          );
-          Navigator.of(context).popUntil((route){
-            return route.isFirst;
-          });
-          return false;
-        }
-
-      // 进行赋值
-      if (mounted)
-        {
-          setState(() {
-            cur_app_info = get_app_info;
-          });
-        }
-      return true;
+    // 检查应用是否存在,不存在直接调商店没有此应用的对话框
+    if (get_app_info.isEmpty) {
+      await showDialog(     // 这里用异步是直接阻断页面继续加载
+        context: context, 
+        barrierDismissible: false,    // 禁止用户按别的地方关闭
+        builder:(context) {
+          return MyDialog_AppNotExistInStore();
+        },
+      );
+      Navigator.of(context).popUntil((route){
+        return route.isFirst;
+      });
+      return false;
     }
+
+    // 进行赋值
+    if (mounted) {
+      setState(() {
+        cur_app_info = get_app_info;
+      });
+    }
+    return true;
+  }
   
   // 获取应用具体安装状态与安装版本的函数
-  Future <void> update_app_installed_status (String appId) async
-    {
-      dynamic installed_apps = await LinyapsCliHelper().get_app_installed_info(appId);
-      // 如果应用存在
-      if (installed_apps != "")
-        {
-          // 立刻通知页面重构获取安装的应用的版本
-          if (mounted)
-            {
-              setState(() {
-                cur_installed_version = installed_apps.version;
-              });
-            }
-        }
+  Future <void> update_app_installed_status (String appId) async {
+    dynamic installed_apps = await LinyapsCliHelper().get_app_installed_info(appId);
+    // 如果应用存在
+    if (installed_apps != "") {
+      // 立刻通知页面重构获取安装的应用的版本
+      if (mounted) {
+        setState(() {
+          cur_installed_version = installed_apps.version;
+        });
+      }
     }
+  }
   
   // 设置页面响应已完成的函数
-  Future <void> set_page_loaded () async
-    {
-      if (mounted)
-        {
-          setState(() {
-            is_page_loaded = true;
-          });
-        }
+  Future <void> set_page_loaded () async {
+    if (mounted) {
+      setState(() {
+        is_page_loaded = true;
+      });
     }
+  }
 
   // 设置安装函数实现,用于被ListView.builder里的控件当回调函数调用
   // 该页面安装应用的方法,version代表当前安装的目标版本,cur_app_version代表如果有的本地安装版本
-  Future <void> install_app (LinyapsPackageInfo appInfo,MyButton_Install button_install) async
-    {
-      // 设置按钮被按下
-      // 设置安装按钮被按下
-      button_install.is_pressed.value = true;
-      await LinyapsAppManagerApi().install_app(appInfo,context);
-      // 设置安装按钮被释放
-      button_install.is_pressed.value = true;
-      if (mounted) setState(() {});
-    }
+  Future <void> install_app (LinyapsPackageInfo appInfo,MyButton_Install button_install) async {
+    // 设置按钮被按下
+    // 设置安装按钮被按下
+    button_install.is_pressed.value = true;
+    await LinyapsAppManagerApi().install_app(appInfo,context);
+    // 设置安装按钮被释放
+    button_install.is_pressed.value = true;
+    if (mounted) setState(() {});
+  }
   
   // 设置卸载函数实现,用于被ListView.builder里的控件当回调函数用
-  Future <void> uninstall_app (String appId,MyButton_FatalWarning button_uninstall) async
-    {
-      // 设置按钮被按下
-      // 设置卸载按钮被按下
-      button_uninstall.is_pressed.value = true;
-      int excute_result = await LinyapsCliHelper().uninstall_app(appId);
-      // 设置安装按钮被释放
-      button_uninstall.is_pressed.value = false;
-      // 如果启动失败设置启动按钮文字为"失败"提醒用户
-      if (excute_result != 0)
-        {
-          button_uninstall.text = Text(
-            "失败",
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-            ),
-          );
-        }
-      // 如果成功则触发重构
-      else
-        {
-          print('Uninstalled version from $cur_installed_version');
-          if (mounted)
-            {
-              setState(() {
-                cur_installed_version = '';
-              });
-            }
-        }
+  Future <void> uninstall_app (String appId,MyButton_FatalWarning button_uninstall) async {
+    // 设置按钮被按下
+    // 设置卸载按钮被按下
+    button_uninstall.is_pressed.value = true;
+    int excute_result = await LinyapsCliHelper().uninstall_app(appId);
+    // 设置安装按钮被释放
+    button_uninstall.is_pressed.value = false;
+    // 如果启动失败设置启动按钮文字为"失败"提醒用户
+    if (excute_result != 0) {
+      button_uninstall.text = Text(
+        "失败",
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+        ),
+      );
     }
+    // 如果成功则触发重构
+    else {
+      print('Uninstalled version from $cur_installed_version');
+      if (mounted) {
+        setState(() {
+          cur_installed_version = '';
+        });
+      }
+    }
+  }
 
   @override
-  void initState ()
-    {
-      super.initState();
-      // 初始化应用信息
-      cur_app_info = [];
-      // 暴力异步获取应用信息
-      Future.delayed(Duration.zero).then((_) async {
-        // 先检连接状态
-        await get_connection_status();
-        if (is_connection_good)
-          {
-            await getAppBase(widget.appId);
-            // 先更新应用具体信息
-            if (await getAppDetails(widget.appId))
-              {
-                // 如果商店中有这个应用再更新应用具体安装情况
-                await update_app_installed_status(widget.appId);
-                // 发送全局广播页面加载完成
-                await set_page_loaded();
-              }
-          }
-        // 这里之所以用else,是防止对应应用没有时仍然往下加载
-        // 因为对应应用如果没有,往下加载会出问题,所以如果应用商店里
-        // 没有这个应用就始终设置页面未加载完成防止不必要的Exceptions
-        else await set_page_loaded();
-      });
-    }
+  void initState () {
+    super.initState();
+    // 初始化应用信息
+    cur_app_info = [];
+    // 暴力异步获取应用信息
+    Future.delayed(Duration.zero).then((_) async {
+      // 先检连接状态
+      await get_connection_status();
+      if (is_connection_good) {
+        await getAppBase(widget.appId);
+        // 先更新应用具体信息
+        if (await getAppDetails(widget.appId)){
+          // 如果商店中有这个应用再更新应用具体安装情况
+          await update_app_installed_status(widget.appId);
+          // 发送全局广播页面加载完成
+          await set_page_loaded();
+        }
+      }
+      // 这里之所以用else,是防止对应应用没有时仍然往下加载
+      // 因为对应应用如果没有,往下加载会出问题,所以如果应用商店里
+      // 没有这个应用就始终设置页面未加载完成防止不必要的Exceptions
+      else await set_page_loaded();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

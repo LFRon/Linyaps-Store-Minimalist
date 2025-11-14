@@ -15,170 +15,157 @@ import 'package:provider/provider.dart';
 class LinyapsAppManagerApi {
 
   // 单开返回本地应用图标的函数,同步进行减少应用加载时间
-  Future <String> getAppIcon (String appId) async 
-    {
-      List <LinyapsPackageInfo> app_info = await LinyapsStoreApiService().get_app_details(appId);
-      String iconUrl = "";
-      // 尝试获取应用的图标
-      try {
-        iconUrl = app_info[0].Icon ?? "";
-      }
-      catch (e) {
-        iconUrl = "";
-      }
-      return iconUrl;
+  Future <String> getAppIcon (String appId) async {
+    List <LinyapsPackageInfo> app_info = await LinyapsStoreApiService().get_app_details(appId);
+    String iconUrl = "";
+    // 尝试获取应用的图标
+    try {
+      iconUrl = app_info[0].Icon ?? "";
     }
+    catch (e) {
+      iconUrl = "";
+    }
+    return iconUrl;
+  }
   
   // 将待安装应用推送到安装队列里函数,而非直接安装
-  Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async 
-    {
-      // 将需要安装的应用统一推送
-      await Provider.of<ApplicationState>(context, listen: false).addDownloadingApp(newApp,context);
-      return;
-    }
+  Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async {
+    // 将需要安装的应用统一推送
+    await Provider.of<ApplicationState>(context, listen: false).addDownloadingApp(newApp,context);
+    return;
+  }
 
   // 返回已经安装的应用抽象类列表
   // 需要加入already_get_list是让重新扫描已安装应用时先获取当前已经安装的应用信息
   // 然后没有的再往里加
-  Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async
-    {
-      // 先异步获取玲珑本地信息
-      dynamic linyapsLocalInfo = await LinyapsCliHelper().get_linyaps_all_local_info();
-      // 处理异常(比如没有安装玲珑或者没安装应用等情况)
-      if (linyapsLocalInfo == null) return [];
-      // 通过迭代器对遍历本地已经安装的玲珑组件包信息
-      dynamic i;
-      // 初始化待返回临时对象
-      List<LinyapsPackageInfo> returnItems = [];
-      // 开始遍历本地的应用安装信息
-      for (i in linyapsLocalInfo['layers'])
-        {
-          String IconUrl = "";
-          // 先检查已知的应用列表是否为空省去不必要的循环
-          if (already_get_list.isEmpty)
-            {
-              returnItems.add(
-                LinyapsPackageInfo(
-                  id: i['info']['id'], 
-                  name: i['info']['name'], 
-                  version: i['info']['version'], 
-                  description: i['info']['description'], 
-                  arch: i['info']['arch'][0],
-                  Icon: IconUrl,     // 此时图标链接为空
-                  IconUpdated: 0,     // 设置图标未更新
-                ),
-              );
-            }
-          // 如果已安装应用列表已初始化过则对比版本号是否发生变化
-          else    
-            {
-              // 先检查应用是否存在
-              dynamic existingApp = already_get_list.firstWhere(
-                (app) => app.id == i['info']['id'],
-                orElse: () => LinyapsPackageInfo(
-                  id: '',     // 找不到就返回空对象,下面检测也用这个空id作为识别
-                  name: '', 
-                  version: '', 
-                  description: '', 
-                  arch: '',
-                )
-              );
-              // 如果应用没有录入就进行录入
-              if (existingApp.id == '')
-                {
-                  returnItems.add(
-                    LinyapsPackageInfo(
-                      id: i['info']['id'], 
-                      name: i['info']['name'], 
-                      version: i['info']['version'], 
-                      description: i['info']['description'], 
-                      arch: i['info']['arch'][0],
-                      Icon: IconUrl,     // 此时图标链接为空
-                      IconUpdated: 0,     // 设置图标未更新
-                    ),
-                  );
-                }
-              // 如果发现录入了,就检查版本是否一致,不一致就更新版本
-              else
-                {
-                  if (existingApp.version != i['info']['version'])
-                    {
-                      returnItems.add(
-                        LinyapsPackageInfo(
-                          id: i['info']['id'], 
-                          name: i['info']['name'], 
-                          version: i['info']['version'], 
-                          description: i['info']['description'], 
-                          arch: i['info']['arch'][0],
-                          Icon: existingApp.Icon,     // 此时图标链接为空
-                          IconUpdated: 1,     // 设置图标已更新
-                        ),
-                      );
-                    }
-                  else
-                    {
-                      returnItems.add(
-                        LinyapsPackageInfo(
-                          id: i['info']['id'], 
-                          name: i['info']['name'], 
-                          version: existingApp.version, 
-                          description: i['info']['description'], 
-                          arch: i['info']['arch'][0],
-                          Icon: existingApp.Icon,     // 此时图标链接为空
-                          IconUpdated: 1,     // 设置图标已更新
-                        ),
-                      );
-                    }
-                }
-            }
+  Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
+    // 先异步获取玲珑本地信息
+    dynamic linyapsLocalInfo = await LinyapsCliHelper().get_linyaps_all_local_info();
+    // 处理异常(比如没有安装玲珑或者没安装应用等情况)
+    if (linyapsLocalInfo == null) return [];
+    // 通过迭代器对遍历本地已经安装的玲珑组件包信息
+    dynamic i;
+    // 初始化待返回临时对象
+    List<LinyapsPackageInfo> returnItems = [];
+    // 开始遍历本地的应用安装信息
+    for (i in linyapsLocalInfo['layers']) {
+      String IconUrl = "";
+      // 先检查已知的应用列表是否为空省去不必要的循环
+      if (already_get_list.isEmpty) {
+        returnItems.add(
+          LinyapsPackageInfo(
+            id: i['info']['id'], 
+            name: i['info']['name'], 
+            version: i['info']['version'], 
+            description: i['info']['description'], 
+            arch: i['info']['arch'][0],
+            Icon: IconUrl,     // 此时图标链接为空
+            IconUpdated: 0,     // 设置图标未更新
+          ),
+        );
+      }
+      // 如果已安装应用列表已初始化过则对比版本号是否发生变化
+      else {
+        // 先检查应用是否存在
+        dynamic existingApp = already_get_list.firstWhere(
+          (app) => app.id == i['info']['id'],
+          orElse: () => LinyapsPackageInfo(
+            id: '',     // 找不到就返回空对象,下面检测也用这个空id作为识别
+            name: '', 
+            version: '', 
+            description: '', 
+            arch: '',
+          )
+        );
+        // 如果应用没有录入就进行录入
+        if (existingApp.id == '') {
+          returnItems.add(
+            LinyapsPackageInfo(
+              id: i['info']['id'], 
+              name: i['info']['name'], 
+              version: i['info']['version'], 
+              description: i['info']['description'], 
+              arch: i['info']['arch'][0],
+              Icon: IconUrl,     // 此时图标链接为空
+              IconUpdated: 0,     // 设置图标未更新
+            ),
+          );
         }
-      return returnItems;
-    }
-
-  // 返回应用可更新列表
-  Future <List<LinyapsPackageInfo>> get_upgradable_apps () async 
-    {
-      List <LinyapsPackageInfo> installed_apps = await get_installed_apps([]);
-
-      // 初始化待返回应用抽象类列表
-      List <LinyapsPackageInfo> upgradable_apps = [];
-
-      // 遍历已安装的应用
-      LinyapsPackageInfo i;   // 先初始化遍历用迭代器
-      for (i in installed_apps)
-        {
-          // 先尝试从商店获取当前应用信息
-          List <LinyapsPackageInfo> app_info_from_store = await LinyapsStoreApiService().get_app_details(i.id);
-          // 如果找不到对应应用,或者发现是base则直接跳过
-          if (
-            app_info_from_store.isEmpty || 
-            app_info_from_store[0].id == 'org.deepin.base' || 
-            app_info_from_store[0].id == 'org.deepin.foundation' ||
-            app_info_from_store[0].id == 'org.deepin.Runtime' ||
-            app_info_from_store[0].id == 'org.deepin.runtime.dtk' || 
-            app_info_from_store[0].id == 'org.deepin.runtime.gtk4'
-          ) continue;
-          // 如果发现有更高版本
-          if (
-            VersionCompare(
-              ver1: app_info_from_store[app_info_from_store.length-1].version,
-              ver2: i.version,
-            ).isFirstGreaterThanSec()
-          ) {
-            // 存储最新版本应用的信息
-            upgradable_apps.add(
+        // 如果发现录入了,就检查版本是否一致,不一致就更新版本
+        else {
+          if (existingApp.version != i['info']['version']) {
+            returnItems.add(
               LinyapsPackageInfo(
-                id: i.id, 
-                name: i.name, 
-                version: app_info_from_store[app_info_from_store.length-1].version, 
-                current_old_version: i.version,
-                description: i.description, 
-                arch: i.arch,
-                Icon: app_info_from_store[app_info_from_store.length-1].Icon,
+                id: i['info']['id'], 
+                name: i['info']['name'], 
+                version: i['info']['version'], 
+                description: i['info']['description'], 
+                arch: i['info']['arch'][0],
+                Icon: existingApp.Icon,     // 此时图标链接为空
+                IconUpdated: 1,     // 设置图标已更新
+              ),
+            );
+          } else {
+            returnItems.add(
+              LinyapsPackageInfo(
+                id: i['info']['id'], 
+                name: i['info']['name'], 
+                version: existingApp.version, 
+                description: i['info']['description'], 
+                arch: i['info']['arch'][0],
+                Icon: existingApp.Icon,     // 此时图标链接为空
+                IconUpdated: 1,     // 设置图标已更新
               ),
             );
           }
         }
-      return upgradable_apps;
+      }
     }
+    return returnItems;
+  }
+
+  // 返回应用可更新列表
+  Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
+    List <LinyapsPackageInfo> installed_apps = await get_installed_apps([]);
+
+    // 初始化待返回应用抽象类列表
+    List <LinyapsPackageInfo> upgradable_apps = [];
+
+    // 遍历已安装的应用
+    LinyapsPackageInfo i;   // 先初始化遍历用迭代器
+    for (i in installed_apps) {
+      // 先尝试从商店获取当前应用信息
+      List <LinyapsPackageInfo> app_info_from_store = await LinyapsStoreApiService().get_app_details(i.id);
+      // 如果找不到对应应用,或者发现是base则直接跳过
+      if (
+        app_info_from_store.isEmpty || 
+        app_info_from_store[0].id == 'org.deepin.base' || 
+        app_info_from_store[0].id == 'org.deepin.foundation' ||
+        app_info_from_store[0].id == 'org.deepin.Runtime' ||
+        app_info_from_store[0].id == 'org.deepin.runtime.dtk' || 
+        app_info_from_store[0].id == 'org.deepin.runtime.gtk4'
+      ) continue;
+      // 如果发现有更高版本
+      if (
+        VersionCompare(
+          ver1: app_info_from_store[app_info_from_store.length-1].version,
+          ver2: i.version,
+        ).isFirstGreaterThanSec()
+      ) {
+        // 存储最新版本应用的信息
+        upgradable_apps.add(
+          LinyapsPackageInfo(
+            id: i.id, 
+            name: i.name, 
+            version: app_info_from_store[app_info_from_store.length-1].version, 
+            current_old_version: i.version,
+            description: i.description, 
+            arch: i.arch,
+            Icon: app_info_from_store[app_info_from_store.length-1].Icon,
+          ),
+        );
+      }
+    }
+    return upgradable_apps;
+  }
 }

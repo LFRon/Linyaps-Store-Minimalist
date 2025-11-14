@@ -37,12 +37,11 @@ class _MyRadio_SelectNewOrMostState extends State<MyRadio_SelectNewOrMost> {
     return RadioGroup<Options>(
       groupValue: _selectedOption,
       onChanged: (value) {
-        if (mounted)
-          {
-            setState(() {
-              _selectedOption = (value==null)?Options.option1:value;
-            });
-          }
+        if (mounted) {
+          setState(() {
+            _selectedOption = (value==null)?Options.option1:value;
+          });
+        }
         // 对不同的选项进行处理
         if (value == Options.option1) widget.onChanged(1);
         else if (value == Options.option2) widget.onChanged(2);

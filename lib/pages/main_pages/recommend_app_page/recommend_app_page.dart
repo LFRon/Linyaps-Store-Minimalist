@@ -39,70 +39,61 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
   List<LinyapsPackageInfo> WelcomeAppsList = [];
 
   // 从API服务中获取顶栏展示应用列表信息
-  Future <void> updateRecommendAppsList () async
-    {
-      List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService().get_welcome_carousel_list();
-      RecommendAppsList = await_get;
-    }
+  Future <void> updateRecommendAppsList () async {
+    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService().get_welcome_carousel_list();
+    RecommendAppsList = await_get;
+  }
   
   // 声明从API服务获取的推荐应用列表信息对象
-  Future <void> updateWelcomeAppsList () async 
-    {
-      List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService().get_welcome_app_list();
-      WelcomeAppsList = await_get;
-    }
+  Future <void> updateWelcomeAppsList () async {
+    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService().get_welcome_app_list();
+    WelcomeAppsList = await_get;
+  }
 
   // 声明连播图控制器
   CarouselSliderController carousel_controller = CarouselSliderController();
 
   // 覆写父类构造函数
   @override
-  void initState ()
-    {
-      super.initState();
-      WidgetsBinding.instance.addObserver(this);
-      // 进行暴力异步加载页面
-      Future.delayed(Duration.zero).then((_) async {
-        // 先异步获取网络连接状态
-        is_connection_good = await CheckInternetConnectionStatus().staus_is_good();
-        if (is_connection_good)
-          {
-            await updateRecommendAppsList();
-            await updateWelcomeAppsList();
-          }
-        // 广播页面信息加载已完成
-        if (mounted)
-          {
-            setState(() {
-              is_page_loaded =true;
-            });
-          }
-      });
-    }
+  void initState () {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    // 进行暴力异步加载页面
+    Future.delayed(Duration.zero).then((_) async {
+      // 先异步获取网络连接状态
+      is_connection_good = await CheckInternetConnectionStatus().staus_is_good();
+      if (is_connection_good) {
+        await updateRecommendAppsList();
+        await updateWelcomeAppsList();
+      }
+      // 广播页面信息加载已完成
+      if (mounted) {
+        setState(() {
+          is_page_loaded =true;
+        });
+      }
+    });
+  }
   
   // 如果发现页面发生更改,那么延迟UI重构
   @override
-  void didChangeMetrics ()
-    {
-      super.didChangeMetrics();
-      if (mounted)
-        {
-          Future.delayed(Duration(milliseconds: 150)).then((_){
-            if (mounted)
-              {
-                setState(() {});
-              }
-          });
+  void didChangeMetrics () {
+    super.didChangeMetrics();
+    if (mounted) {
+      Future.delayed(Duration(milliseconds: 150)).then((_){
+        if (mounted){
+          setState(() {});
         }
+      });
     }
+  }
   
   // 覆写父类析构函数
   @override
-  void dispose ()
-    {
-      WidgetsBinding.instance.removeObserver(this);
-      super.dispose();
-    }
+  void dispose () {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
