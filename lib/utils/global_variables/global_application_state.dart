@@ -65,11 +65,10 @@ class ApplicationState extends ChangeNotifier {
     // 设置新加入应用的下载状态为正在下载
     newApp.downloadState = DownloadState.waiting;
 
-    print('Before add: ${downloadingAppsQueue.length}');
     // 创建新列表实例以确保触发更新
     downloadingAppsQueue = [...downloadingAppsQueue, newApp];
-    print('After add: ${downloadingAppsQueue.length}');
     notifyListeners();  
+    
     // 如果流水线没有更新就进行启动更新流水线
     if (!isProcessingQueue) processDownloadingQueue(context);
   }
