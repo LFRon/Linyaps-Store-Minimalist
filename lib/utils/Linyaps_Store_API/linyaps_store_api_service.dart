@@ -368,10 +368,35 @@ class LinyapsStoreApiService {
       else return "";
     }
 
-  // 获取具体应用的详细信息的方法1: 此方法是返回一个应用的每个版本的列表信息
+  // 获取具体应用的详细信息的方法2: 此方法是仅返回应用的最新版本信息
+  Future <List<LinyapsPackageInfo>> get_app_details (String appId) async {
+    // 更新系统架构信息
+    await update_os_arch();   
+    // 指定具体响应API地址
+    String serverUrl = '$serverHost_Store/app/getAppDetail';
+    // 创建Dio请求对象
+    Dio dio = Dio ();    
+    // 准备请求数据
+    Map <String,dynamic> upload_data = {   
+      "appId": appId,
+      "arch": repo_arch
+    };
+    // 发送并获取返回信息
+    Response response = await dio.post(
+      serverUrl,
+      data: jsonEncode(upload_data),
+    );  
+    List <dynamic> app_info_get = response.data['data'];
+    dio.close();
+
+    // 进行解析
+    return [];
+  }
+
+  // 获取具体应用的详细信息的方法2: 此方法是返回一个应用的每个版本的列表信息
   Future <List<LinyapsPackageInfo>> get_app_details_list (String appId) async {
-    await update_os_arch();   // 更新系统架构信息
-    int i=0;   // 用于给下方循环
+    // 更新系统架构信息
+    await update_os_arch();   
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/visit/getSearchAppVersionList';
     Dio dio = Dio ();    // 创建Dio请求对象
@@ -388,10 +413,13 @@ class LinyapsStoreApiService {
       data: jsonEncode(upload_data),
     );  
     dio.close();
-    List<dynamic> app_info_get = response.data['data'];
+    List <dynamic> app_info_get = response.data['data'];
 
     // 将返回的信息变成玲珑应用类
     List <LinyapsPackageInfo> cur_app_info = [];
+
+    // 提前初始化i变量
+    int i=0;
     if (app_info_get.isNotEmpty) {
       for (i=0;i<app_info_get.length;i++) {
         LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(

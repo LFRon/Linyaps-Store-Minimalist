@@ -74,7 +74,7 @@ class InstalledAppsGridItems {
                 // 先显示图片
                 CachedNetworkImage(
                   imageUrl: installed_app_info[index].Icon!,
-                  key: ValueKey('${installed_app_info[index].name}_${installed_app_info[index].IconUpdated}'),
+                  key: ValueKey(installed_app_info[index].name),
                   height: 80,width: 80,
                   placeholder: (context, loadingProgress) {
                     return Center(

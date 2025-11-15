@@ -8,6 +8,7 @@ import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_conne
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/installed_apps_grid_items.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/upgradable_app_grid_item.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_all_button.dart';
@@ -124,6 +125,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> updateInstalledAppsIcon () async {
     // 用于存储了带了AppIcon链接的Icon列表
     List <LinyapsPackageInfo> newAppsList = [];
+    // 用于调试新商店接口用
+    // await LinyapsStoreApiService().get_app_details('com.tencent.wechat');
     for (LinyapsPackageInfo i in globalAppState.installedAppsList) {
       String cur_app_icon = await LinyapsAppManagerApi().getAppIcon(i.id);
       newAppsList.add(
@@ -134,7 +137,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           description: i.description, 
           arch: i.arch,
           Icon: cur_app_icon,
-          IconUpdated: 1,     // 设置图片已加载过
         )
       );
     }

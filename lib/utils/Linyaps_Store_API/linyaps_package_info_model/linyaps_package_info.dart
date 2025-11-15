@@ -27,7 +27,7 @@ class LinyapsPackageInfo {
   DownloadState? downloadState;
 
   String? Icon;    // 应用图标
-  int? IconUpdated;     // 应用图标是否更新
+  // int? IconUpdated;     // 应用图标是否更新
   String? repoName;    // 应用所在源名称
   String? channel;   // 应用所在渠道
   String? kind;    // 应用所在分类
@@ -60,7 +60,7 @@ class LinyapsPackageInfo {
     required this.description,
     required this.arch,
     this.Icon,
-    this.IconUpdated,
+    // this.IconUpdated,
     this.repoName,
     this.current_old_version,
     this.downloadState,

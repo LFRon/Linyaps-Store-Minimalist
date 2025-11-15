@@ -41,13 +41,13 @@ class LinyapsAppManagerApi {
   Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
     // 先异步获取玲珑本地信息
     dynamic linyapsLocalInfo = await LinyapsCliHelper().get_linyaps_all_local_info();
+    // 再获取
     // 处理异常(比如没有安装玲珑或者没安装应用等情况)
     if (linyapsLocalInfo == null) return [];
-    // 通过迭代器对遍历本地已经安装的玲珑组件包信息
-    dynamic i;
     // 初始化待返回临时对象
     List<LinyapsPackageInfo> returnItems = [];
     // 开始遍历本地的应用安装信息
+    dynamic i;
     for (i in linyapsLocalInfo['layers']) {
       String IconUrl = "";
       // 先检查已知的应用列表是否为空省去不必要的循环
@@ -60,7 +60,6 @@ class LinyapsAppManagerApi {
             description: i['info']['description'], 
             arch: i['info']['arch'][0],
             Icon: IconUrl,     // 此时图标链接为空
-            IconUpdated: 0,     // 设置图标未更新
           ),
         );
       }
@@ -87,7 +86,6 @@ class LinyapsAppManagerApi {
               description: i['info']['description'], 
               arch: i['info']['arch'][0],
               Icon: IconUrl,     // 此时图标链接为空
-              IconUpdated: 0,     // 设置图标未更新
             ),
           );
         }
@@ -102,7 +100,6 @@ class LinyapsAppManagerApi {
                 description: i['info']['description'], 
                 arch: i['info']['arch'][0],
                 Icon: existingApp.Icon,     // 此时图标链接为空
-                IconUpdated: 1,     // 设置图标已更新
               ),
             );
           } else {
@@ -114,7 +111,6 @@ class LinyapsAppManagerApi {
                 description: i['info']['description'], 
                 arch: i['info']['arch'][0],
                 Icon: existingApp.Icon,     // 此时图标链接为空
-                IconUpdated: 1,     // 设置图标已更新
               ),
             );
           }
