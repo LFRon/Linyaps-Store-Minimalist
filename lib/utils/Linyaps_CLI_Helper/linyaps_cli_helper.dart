@@ -14,7 +14,7 @@ class LinyapsCliHelper {
   // 用于判断是否安装了玲珑
   Future <bool> is_installed_linyaps () async {
     try {
-      await Process.run('ll-cli', ['version']);
+      await Process.run('ll-cli', ['--version']);
       return true;
     }
     catch (e) {
