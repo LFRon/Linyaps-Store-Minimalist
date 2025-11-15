@@ -7,8 +7,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/upgrade_button.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
 import 'package:provider/provider.dart';
 
 class UpgradableAppListItems {

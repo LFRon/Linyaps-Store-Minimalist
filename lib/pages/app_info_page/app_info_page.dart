@@ -11,11 +11,11 @@ import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/application_management/dialog_app_not_exist_in_store.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/back_button.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/install_button.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/fatal_warning_button.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_color/my_color.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/back_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/install_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_color/my_color.dart';
 
 class AppInfoPage extends StatefulWidget {
 

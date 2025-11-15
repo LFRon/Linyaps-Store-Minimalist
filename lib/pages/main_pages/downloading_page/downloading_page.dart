@@ -4,8 +4,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/downloading_page/downloading_app_list_item.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/downloading_page/downloading_app_list_item.dart';
 import 'package:provider/provider.dart';
 
 class DownloadingPage extends StatefulWidget {

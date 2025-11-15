@@ -6,10 +6,10 @@
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/install_button.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/launch_app_button.dart';
-import 'package:linglong_store_flutter/utils/pages_utils/my_buttons/fatal_warning_button.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/install_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/launch_app_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';
 import 'package:provider/provider.dart';
 
 class AppInfoView extends StatefulWidget {

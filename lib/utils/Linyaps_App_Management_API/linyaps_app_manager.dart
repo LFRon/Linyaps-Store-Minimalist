@@ -9,7 +9,7 @@ import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_help
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
-import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:provider/provider.dart';
 
 class LinyapsAppManagerApi {

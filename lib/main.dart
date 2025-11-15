@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
-import 'package:linglong_store_flutter/utils/global_variables/global_application_state.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
