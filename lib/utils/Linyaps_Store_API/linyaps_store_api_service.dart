@@ -22,8 +22,8 @@ class LinyapsStoreApiService {
 
   // 进行操作系统架构更新函数
   Future <void> update_os_arch () async {
-    os_arch = await getOSArchInfo().getUnameArch();
-    repo_arch = await getOSArchInfo().getLinyapsStoreApiArch();
+    os_arch = await getOSArchInfo.getUnameArch();
+    repo_arch = await getOSArchInfo.getLinyapsStoreApiArch();
   }
   
   // 初始化响应总线
@@ -373,7 +373,8 @@ class LinyapsStoreApiService {
     // 更新系统架构信息
     await update_os_arch();   
     // 指定具体响应API地址
-    String serverUrl = '$serverHost_Store/app/getAppDetail';
+    // TODO 由于该API尚未稳定,故暂时使用临时地址
+    String serverUrl = 'https://m1.apifoxmock.com/m1/6209562-5902957-default/app/getAppDetail';
     // 创建Dio请求对象
     Dio dio = Dio ();    
     // 准备请求数据
@@ -386,7 +387,7 @@ class LinyapsStoreApiService {
       serverUrl,
       data: jsonEncode(upload_data),
     );  
-    List <dynamic> app_info_get = response.data['data'];
+    Map <String,String> app_info_get = response.data['data']['key'];
     dio.close();
 
     // 进行解析

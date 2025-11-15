@@ -8,7 +8,7 @@ import 'dart:io';
 class getOSArchInfo {
 
   // 用于返回按照"uname -m"标准命令输出的架构信息
-  Future <String> getUnameArch () async {
+  static Future <String> getUnameArch () async {
     ProcessResult arch_result;
     arch_result = await Process.run('uname', ['-m']);
     // 更新操作系统架构信息
@@ -18,7 +18,7 @@ class getOSArchInfo {
   }
 
   // 用于返回按照玲珑商店架构要求的架构信息
-  Future <String> getLinyapsStoreApiArch () async {
+  static Future <String> getLinyapsStoreApiArch () async {
     ProcessResult arch_result;
     arch_result = await Process.run('uname', ['-m']);
     // 更新操作系统架构信息
