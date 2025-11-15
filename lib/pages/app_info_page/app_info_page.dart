@@ -69,7 +69,7 @@ class AppInfoPageState extends State<AppInfoPage> {
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
   Future <bool> getAppDetails (String appId) async {
     // 从玲珑后端API中获得玲珑应用数据
-    List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService().get_app_details(appId);
+    List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService().get_app_details_list(appId);
 
     // 检查应用是否存在,不存在直接调商店没有此应用的对话框
     if (get_app_info.isEmpty) {

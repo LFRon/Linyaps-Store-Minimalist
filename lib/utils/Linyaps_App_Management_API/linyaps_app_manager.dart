@@ -16,7 +16,7 @@ class LinyapsAppManagerApi {
 
   // 单开返回本地应用图标的函数,同步进行减少应用加载时间
   Future <String> getAppIcon (String appId) async {
-    List <LinyapsPackageInfo> app_info = await LinyapsStoreApiService().get_app_details(appId);
+    List <LinyapsPackageInfo> app_info = await LinyapsStoreApiService().get_app_details_list(appId);
     String iconUrl = "";
     // 尝试获取应用的图标
     try {
@@ -135,7 +135,7 @@ class LinyapsAppManagerApi {
     LinyapsPackageInfo i;   // 先初始化遍历用迭代器
     for (i in installed_apps) {
       // 先尝试从商店获取当前应用信息
-      List <LinyapsPackageInfo> app_info_from_store = await LinyapsStoreApiService().get_app_details(i.id);
+      List <LinyapsPackageInfo> app_info_from_store = await LinyapsStoreApiService().get_app_details_list(i.id);
       // 如果找不到对应应用,或者发现是base则直接跳过
       if (
         app_info_from_store.isEmpty || 
