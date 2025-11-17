@@ -108,7 +108,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
     // 更新对应变量并触发页面重构
     await globalAppState.updateUpgradableAppsList_Online();
-    if (mounted) setState(() {});
+    // if (mounted) setState(() {});
     return;
   }
   
@@ -116,7 +116,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> updateInstalledAppsList () async {
     await globalAppState.updateInstalledAppsList_Online();
     // 更新应用安装信息
-    if (mounted) setState(() {});
+    // if (mounted) setState(() {});
     return;
   }
   
@@ -158,7 +158,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> upgradeApp (LinyapsPackageInfo cur_app_info) async {
     // 将应用推入下载列表
     await LinyapsAppManagerApi().install_app(cur_app_info, context);
-    if (mounted) setState(() {});
+    // if (mounted) setState(() {});
     return;
 }
 
