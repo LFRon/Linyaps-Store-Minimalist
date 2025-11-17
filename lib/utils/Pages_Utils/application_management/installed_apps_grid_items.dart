@@ -73,7 +73,7 @@ class InstalledAppsGridItems {
               children: [
                 // 先显示图片
                 CachedNetworkImage(
-                  imageUrl: installed_app_info[index].Icon!,
+                  imageUrl: installed_app_info[index].Icon ?? '',
                   key: ValueKey(installed_app_info[index].name),
                   height: 80,width: 80,
                   placeholder: (context, loadingProgress) {

@@ -13,12 +13,6 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 import 'package:provider/provider.dart';
 
 class LinyapsAppManagerApi {
-
-  // 单开返回本地应用图标的函数,同步进行减少应用加载时间
-  Future <String> getAppIcon (String appId) async {
-    LinyapsPackageInfo? app_info = await LinyapsStoreApiService().get_app_detail_latest(appId);
-    return (app_info==null ? '' : app_info.Icon ?? '');
-  }
   
   // 将待安装应用推送到安装队列里函数,而非直接安装
   Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async {

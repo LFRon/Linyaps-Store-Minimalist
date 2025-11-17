@@ -407,6 +407,47 @@ class LinyapsStoreApiService {
     );
   }
 
+  // 单开返回本地应用图标的函数,同步进行减少应用加载时间
+  Future <List<LinyapsPackageInfo>> updateAppIcon (List<LinyapsPackageInfo> installed_apps) async {
+    // 更新系统架构信息
+    await update_os_arch();   
+    // 指定具体响应API地址
+    String serverUrl = '$serverHost_Store/app/getAppDetail';
+    
+    // 初始化待提交应用
+    List <Map<String, String>> upload_installed_apps = [];
+    for (dynamic i in installed_apps) {
+      upload_installed_apps.add({
+        'appId': i.id,
+        'arch': repo_arch
+      });
+    }
+    // 创建Dio请求对象
+    Dio dio = Dio ();    
+    // 发送并获取返回信息
+    Response response = await dio.post(
+      serverUrl,
+      data: jsonEncode(upload_installed_apps),
+    );  
+
+    Map <String, dynamic> app_info_get = response.data['data'];
+    // 拿到请求后准备逐个返回
+    List <LinyapsPackageInfo> returnItems = [];
+    int i=0;
+    for (LinyapsPackageInfo cur_app_info in installed_apps) {
+      // 不管其他,先加入元素
+      returnItems.add(installed_apps[i]);
+      String? IconUrl;
+      if (app_info_get.containsKey(returnItems[i].id)) {
+        IconUrl = app_info_get[returnItems[i].id][0]['icon'];
+        returnItems[i].Icon = IconUrl;
+      }
+      i++;
+    }
+
+    return returnItems;
+  }
+
   // 获取具体应用的详细信息的方法2: 此方法是返回一个应用的每个版本的列表信息
   Future <List<LinyapsPackageInfo>> get_app_details_list (String appId) async {
     // 更新系统架构信息
