@@ -5,6 +5,7 @@
 
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/os_arch_info_middleware/get_os_arch_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
@@ -407,7 +408,7 @@ class LinyapsStoreApiService {
     );
   }
 
-  // 单开返回本地应用图标的函数,同步进行减少应用加载时间
+  // 单开获取本地应用图标的函数, 同步进行减少应用加载时间
   Future <List<LinyapsPackageInfo>> updateAppIcon (List<LinyapsPackageInfo> installed_apps) async {
     // 更新系统架构信息
     await update_os_arch();   
@@ -436,7 +437,7 @@ class LinyapsStoreApiService {
     int i=0;
     for (LinyapsPackageInfo cur_app_info in installed_apps) {
       // 不管其他,先加入元素
-      returnItems.add(installed_apps[i]);
+      returnItems.add(cur_app_info);
       String? IconUrl;
       if (app_info_get.containsKey(returnItems[i].id)) {
         IconUrl = app_info_get[returnItems[i].id][0]['icon'];
@@ -446,6 +447,86 @@ class LinyapsStoreApiService {
     }
 
     return returnItems;
+  }
+
+  // 返回应用可更新列表
+  Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
+    // 更新系统架构信息
+    await update_os_arch();   
+    // 指定具体响应API地址
+    String serverUrl = '$serverHost_Store/app/getAppDetail';
+
+    List <LinyapsPackageInfo> installed_apps = await LinyapsAppManagerApi().get_installed_apps([]);
+    // 初始化待提交应用
+    List <Map<String, String>> upload_installed_apps = [];
+    for (dynamic i in installed_apps) {
+      upload_installed_apps.add({
+        'appId': i.id,
+        'arch': repo_arch
+      });
+    }
+    // 创建Dio请求对象
+    Dio dio = Dio ();    
+    // 发送并获取返回信息
+    Response response = await dio.post(
+      serverUrl,
+      data: jsonEncode(upload_installed_apps),
+    );  
+    Map <String, dynamic> app_info_get = response.data['data'];
+
+    // 初始化待返回应用抽象类列表
+    List <LinyapsPackageInfo> upgradable_apps = [];
+
+    // 遍历已安装的应用
+    LinyapsPackageInfo i;   // 先初始化遍历用迭代器
+    for (i in installed_apps) {
+      // 先尝试从商店获取当前应用信息,若没有则直接返回空对象
+      LinyapsPackageInfo app_info_from_store = app_info_get.containsKey(i.id)
+      ? LinyapsPackageInfo(
+        id: app_info_get[i.id][0]['appId'], 
+        name: app_info_get[i.id][0]['name'], 
+        version: app_info_get[i.id][0]['version'], 
+        description: app_info_get[i.id][0]['description'], 
+        arch: repo_arch,
+      )
+      : LinyapsPackageInfo(
+        id: '', 
+        name: '', 
+        version: '', 
+        description: '', 
+        arch: ''
+      );
+      // 如果找不到对应应用,或者发现是base则直接跳过
+      if (
+        app_info_from_store.id == '' || 
+        app_info_from_store.id == 'org.deepin.base' || 
+        app_info_from_store.id == 'org.deepin.foundation' ||
+        app_info_from_store.id == 'org.deepin.Runtime' ||
+        app_info_from_store.id == 'org.deepin.runtime.dtk' || 
+        app_info_from_store.id == 'org.deepin.runtime.gtk4'
+      ) continue;
+      // 如果发现有更高版本
+      if (
+        VersionCompare(
+          ver1: app_info_from_store.version,
+          ver2: i.version,
+        ).isFirstGreaterThanSec()
+      ) {
+        // 存储最新版本应用的信息
+        upgradable_apps.add(
+          LinyapsPackageInfo(
+            id: i.id, 
+            name: i.name, 
+            version: app_info_from_store.version, 
+            current_old_version: i.version,
+            description: i.description, 
+            arch: i.arch,
+            Icon: app_info_from_store.Icon,
+          ),
+        );
+      }
+    }
+    return upgradable_apps;
   }
 
   // 获取具体应用的详细信息的方法2: 此方法是返回一个应用的每个版本的列表信息

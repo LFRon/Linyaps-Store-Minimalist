@@ -7,8 +7,6 @@
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:provider/provider.dart';
 
@@ -104,50 +102,5 @@ class LinyapsAppManagerApi {
       }
     }
     return returnItems;
-  }
-
-  // 返回应用可更新列表
-  Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
-    List <LinyapsPackageInfo> installed_apps = await get_installed_apps([]);
-
-    // 初始化待返回应用抽象类列表
-    List <LinyapsPackageInfo> upgradable_apps = [];
-
-    // 遍历已安装的应用
-    LinyapsPackageInfo i;   // 先初始化遍历用迭代器
-    for (i in installed_apps) {
-      // 先尝试从商店获取当前应用信息
-      List <LinyapsPackageInfo> app_info_from_store = await LinyapsStoreApiService().get_app_details_list(i.id);
-      // 如果找不到对应应用,或者发现是base则直接跳过
-      if (
-        app_info_from_store.isEmpty || 
-        app_info_from_store[0].id == 'org.deepin.base' || 
-        app_info_from_store[0].id == 'org.deepin.foundation' ||
-        app_info_from_store[0].id == 'org.deepin.Runtime' ||
-        app_info_from_store[0].id == 'org.deepin.runtime.dtk' || 
-        app_info_from_store[0].id == 'org.deepin.runtime.gtk4'
-      ) continue;
-      // 如果发现有更高版本
-      if (
-        VersionCompare(
-          ver1: app_info_from_store[app_info_from_store.length-1].version,
-          ver2: i.version,
-        ).isFirstGreaterThanSec()
-      ) {
-        // 存储最新版本应用的信息
-        upgradable_apps.add(
-          LinyapsPackageInfo(
-            id: i.id, 
-            name: i.name, 
-            version: app_info_from_store[app_info_from_store.length-1].version, 
-            current_old_version: i.version,
-            description: i.description, 
-            arch: i.arch,
-            Icon: app_info_from_store[app_info_from_store.length-1].Icon,
-          ),
-        );
-      }
-    }
-    return upgradable_apps;
   }
 }

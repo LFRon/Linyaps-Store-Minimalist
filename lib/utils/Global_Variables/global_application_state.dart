@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 
 class ApplicationState extends ChangeNotifier {
 
@@ -26,7 +27,7 @@ class ApplicationState extends ChangeNotifier {
 
   // 在线更新应用更新状况方法
   Future <void> updateUpgradableAppsList_Online () async {
-    List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
+    List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsStoreApiService().get_upgradable_apps();
     // 更新对应变量并触发页面重构
     upgradableAppsList = get_upgradable_apps;
     notifyListeners();
