@@ -216,6 +216,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     if (!is_page_loading && is_connection_good) {
       // 先设置页面为加载中状态
       await setPageLoading();
+      // 防止刷新过于频繁
+      sleep(Duration(milliseconds: 2500));
       // 再执行具体更新函数功能
       await updateInstalledAppsList();
       await updateUpgradableAppsList();
