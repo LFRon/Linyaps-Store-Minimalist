@@ -369,12 +369,12 @@ class LinyapsStoreApiService {
     }
 
   // 获取具体应用的详细信息的方法2: 此方法是仅返回应用的最新版本信息
-  Future <List<LinyapsPackageInfo>> get_app_details (String appId) async {
+  // 当能获取到应用信息时返回对应类, 否则返回null
+  Future <LinyapsPackageInfo?> get_app_detail_latest (String appId) async {
     // 更新系统架构信息
     await update_os_arch();   
     // 指定具体响应API地址
-    // TODO 由于该API尚未稳定,故暂时使用临时地址
-    String serverUrl = 'https://m1.apifoxmock.com/m1/6209562-5902957-default/app/getAppDetail';
+    String serverUrl = '$serverHost_Store/app/getAppDetail';
     // 创建Dio请求对象
     Dio dio = Dio ();    
     // 准备请求数据
@@ -382,16 +382,29 @@ class LinyapsStoreApiService {
       "appId": appId,
       "arch": repo_arch
     };
+    List <Map<String, dynamic>> upload_data_list = [];
+    upload_data_list.add(upload_data);
     // 发送并获取返回信息
     Response response = await dio.post(
       serverUrl,
-      data: jsonEncode(upload_data),
+      data: jsonEncode(upload_data_list),
     );  
-    Map <String,String> app_info_get = response.data['data']['key'];
     dio.close();
 
-    // 进行解析
-    return [];
+    // 在这里提前读获取的应用信息,若为Null直接返回
+    if (response.data['data'][appId] == null) return null;
+    Map <dynamic,dynamic> app_info_get = response.data['data'][appId][0];
+    
+    // 进行解析并返回应用详情
+    return LinyapsPackageInfo(
+      id: app_info_get['appId'], 
+      name: app_info_get['name'], 
+      arch: repo_arch,
+      version: app_info_get['version'], 
+      description: app_info_get['description'], 
+      createTime: app_info_get['createTime'], 
+      Icon: app_info_get['icon'],
+    );
   }
 
   // 获取具体应用的详细信息的方法2: 此方法是返回一个应用的每个版本的列表信息
