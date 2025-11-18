@@ -1,7 +1,7 @@
 // 用于通过命令读取用户的安装信息
 
 // 关闭VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names, unnecessary_string_interpolations, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, unnecessary_string_interpolations, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
 import 'dart:convert';
 import 'dart:io';
@@ -35,10 +35,7 @@ class LinyapsCliHelper {
         Map<String, dynamic> jsonData = jsonDecode(get_states_content) as Map<String, dynamic>;
         return jsonData;
       }
-    else
-      {
-        return null;
-      }
+    else return null;
   }
   
   // 用于返回应用安装的版本方法
