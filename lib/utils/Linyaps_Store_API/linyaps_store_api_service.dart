@@ -482,20 +482,20 @@ class LinyapsStoreApiService {
     for (i in installed_apps) {
       // 先尝试从商店获取当前应用信息,若没有则直接返回空对象
       LinyapsPackageInfo app_info_from_store = app_info_get.containsKey(i.id)
-      ? LinyapsPackageInfo(
-        id: app_info_get[i.id][0]['appId'], 
-        name: app_info_get[i.id][0]['name'], 
-        version: app_info_get[i.id][0]['version'], 
-        description: app_info_get[i.id][0]['description'], 
-        arch: repo_arch,
-      )
-      : LinyapsPackageInfo(
-        id: '', 
-        name: '', 
-        version: '', 
-        description: '', 
-        arch: ''
-      );
+        ? LinyapsPackageInfo(
+          id: app_info_get[i.id][0]['appId'], 
+          name: app_info_get[i.id][0]['name'], 
+          version: app_info_get[i.id][0]['version'], 
+          description: app_info_get[i.id][0]['description'], 
+          arch: repo_arch,
+        )
+        : LinyapsPackageInfo(
+          id: '', 
+          name: '', 
+          version: '', 
+          description: '', 
+          arch: ''
+        );
       // 如果找不到对应应用,或者发现是base则直接跳过
       if (
         app_info_from_store.id == '' || 
