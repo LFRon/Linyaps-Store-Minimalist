@@ -75,19 +75,6 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     });
   }
   
-  // 如果发现页面发生更改,那么延迟UI重构
-  @override
-  void didChangeMetrics () {
-    super.didChangeMetrics();
-    if (mounted) {
-      Future.delayed(Duration(milliseconds: 150)).then((_){
-        if (mounted){
-          setState(() {});
-        }
-      });
-    }
-  }
-  
   // 覆写父类析构函数
   @override
   void dispose () {
