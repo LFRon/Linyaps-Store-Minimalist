@@ -44,7 +44,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   bool is_page_loaded = false;
   bool is_upgradable_app_loaded = false;
 
-
   // 声明全局应用列表对象
   late ApplicationState globalAppState;
 
