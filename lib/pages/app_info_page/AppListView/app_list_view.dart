@@ -64,6 +64,7 @@ class AppInfoViewState extends State<AppInfoView> {
     // 设置按钮被按下
     button_launchapp.is_pressed.value = true;
     LinyapsCliHelper.launch_installed_app(appId);
+    // 等待一段时间再允许用户再次启动
     sleep(Duration(milliseconds: 550));
     // 启动后设置按钮被释放
     button_launchapp.is_pressed.value = false;

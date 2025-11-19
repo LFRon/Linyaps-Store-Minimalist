@@ -88,7 +88,7 @@ class AppInfoPageState extends State<AppInfoPage> {
   
   // 获取应用具体安装状态与安装版本的函数
   Future <void> update_app_installed_status (String appId) async {
-    dynamic installed_apps = await LinyapsCliHelper().get_app_installed_info(appId);
+    dynamic installed_apps = await LinyapsCliHelper.get_app_installed_info(appId);
     // 如果应用存在
     if (installed_apps != "") {
       // 立刻通知页面重构获取安装的应用的版本
@@ -126,7 +126,7 @@ class AppInfoPageState extends State<AppInfoPage> {
     // 设置按钮被按下
     // 设置卸载按钮被按下
     button_uninstall.is_pressed.value = true;
-    int excute_result = await LinyapsCliHelper().uninstall_app(appId);
+    int excute_result = await LinyapsCliHelper.uninstall_app(appId);
     // 设置安装按钮被释放
     button_uninstall.is_pressed.value = false;
     // 如果启动失败设置启动按钮文字为"失败"提醒用户

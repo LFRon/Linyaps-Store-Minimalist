@@ -24,7 +24,7 @@ class LinyapsAppManagerApi {
   // 然后没有的再往里加
   Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
     // 先异步获取玲珑本地信息
-    dynamic linyapsLocalInfo = await LinyapsCliHelper().get_linyaps_all_local_info();
+    dynamic linyapsLocalInfo = await LinyapsCliHelper.get_linyaps_all_local_info();
     // 再获取
     // 遇到没有安装玲珑或者没安装应用等情况,直接返回空列表
     if (linyapsLocalInfo == null) return [];

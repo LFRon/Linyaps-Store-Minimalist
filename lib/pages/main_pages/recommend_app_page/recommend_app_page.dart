@@ -1,11 +1,13 @@
 // 显示推荐应用信息页面
 
 // 关闭VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, unnecessary_overrides
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, unnecessary_overrides, use_build_context_synchronously
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/pages/install_linyaps_page/install_linyaps_page.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
+import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/CarouselSliderItems.dart';
@@ -60,6 +62,17 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     WidgetsBinding.instance.addObserver(this);
     // 进行暴力异步加载页面
     Future.delayed(Duration.zero).then((_) async {
+      // 先检测玲珑是否安装了,若未安装则直接跳转
+      if (!await LinyapsCliHelper.is_installed_linyaps()) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return InstallLinyapsPage();
+            },
+          ),
+        );
+      }
       // 先异步获取网络连接状态
       is_connection_good = await CheckInternetConnectionStatus().staus_is_good();
       if (is_connection_good) {
@@ -73,6 +86,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
         });
       }
     });
+
   }
   
   // 覆写父类析构函数

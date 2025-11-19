@@ -89,7 +89,7 @@ class ApplicationState extends ChangeNotifier {
       currentApp.downloadState = DownloadState.downloading;
       notifyListeners();
       if (
-        await LinyapsCliHelper().install_app(
+        await LinyapsCliHelper.install_app(
           currentApp.id, 
           currentApp.name,
           currentApp.version, 
