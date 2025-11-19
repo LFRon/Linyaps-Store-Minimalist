@@ -226,7 +226,7 @@ class LinyapsStoreApiService {
     );  
     dio.close();
 
-    // 声明获取
+    // 初始化获取到的所有应用信息列表
     List <LinyapsPackageInfo> app_list = [];
 
     // 将API响应的信息经过精准切割,加入到应用列表中
