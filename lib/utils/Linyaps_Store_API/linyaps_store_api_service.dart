@@ -294,81 +294,6 @@ class LinyapsStoreApiService {
       return returnItems;
     }
 
-  // 获取应用Base信息的方法
-  Future <String> get_app_base (String appId) async 
-    {
-      await update_os_arch();    // 更新系统架构信息
-      String serverUrl = '$serverHost_Repo/api/v0/apps/fuzzysearchapp';
-      Dio dio = Dio ();    // 创建Dio请求对象
-      int i=0;
-      Map <String,dynamic> upload_data = {    // 准备请求数据
-        "repoName": "stable",
-        "channel": "main",
-        "arch": repo_arch,
-        "appId": appId,
-      };
-      // 发送并获取返回信息
-      Response response = await dio.post(
-        serverUrl,
-        data: jsonEncode(upload_data),
-      );  
-      dio.close();
-      // 防止点开没有收录的应用而获取到null的base
-      if (response.data['data'] == null) return "";
-      List <dynamic> app_info_get = response.data['data'];
-      List <LinyapsPackageInfo> app_info_sorted = [];
-      // 对版本号进行二叉树的升序排序
-      if (app_info_get.isNotEmpty) {
-        for (i=0;i<app_info_get.length;i++) {
-          LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(
-            id: app_info_get[i]['id']==null?app_info_get[i]['appId']:app_info_get[i]['id'], 
-            devName: app_info_get[i]['devName'],
-            name: app_info_get[i]['name'], 
-            base: app_info_get[i]['base'], 
-            installCount: app_info_get[i]['installCount'],
-            runtime: app_info_get[i]['runtime'],
-            repoName: app_info_get[i]['repoName'],
-            channel: app_info_get[i]['channel'],
-            module: app_info_get[i]['module'],
-            version: app_info_get[i]['version'], 
-            description: app_info_get[i]['description'], 
-            arch: app_info_get[i]['arch'],
-            Icon: app_info_get[i]['icon'],  
-          );
-          
-          // 使用二分查找找到合适的插入位置
-          if (app_info_sorted.isEmpty) app_info_sorted.add(wait_add_info);
-          else {
-            // 使用二分法寻找待插入节点
-            int left = 0;
-            int right = app_info_sorted.length - 1;
-            while (left<=right) {
-              // 存储中间节点 (这里是整除)
-              int m =(left + right) ~/ 2;
-              // 如果中间节点大于待插入节点
-              if (
-                VersionCompare(
-                ver1: app_info_sorted[m].version, 
-                ver2: wait_add_info.version,
-                ).isFirstGreaterThanSec()
-              ) {
-                right=m-1;
-              }
-              else left=m+1;
-            }
-            // 最后插入待插入节点
-            // 特殊处理最后一个让用专用的插入函数,因为insert不支持在末尾追加,这样会导致原先的最后一个元素被往后挤
-            if (left<app_info_sorted.length) app_info_sorted.insert(left,wait_add_info);
-            else app_info_sorted.add(wait_add_info);
-          }    
-        }
-        // 返回对应信息
-        return app_info_sorted[app_info_sorted.length-1].base ?? '';
-      }
-      // 如果没有对应应用直接返回空列表
-      else return "";
-    }
-
   // 获取具体应用的详细信息的方法2: 此方法是仅返回应用的最新版本信息
   // 当能获取到应用信息时返回对应类, 否则返回null
   Future <LinyapsPackageInfo?> get_app_detail_latest (String appId) async {
@@ -535,14 +460,14 @@ class LinyapsStoreApiService {
     // 更新系统架构信息
     await update_os_arch();   
     // 指定具体响应API地址
-    String serverUrl = '$serverHost_Store/visit/getSearchAppVersionList';
+    String serverUrl = '$serverHost_Store/app/getAppDetail';
     Dio dio = Dio ();    // 创建Dio请求对象
-    Map <String,dynamic> upload_data = {    // 准备请求数据
-      "repoName":"stable",
-      "channel": "main",
-      "arch": repo_arch,
+    // 由于该API强制要求列表形式添加故在这里也使用列表形式
+    List<Map<String,dynamic>> upload_data = [];
+    upload_data.add({
       "appId": appId,
-    };
+      "arch": repo_arch,
+    });
 
     // 发送并获取返回信息
     Response response = await dio.post(
@@ -550,63 +475,93 @@ class LinyapsStoreApiService {
       data: jsonEncode(upload_data),
     );  
     dio.close();
-    List <dynamic> app_info_get = response.data['data'];
 
-    // 将返回的信息变成玲珑应用类
+    // 如果发现返回的应用信息为null则直接返回空列表
+    if (response.data['data'] == null) return [];
+
+    // 如果获取信息不为空则拿到信息
+    List <dynamic> app_info_get = response.data['data'][appId];
+
+    // 将返回的信息变成玲珑应用类的列表
     List <LinyapsPackageInfo> cur_app_info = [];
 
     // 提前初始化i变量
-    int i=0;
-    if (app_info_get.isNotEmpty) {
-      for (i=0;i<app_info_get.length;i++) {
-        LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(
-          id: app_info_get[i]['id']==null?app_info_get[i]['appId']:app_info_get[i]['id'], 
-          devName: app_info_get[i]['devName'],
-          name: app_info_get[i]['name'], 
-          base: app_info_get[i]['base'], 
-          installCount: app_info_get[i]['installCount'],
-          runtime: app_info_get[i]['runtime'],
-          repoName: app_info_get[i]['repoName'],
-          channel: app_info_get[i]['channel'],
-          module: app_info_get[i]['module'],
-          version: app_info_get[i]['version'], 
-          description: app_info_get[i]['description'], 
-          arch: app_info_get[i]['arch'],
-          Icon: app_info_get[i]['icon'],  
-        );
-        
-        // 使用二分查找找到合适的插入位置
-        if (cur_app_info.isEmpty) cur_app_info.add(wait_add_info);
-        else {
-          // 使用二分法寻找待插入节点
-          int left = 0;
-          int right = cur_app_info.length - 1;
-          while (left<=right)
-            {
-              // 存储中间节点
-              int m =(left + right) ~/ 2;
-              // 如果中间节点大于待插入节点
-              if (
-                VersionCompare(
-                  ver1: cur_app_info[m].version, 
-                  ver2: wait_add_info.version,
-                ).isFirstGreaterThanSec()
-              ) {
-                right=m-1;
-              }
-              else left=m+1;
-            }
-          // 最后插入待插入节点
-          // 特殊处理最后一个让用专用的插入函数,因为insert不支持在末尾追加,这样会导致原先的最后一个元素被往后挤
-          if (left<cur_app_info.length) cur_app_info.insert(left,wait_add_info);
-          else cur_app_info.add(wait_add_info);
-        }    
-      }
-      // 返回对应信息
-      return cur_app_info;
+    for (dynamic i in app_info_get) {
+      cur_app_info.add(
+        LinyapsPackageInfo(
+          id: i['appId'] ?? '', 
+          devName: i['devName'],
+          name: i['name'], 
+          zhName: i['zhName'],
+          base: i['base'] ?? '', 
+          installCount: i['installCount'],
+          runtime: i['runtime'],
+          repoName: i['repoName'],
+          channel: i['channel'],
+          module: i['module'],
+          version: i['version'], 
+          description: i['description'], 
+          arch: i['arch'],
+          Icon: i['icon'],  
+        ),
+      );
     }
-    // 如果没有对应应用直接返回空列表
-    else return [];
+
+    // 最终从服务器返回必需的信息
+    return cur_app_info;
+    
   }
 
+  /**
+  // 备份用的二分查找算法
+  if (app_info_get.isNotEmpty) {
+    for (i=0;i<app_info_get.length;i++) {
+      LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(
+        id: app_info_get[i]['id']==null?app_info_get[i]['appId']:app_info_get[i]['id'], 
+        devName: app_info_get[i]['devName'],
+        name: app_info_get[i]['name'], 
+        base: app_info_get[i]['base'], 
+        installCount: app_info_get[i]['installCount'],
+        runtime: app_info_get[i]['runtime'],
+        repoName: app_info_get[i]['repoName'],
+        channel: app_info_get[i]['channel'],
+        module: app_info_get[i]['module'],
+        version: app_info_get[i]['version'], 
+        description: app_info_get[i]['description'], 
+        arch: app_info_get[i]['arch'],
+        Icon: app_info_get[i]['icon'],  
+      );
+      
+      // 使用二分查找找到合适的插入位置
+      if (cur_app_info.isEmpty) cur_app_info.add(wait_add_info);
+      else {
+        // 使用二分法寻找待插入节点
+        int left = 0;
+        int right = cur_app_info.length - 1;
+        while (left<=right)
+          {
+            // 存储中间节点
+            int m =(left + right) ~/ 2;
+            // 如果中间节点大于待插入节点
+            if (
+              VersionCompare(
+                ver1: cur_app_info[m].version, 
+                ver2: wait_add_info.version,
+              ).isFirstGreaterThanSec()
+            ) {
+              right=m-1;
+            }
+            else left=m+1;
+          }
+        // 最后插入待插入节点
+        // 特殊处理最后一个让用专用的插入函数,因为insert不支持在末尾追加,这样会导致原先的最后一个元素被往后挤
+        if (left<cur_app_info.length) cur_app_info.insert(left,wait_add_info);
+        else cur_app_info.add(wait_add_info);
+      }    
+    }
+    // 返回对应信息
+    return cur_app_info;
+  } 
+  else return [];
+   */
 }

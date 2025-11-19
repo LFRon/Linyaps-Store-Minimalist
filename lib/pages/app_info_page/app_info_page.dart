@@ -42,9 +42,6 @@ class AppInfoPageState extends State<AppInfoPage> {
   // 声明当前应用对象
   late List <LinyapsPackageInfo> cur_app_info;
 
-  // 由于商店目前不支持获取应用base信息,因此单开一个变量获取应用最新的base信息
-  String cur_app_base = '';
-
   // 声明存储当前应用安装的第几个版本,默认为字符串为空代表没有安装
   String cur_installed_version = '';
 
@@ -58,12 +55,6 @@ class AppInfoPageState extends State<AppInfoPage> {
       });
     }
     return;
-  }
-
-  // 由于商店目前不支持获取应用base信息,因此单开一个函数获取应用最新的base信息
-  Future <void> getAppBase (String appId) async {
-    String get_app_base = await LinyapsStoreApiService().get_app_base(appId);
-    if (mounted) cur_app_base = get_app_base;
   }
 
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
@@ -169,7 +160,6 @@ class AppInfoPageState extends State<AppInfoPage> {
       // 先检连接状态
       await get_connection_status();
       if (is_connection_good) {
-        await getAppBase(widget.appId);
         // 先更新应用具体信息
         if (await getAppDetails(widget.appId)){
           // 如果商店中有这个应用再更新应用具体安装情况
@@ -321,7 +311,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "应用维护者: ${(cur_app_info[cur_app_info.length-1].devName==null || cur_app_info[cur_app_info.length-1].devName=='null')?'未知':cur_app_info[cur_app_info.length-1].devName}",
+                                          "应用维护者: ${cur_app_info[0].devName ?? '未知'}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -330,7 +320,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                         
                                         SizedBox(height: height*0.02,),
                                         Text(
-                                          "应用基础环境: $cur_app_base",
+                                          "应用基础环境: ${cur_app_info[0].base}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -339,7 +329,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                         
                                         SizedBox(height: height*0.02,),
                                         Text(
-                                          "应用运行环境: ${(cur_app_info[cur_app_info.length-1].runtime=='' || cur_app_info[cur_app_info.length-1].runtime=='null')?'无':cur_app_info[cur_app_info.length-1].runtime}",
+                                          "应用运行环境: ${(cur_app_info[0].runtime=='' || cur_app_info[0].runtime=='null')?'无':cur_app_info[0].runtime}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -347,7 +337,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                         ),
                                         SizedBox(height: height*0.02,),
                                         Text(
-                                          "应用完整介绍: ${cur_app_info[cur_app_info.length-1].description}",
+                                          "应用完整介绍: ${cur_app_info[0].description}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -382,12 +372,11 @@ class AppInfoPageState extends State<AppInfoPage> {
                                         child: ListView.builder(
                                           itemCount: cur_app_info.length,
                                           itemBuilder: (context,index) {
-                                            int reversedIndex = cur_app_info.length - 1 - index;
                                             return Padding(
                                               padding: EdgeInsets.only(top:5.0,bottom: 5.0),
                                               child: AppInfoView(
-                                                app_info: cur_app_info[reversedIndex],
-                                                is_cur_version_installed: cur_app_info[reversedIndex].version == cur_installed_version?true:false,
+                                                app_info: cur_app_info[index],
+                                                is_cur_version_installed: cur_app_info[index].version == cur_installed_version ? true : false,
                                                 cur_installed_app_version: cur_installed_version==''?null:cur_installed_version,
                                                 install_app: (appInfo, button_install) async {
                                                   await install_app(appInfo, button_install);
