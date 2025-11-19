@@ -588,8 +588,8 @@ class LinyapsStoreApiService {
               // 如果中间节点大于待插入节点
               if (
                 VersionCompare(
-                ver1: cur_app_info[m].version, 
-                ver2: wait_add_info.version,
+                  ver1: cur_app_info[m].version, 
+                  ver2: wait_add_info.version,
                 ).isFirstGreaterThanSec()
               ) {
                 right=m-1;
