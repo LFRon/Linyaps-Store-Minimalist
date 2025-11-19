@@ -3,8 +3,6 @@
 // 忽略VSCode非必要报错
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, use_build_context_synchronously, unnecessary_overrides
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
@@ -216,8 +214,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     if (!is_page_loading && is_connection_good) {
       // 先设置页面为加载中状态
       await setPageLoading();
-      // 防止刷新过于频繁
-      sleep(Duration(milliseconds: 2500));
       // 再执行具体更新函数功能
       await updateInstalledAppsList();
       await updateUpgradableAppsList();
