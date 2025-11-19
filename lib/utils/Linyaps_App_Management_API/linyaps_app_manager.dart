@@ -26,14 +26,13 @@ class LinyapsAppManagerApi {
     // 先异步获取玲珑本地信息
     dynamic linyapsLocalInfo = await LinyapsCliHelper().get_linyaps_all_local_info();
     // 再获取
-    // 处理异常(比如没有安装玲珑或者没安装应用等情况)
+    // 遇到没有安装玲珑或者没安装应用等情况,直接返回空列表
     if (linyapsLocalInfo == null) return [];
     // 初始化待返回临时对象
     List<LinyapsPackageInfo> returnItems = [];
     // 开始遍历本地的应用安装信息
     dynamic i;
     for (i in linyapsLocalInfo['layers']) {
-      String IconUrl = "";
       // 先检查已知的应用列表是否为空省去不必要的循环
       if (already_get_list.isEmpty) {
         returnItems.add(
@@ -43,7 +42,7 @@ class LinyapsAppManagerApi {
             version: i['info']['version'], 
             description: i['info']['description'], 
             arch: i['info']['arch'][0],
-            Icon: IconUrl,     // 此时图标链接为空
+            Icon: '',     // 此时图标链接为空
           ),
         );
       }
@@ -69,7 +68,7 @@ class LinyapsAppManagerApi {
               version: i['info']['version'], 
               description: i['info']['description'], 
               arch: i['info']['arch'][0],
-              Icon: IconUrl,     // 此时图标链接为空
+              Icon: existingApp.Icon,     // 此时图标链接为空
             ),
           );
         }
@@ -83,7 +82,7 @@ class LinyapsAppManagerApi {
                 version: i['info']['version'], 
                 description: i['info']['description'], 
                 arch: i['info']['arch'][0],
-                Icon: existingApp.Icon,     // 此时图标链接为空
+                Icon: existingApp.Icon,    
               ),
             );
           } else {
@@ -94,7 +93,7 @@ class LinyapsAppManagerApi {
                 version: existingApp.version, 
                 description: i['info']['description'], 
                 arch: i['info']['arch'][0],
-                Icon: existingApp.Icon,     // 此时图标链接为空
+                Icon: existingApp.Icon,   
               ),
             );
           }
