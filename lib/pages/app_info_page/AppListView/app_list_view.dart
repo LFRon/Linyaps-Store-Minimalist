@@ -3,6 +3,8 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: prefer_const_constructors_in_immutables, non_constant_identifier_names, must_be_immutable, prefer_if_null_operators
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -61,7 +63,8 @@ class AppInfoViewState extends State<AppInfoView> {
   void launch_app (String appId) {
     // 设置按钮被按下
     button_launchapp.is_pressed.value = true;
-    LinyapsCliHelper().launch_installed_app(appId);
+    LinyapsCliHelper.launch_installed_app(appId);
+    sleep(Duration(milliseconds: 550));
     // 启动后设置按钮被释放
     button_launchapp.is_pressed.value = false;
   }
