@@ -6,7 +6,7 @@
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class CheckInternetConnectionStatus {
-  Future<bool> staus_is_good () async {
+  static Future<bool> staus_is_good () async {
     // 新建网络检测对象
     InternetConnection connection = InternetConnection.createInstance(
       customCheckOptions: [

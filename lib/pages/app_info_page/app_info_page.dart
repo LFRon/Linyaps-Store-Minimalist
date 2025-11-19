@@ -47,7 +47,7 @@ class AppInfoPageState extends State<AppInfoPage> {
 
   // 获取当前网络具体状况函数
   Future <void> get_connection_status () async {
-    bool is_connection_good_get = await CheckInternetConnectionStatus().staus_is_good();
+    bool is_connection_good_get = await CheckInternetConnectionStatus.staus_is_good();
     // 更新页面具体变量信息
     if (mounted) {
       setState(() {

@@ -54,7 +54,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
   // 刷新网络连接状态的函数
   Future <void> update_connection_status () async {
     // 先异步获取网络连接状态
-    bool get_connection_status =  await CheckInternetConnectionStatus().staus_is_good();
+    bool get_connection_status =  await CheckInternetConnectionStatus.staus_is_good();
     // 刷新变量信息并触发页面重构
     if (mounted) {
       setState(() {

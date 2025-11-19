@@ -36,7 +36,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   // 刷新网络状态用函数
   Future<void> updateConnectionStatus() async {
-    bool connection_status_get = await CheckInternetConnectionStatus().staus_is_good();
+    bool connection_status_get = await CheckInternetConnectionStatus.staus_is_good();
     if (mounted) {
       setState(() {
         is_connection_good = connection_status_get;

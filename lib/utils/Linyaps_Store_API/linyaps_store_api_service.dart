@@ -269,6 +269,8 @@ class LinyapsStoreApiService {
         serverUrl,
         data: jsonEncode(upload_data),
       );  
+      dio.close();
+
       List <dynamic> search_info_get = response.data['data']['records'];
 
       // 循环加入最终结果对象中
@@ -355,6 +357,7 @@ class LinyapsStoreApiService {
       serverUrl,
       data: jsonEncode(upload_installed_apps),
     );  
+    dio.close();
 
     Map <String, dynamic> app_info_get = response.data['data'];
     // 拿到请求后准备逐个返回
