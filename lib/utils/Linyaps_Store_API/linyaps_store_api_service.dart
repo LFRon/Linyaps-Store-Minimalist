@@ -506,62 +506,60 @@ class LinyapsStoreApiService {
         ),
       );
     }
-
     // 最终从服务器返回必需的信息
     return cur_app_info;
-    
   }
-
-  /**
-  // 备份用的二分查找算法
-  if (app_info_get.isNotEmpty) {
-    for (i=0;i<app_info_get.length;i++) {
-      LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(
-        id: app_info_get[i]['id']==null?app_info_get[i]['appId']:app_info_get[i]['id'], 
-        devName: app_info_get[i]['devName'],
-        name: app_info_get[i]['name'], 
-        base: app_info_get[i]['base'], 
-        installCount: app_info_get[i]['installCount'],
-        runtime: app_info_get[i]['runtime'],
-        repoName: app_info_get[i]['repoName'],
-        channel: app_info_get[i]['channel'],
-        module: app_info_get[i]['module'],
-        version: app_info_get[i]['version'], 
-        description: app_info_get[i]['description'], 
-        arch: app_info_get[i]['arch'],
-        Icon: app_info_get[i]['icon'],  
-      );
-      
-      // 使用二分查找找到合适的插入位置
-      if (cur_app_info.isEmpty) cur_app_info.add(wait_add_info);
-      else {
-        // 使用二分法寻找待插入节点
-        int left = 0;
-        int right = cur_app_info.length - 1;
-        while (left<=right)
-          {
-            // 存储中间节点
-            int m =(left + right) ~/ 2;
-            // 如果中间节点大于待插入节点
-            if (
-              VersionCompare(
-                ver1: cur_app_info[m].version, 
-                ver2: wait_add_info.version,
-              ).isFirstGreaterThanSec()
-            ) {
-              right=m-1;
-            }
-            else left=m+1;
-          }
-        // 最后插入待插入节点
-        // 特殊处理最后一个让用专用的插入函数,因为insert不支持在末尾追加,这样会导致原先的最后一个元素被往后挤
-        if (left<cur_app_info.length) cur_app_info.insert(left,wait_add_info);
-        else cur_app_info.add(wait_add_info);
-      }    
-    }
-    // 返回对应信息
-    return cur_app_info;
-  } 
-  else return [];
-   */
 }
+
+/**
+// 备份用的二分查找算法
+if (app_info_get.isNotEmpty) {
+  for (i=0;i<app_info_get.length;i++) {
+    LinyapsPackageInfo wait_add_info = LinyapsPackageInfo(
+      id: app_info_get[i]['id']==null?app_info_get[i]['appId']:app_info_get[i]['id'], 
+      devName: app_info_get[i]['devName'],
+      name: app_info_get[i]['name'], 
+      base: app_info_get[i]['base'], 
+      installCount: app_info_get[i]['installCount'],
+      runtime: app_info_get[i]['runtime'],
+      repoName: app_info_get[i]['repoName'],
+      channel: app_info_get[i]['channel'],
+      module: app_info_get[i]['module'],
+      version: app_info_get[i]['version'], 
+      description: app_info_get[i]['description'], 
+      arch: app_info_get[i]['arch'],
+      Icon: app_info_get[i]['icon'],  
+    );
+    
+    // 使用二分查找找到合适的插入位置
+    if (cur_app_info.isEmpty) cur_app_info.add(wait_add_info);
+    else {
+      // 使用二分法寻找待插入节点
+      int left = 0;
+      int right = cur_app_info.length - 1;
+      while (left<=right)
+        {
+          // 存储中间节点
+          int m =(left + right) ~/ 2;
+          // 如果中间节点大于待插入节点
+          if (
+            VersionCompare(
+              ver1: cur_app_info[m].version, 
+              ver2: wait_add_info.version,
+            ).isFirstGreaterThanSec()
+          ) {
+            right=m-1;
+          }
+          else left=m+1;
+        }
+      // 最后插入待插入节点
+      // 特殊处理最后一个让用专用的插入函数,因为insert不支持在末尾追加,这样会导致原先的最后一个元素被往后挤
+      if (left<cur_app_info.length) cur_app_info.insert(left,wait_add_info);
+      else cur_app_info.add(wait_add_info);
+    }    
+  }
+  // 返回对应信息
+  return cur_app_info;
+} 
+else return [];
+*/
