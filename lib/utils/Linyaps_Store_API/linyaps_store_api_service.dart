@@ -487,6 +487,7 @@ class LinyapsStoreApiService {
           name: app_info_get[i.id][0]['name'], 
           version: app_info_get[i.id][0]['version'], 
           description: app_info_get[i.id][0]['description'], 
+          Icon: app_info_get[i.id][0]['icon'],
           arch: repo_arch,
         )
         : LinyapsPackageInfo(
