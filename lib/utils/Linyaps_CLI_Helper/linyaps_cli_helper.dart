@@ -27,14 +27,13 @@ class LinyapsCliHelper {
     // 指定玲珑的states.json路径
     String linyaps_states_path = '/var/lib/linglong/states.json';
     File file = File(linyaps_states_path);
-    if (await file.exists())
-      {
-        // 以字符串的形式读取states.json
-        String get_states_content = await file.readAsString();
-        // 将字符串对象转成列表字典
-        Map<String, dynamic> jsonData = jsonDecode(get_states_content) as Map<String, dynamic>;
-        return jsonData;
-      }
+    if (await file.exists()) {
+      // 以字符串的形式读取states.json
+      String get_states_content = await file.readAsString();
+      // 将字符串对象转成列表字典
+      Map<String, dynamic> jsonData = jsonDecode(get_states_content) as Map<String, dynamic>;
+      return jsonData;
+    }
     else return null;
   }
   
