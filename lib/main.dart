@@ -1,5 +1,5 @@
 // 主程序总线
-// ignore_for_file: non_constant_identifier_names, must_be_immutable
+// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   void initState ()
     {
       super.initState();
-      // 检测操作系统不是Linux赶紧跑路
+      // 检测操作系统是不是Linux,不是的话赶紧跑路
       if (!Platform.isLinux) exit(0);
     }
 
