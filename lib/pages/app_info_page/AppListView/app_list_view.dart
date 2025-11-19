@@ -3,8 +3,6 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: prefer_const_constructors_in_immutables, non_constant_identifier_names, must_be_immutable, prefer_if_null_operators
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -60,12 +58,12 @@ class AppInfoViewState extends State<AppInfoView> {
   // List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context,listen: false).downloadingAppsQueue;
 
   // 该页面启动应用的方法
-  void launch_app (String appId) {
+  void launch_app (String appId) async {
     // 设置按钮被按下
     button_launchapp.is_pressed.value = true;
     LinyapsCliHelper.launch_installed_app(appId);
-    // 等待一段时间再允许用户再次启动
-    sleep(Duration(milliseconds: 550));
+    // 设置一定延迟后才允许用户继续按下, 以防用户突然一次按太多下打开过多实例
+    await Future.delayed(Duration(milliseconds: 550));
     // 启动后设置按钮被释放
     button_launchapp.is_pressed.value = false;
   }
