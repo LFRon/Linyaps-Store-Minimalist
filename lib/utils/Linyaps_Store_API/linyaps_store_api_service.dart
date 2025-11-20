@@ -252,49 +252,48 @@ class LinyapsStoreApiService {
   }
 
   // 获取用户搜索结果的后端对接方法
-  Future <List<LinyapsPackageInfo>> get_search_results (String searchId) async 
-    {
-      await update_os_arch();   // 更新系统架构信息
-      String serverUrl = '$serverHost_Store/visit/getSearchAppList';
-      Dio dio = Dio ();    // 创建Dio请求对象
-      Map <String,dynamic> upload_data = {    // 准备请求数据
-        "repoName": "stable",
-        "name": searchId,
-        "arch": repo_arch,
-        "pageNo": 1,
-        "pageSize": 100,
-      };
-      // 发送并获取返回结果
-      Response response = await dio.post(
-        serverUrl,
-        data: jsonEncode(upload_data),
-      );  
-      dio.close();
+  Future <List<LinyapsPackageInfo>> get_search_results (String searchId) async {
+    await update_os_arch();   // 更新系统架构信息
+    String serverUrl = '$serverHost_Store/visit/getSearchAppList';
+    Dio dio = Dio ();    // 创建Dio请求对象
+    Map <String,dynamic> upload_data = {    // 准备请求数据
+      "repoName": "stable",
+      "name": searchId,
+      "arch": repo_arch,
+      "pageNo": 1,
+      "pageSize": 100,
+    };
+    // 发送并获取返回结果
+    Response response = await dio.post(
+      serverUrl,
+      data: jsonEncode(upload_data),
+    );  
+    dio.close();
 
-      List <dynamic> search_info_get = response.data['data']['records'];
+    List <dynamic> search_info_get = response.data['data']['records'];
 
-      // 循环加入最终结果对象中
-      List <LinyapsPackageInfo> returnItems = [];
-      dynamic i;
-      for (i in search_info_get) {
-        returnItems.add(
-          LinyapsPackageInfo(
-            id: i['id']==null?i['appId']:i['id'], 
-            name: i['name'], 
-            version: i['version'], 
-            description: i['description'], 
-            arch: i['arch'],
-            Icon: i['icon'],
-            channel: i['channel'],
-            module: i['module'],
-            categoryName: i['categoryName'],
-            installCount: i['installCount'],
-          ),
-        );
-      }
-      // 直接以玲珑包类返回结果
-      return returnItems;
+    // 循环加入最终结果对象中
+    List <LinyapsPackageInfo> returnItems = [];
+    dynamic i;
+    for (i in search_info_get) {
+      returnItems.add(
+        LinyapsPackageInfo(
+          id: i['id']==null?i['appId']:i['id'], 
+          name: i['name'], 
+          version: i['version'], 
+          description: i['description'], 
+          arch: i['arch'],
+          Icon: i['icon'],
+          channel: i['channel'],
+          module: i['module'],
+          categoryName: i['categoryName'],
+          installCount: i['installCount'],
+        ),
+      );
     }
+    // 直接以玲珑包类返回结果
+    return returnItems;
+  }
 
   // 获取具体应用的详细信息的方法2: 此方法是仅返回应用的最新版本信息
   // 当能获取到应用信息时返回对应类, 否则返回null
