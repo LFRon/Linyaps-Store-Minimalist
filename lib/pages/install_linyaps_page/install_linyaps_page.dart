@@ -1,15 +1,36 @@
 // 若用户未安装玲珑则跳出的页面
+
+// 关闭VSCode非必要报错
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/confirm_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InstallLinyapsPage extends StatefulWidget {
-
   const InstallLinyapsPage({super.key});
-
   @override
   State<InstallLinyapsPage> createState() => _InstallLinyapsPageState();
 }
 
 class _InstallLinyapsPageState extends State<InstallLinyapsPage> {
+
+  // 打开玲珑官方源链接函数
+  Future <void> launchLinyapsOfficialGuideUrl () async {
+    // 设置即将打开的链接
+    Uri url_official = Uri.parse('https://linyaps.org.cn/guide/start/install.html');
+    await launchUrl(url_official);
+    return;
+  }
+
+  // 打开玲珑社区源链接函数
+  Future <void> launchLinyapsCommunityGuideUrl () async {
+    // 设置即将打开的链接
+    Uri url_community = Uri.parse('https://bbs.deepin.org.cn/post/289061');
+    await launchUrl(url_community);
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +75,22 @@ class _InstallLinyapsPageState extends State<InstallLinyapsPage> {
                           fontSize: 20,
                         ),
                       ),
+                      const SizedBox(width: 50,),
+                      SizedBox(
+                        width: 220,
+                        height: 60,
+                        child: MyButton_Confirm(
+                          onPressed: () async {
+                            await launchLinyapsOfficialGuideUrl();
+                          }, 
+                          text: Text(
+                            '点击访问官方源安装教程',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 40,),
@@ -64,6 +101,22 @@ class _InstallLinyapsPageState extends State<InstallLinyapsPage> {
                         '如果您追新, 想第一时间体验最新功能, \n点击右侧按钮跳转玲珑社区源安装教程即可 ->',
                         style: TextStyle(
                           fontSize: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 50,),
+                      SizedBox(
+                        width: 220,
+                        height: 60,
+                        child: MyButton_Confirm(
+                          onPressed: () async {
+                            await launchLinyapsCommunityGuideUrl();
+                          }, 
+                          text: Text(
+                            '点击访问社区源安装教程',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
                       ),
                     ],
