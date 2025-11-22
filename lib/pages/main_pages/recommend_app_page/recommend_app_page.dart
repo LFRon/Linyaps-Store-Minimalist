@@ -67,8 +67,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     // 进行暴力异步加载页面
     Future.delayed(Duration.zero).then((_) async {
       // 先检测玲珑是否安装了, 若未安装则直接跳转
-      // 调试用代码, 请勿用于生产环境
-      if (await LinyapsCliHelper.is_installed_linyaps()) {
+      if (!await LinyapsCliHelper.is_installed_linyaps()) {
         Navigator.push(
           context,
           MaterialPageRoute(
