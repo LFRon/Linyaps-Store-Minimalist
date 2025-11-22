@@ -68,6 +68,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
   // 更新页面加载状态为加载中的方法
   Future <void> setPageLoading () async {
+    // ignore: avoid_print
     print("- set <is_page_loading> to true");
     if (mounted){
       setState(() {
@@ -79,6 +80,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   
   // 更新页面加载状态为加载完成的方法
   Future <void> setPageNotLoading () async {
+    // ignore: avoid_print
     print("- set <is_page_loading> to false");
     if (mounted) {
       setState(() {
@@ -117,11 +119,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     return;
   }
   
-  // 获取所有应用
+  // 调用在线功能获取所有应用
   Future <void> updateInstalledAppsList () async {
     await globalAppState.updateInstalledAppsList_Online();
-    // 更新应用安装信息
-    // if (mounted) setState(() {});
     return;
   }
   
@@ -455,18 +455,18 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: height*0.06,
-                    width: height*0.06,
+                    height: 50,
+                    width: 50,
                     child: CircularProgressIndicator(
                       color: Colors.grey.shade500,
-                      strokeWidth: 4.5,
+                      strokeWidth: 5,
                     ),
                   ),
-                  SizedBox(height: height*0.03,),
+                  SizedBox(height: 35,),
                   Text(
                     "正在载入本地应用信息 ~",
                     style: TextStyle(
-                      fontSize: height*0.025,
+                      fontSize: 22,
                     ),
                   ),
                 ],
