@@ -341,8 +341,8 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 55,
-                        width: 55,
+                        height: 50,
+                        width: 50,
                         child: RepaintBoundary(
                           child: CircularProgressIndicator(
                             color: Colors.grey.shade500,
