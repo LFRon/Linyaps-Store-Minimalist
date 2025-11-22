@@ -211,7 +211,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
       text: Text(
         "搜索",
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
         ),
       ), 
       is_pressed: ValueNotifier<bool>(false),
@@ -226,7 +226,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
       text: Text(
         "重置",
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           color: Colors.white,
         ),
       ), 
@@ -256,7 +256,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                 Text(
                   "全部应用",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 25,
                   ),
                 ),
                 // 子列用于放置搜索框
@@ -264,7 +264,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      height: 45,
+                      height: 40,
                       width: width*0.25,
                       child: TextField(
                         controller: _controller_searchtext,
@@ -272,7 +272,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                           fontSize: 18
                         ),
                         // 设置光标高度
-                        cursorHeight: 25,  
+                        cursorHeight: 22,  
                         // 与回车键按下捆绑
                         onSubmitted: (value) => reloadPage_searchResult(),
                         decoration: InputDecoration(
@@ -291,7 +291,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                           // 设置输入框的提示文字内容与样式
                           hintText: "在这里输入您想搜索的应用 ~",
                           hintStyle: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             color: Colors.grey.shade700,
                           ),
                         ),
@@ -300,15 +300,15 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     SizedBox(width: 30,),
                     // 放置"搜索"按钮
                     SizedBox(
-                      height: 45,
-                      width: 90,
+                      height: 40,
+                      width: 85,
                       child: button_search
                     ),
                     SizedBox(width: 20,),
                     // 放置"重置"按钮
                     SizedBox(
-                      height: 45,
-                      width: 90,
+                      height: 40,
+                      width: 85,
                       child: button_reset,
                     ),
                   ],
