@@ -114,7 +114,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     return Scaffold(
       body: is_page_loaded 
         ? Padding(
-          padding: EdgeInsets.only(top:height*0.1,left: width*0.06,right: width*0.06),
+          padding: EdgeInsets.only(top: 20,left: 30,right: 50),
           child: Column(
             children: [
               Stack(
@@ -139,6 +139,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
               
                   // 通过精准定位设置左右轮换按钮
                   Positioned(
+                    top: height*0.08,
                     left: width*0.01,
                     child: Center(
                       child: FloatingActionButton(
@@ -152,6 +153,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                     ),
                   ),
                   Positioned(
+                    top: height*0.08,
                     right: width*0.01,
                     child: Center(
                       child: FloatingActionButton(

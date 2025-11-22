@@ -211,7 +211,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
       text: Text(
         "搜索",
         style: TextStyle(
-          fontSize: height*0.02,
+          fontSize: 20,
         ),
       ), 
       is_pressed: ValueNotifier<bool>(false),
@@ -226,12 +226,12 @@ class _AllAppsPageState extends State<AllAppsPage> {
       text: Text(
         "重置",
         style: TextStyle(
-          fontSize: height*0.02,
+          fontSize: 20,
           color: Colors.white,
         ),
       ), 
       is_pressed: ValueNotifier<bool>(false), 
-      indicator_width: height*0.022, 
+      indicator_width: 10, 
       onPressed: () async {
         await reloadPage_all();
       },
@@ -246,7 +246,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(top:height*0.04,left: width*0.03,right: width*0.05),
+        padding: EdgeInsets.only(top: 20,left: 30,right: 50),
         child: Column(
           children: [
             // 列式布局放置应用分类与搜索框
@@ -256,7 +256,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                 Text(
                   "全部应用",
                   style: TextStyle(
-                    fontSize: height*0.03,
+                    fontSize: 28,
                   ),
                 ),
                 // 子列用于放置搜索框
@@ -264,15 +264,15 @@ class _AllAppsPageState extends State<AllAppsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      height: height*0.05,
+                      height: 45,
                       width: width*0.25,
                       child: TextField(
                         controller: _controller_searchtext,
                         style: TextStyle(
-                          fontSize: height*0.025
+                          fontSize: 18
                         ),
                         // 设置光标高度
-                        cursorHeight: height*0.03,  
+                        cursorHeight: 25,  
                         // 与回车键按下捆绑
                         onSubmitted: (value) => reloadPage_searchResult(),
                         decoration: InputDecoration(
@@ -291,31 +291,31 @@ class _AllAppsPageState extends State<AllAppsPage> {
                           // 设置输入框的提示文字内容与样式
                           hintText: "在这里输入您想搜索的应用 ~",
                           hintStyle: TextStyle(
-                            fontSize: height*0.02,
+                            fontSize: 16,
                             color: Colors.grey.shade700,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: width*0.02,),
+                    SizedBox(width: 30,),
                     // 放置"搜索"按钮
                     SizedBox(
-                      height: height*0.052,
-                      width: height*0.1,
+                      height: 45,
+                      width: 90,
                       child: button_search
                     ),
-                    SizedBox(width: width*0.015,),
+                    SizedBox(width: 20,),
                     // 放置"重置"按钮
                     SizedBox(
-                      height: height*0.052,
-                      width: height*0.1,
+                      height: 45,
+                      width: 90,
                       child: button_reset,
                     ),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: height*0.02,),
+            SizedBox(height: 20,),
             Flexible(
               child: is_page_loaded
                 ? GridView.builder(
@@ -323,8 +323,8 @@ class _AllAppsPageState extends State<AllAppsPage> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: gridViewCrossAxisCount,  // 根据窗口像素大小调整
                     childAspectRatio: 1.0,
-                    crossAxisSpacing: width*0.02,
-                    mainAxisSpacing: height*0.02,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
                   ),
                   itemCount: cur_app_list.length,
                   itemBuilder:(context, index) {
@@ -341,20 +341,20 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: height*0.06,
-                        width: height*0.06,
+                        height: 55,
+                        width: 55,
                         child: RepaintBoundary(
                           child: CircularProgressIndicator(
                             color: Colors.grey.shade500,
-                            strokeWidth: 4.5,
+                            strokeWidth: 5,
                           ),
                         ),
                       ),
-                      SizedBox(height: height*0.03,),
+                      SizedBox(height: 30,),
                       Text(
                         "稍等一下,信息正在加载中哦 ~",
                         style: TextStyle(
-                          fontSize: width*0.015,
+                          fontSize: 22,
                         ),
                       ),
                     ],
