@@ -11,17 +11,12 @@ import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_i
 class MostDownloadAppGridItems {
   List<LinyapsPackageInfo> NewestAppsList;
 
-  // 获取当前屏幕长宽
-  double height;
-  double width;
   // 获取当前页面上下文对象
   BuildContext context;
 
   MostDownloadAppGridItems({
     required this.NewestAppsList,
     required this.context,
-    required this.height,
-    required this.width,
   });
   List <Widget> Items ()
     {
@@ -33,8 +28,8 @@ class MostDownloadAppGridItems {
             // 用Padding是避开右侧的滚轮
             padding: EdgeInsets.only(right: 13.0),
             child: Container(
-              height: height*0.01,
-              width: width*0.01,
+              height: 150,
+              width: 150,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.onPrimary,
                 borderRadius: BorderRadius.circular(12),
@@ -69,12 +64,8 @@ class MostDownloadAppGridItems {
                           child: CachedNetworkImage(
                             imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
                             placeholder: (context, url) => Center(
-                              child: SizedBox(
-                                height: height*0.02,
-                                width: height*0.02,
-                                child: CircularProgressIndicator(
-                                  color: Colors.grey.shade300,
-                                ),  // 加载时显示进度条
+                              child: CircularProgressIndicator(
+                                color: Colors.grey.shade300,
                               ),
                             ),
                             // 无法显示图片时显示错误
@@ -93,7 +84,7 @@ class MostDownloadAppGridItems {
                             width: 80,
                           ),
                         ),
-                        SizedBox(height:height*0.03,),    // 设置控件间间距
+                        SizedBox(height: 20,),    // 设置控件间间距
                         // 再显示应用名
                         Text(
                           appinfo.name,
@@ -105,7 +96,7 @@ class MostDownloadAppGridItems {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height:height*0.025,),    // 设置控件间间距
+                        SizedBox(height: 20,),    // 设置控件间间距
                         Text(
                           "下载量: ${appinfo.installCount==null?"未知":appinfo.installCount!} 次",
                           style: TextStyle(

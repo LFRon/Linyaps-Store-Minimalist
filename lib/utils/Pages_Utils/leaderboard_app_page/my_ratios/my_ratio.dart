@@ -7,17 +7,12 @@ import 'package:flutter/material.dart';
 
 class MyRadio_SelectNewOrMost extends StatefulWidget {
 
-  // 传入必须的窗口像素信息
-  double height,width;
-
   // 传入与父页面必需的回调函数
   Function (int value) onChanged;
 
   MyRadio_SelectNewOrMost({
     super.key,
     required this.onChanged,
-    required this.height,
-    required this.width,
   });
 
   @override
@@ -60,14 +55,14 @@ class _MyRadio_SelectNewOrMostState extends State<MyRadio_SelectNewOrMost> {
             activeColor: Colors.blueAccent,
             focusColor: Colors.blueAccent,
           ),
-          SizedBox(width: widget.width*0.005,),
+          SizedBox(width: 10,),
           Text(
             "查看最近更新应用",
             style: TextStyle(
-              fontSize: widget.height*0.024
+              fontSize: 22
             ),
           ),
-          SizedBox(width: widget.width*0.04,),
+          SizedBox(width: 40,),
           Radio<Options>(
             value: Options.option2,
             // 设置鼠标悬浮时半透明效果
@@ -80,11 +75,11 @@ class _MyRadio_SelectNewOrMostState extends State<MyRadio_SelectNewOrMost> {
             activeColor: Colors.blueAccent,
             focusColor: Colors.blueAccent,
           ),
-          SizedBox(width: widget.width*0.005,),
+          SizedBox(width: 10,),
           Text(
             "查看下载最多应用",
             style: TextStyle(
-              fontSize: widget.height*0.024
+              fontSize: 22
             ),
           ),
         ],

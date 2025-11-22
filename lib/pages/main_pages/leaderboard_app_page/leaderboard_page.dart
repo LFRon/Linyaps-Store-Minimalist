@@ -19,8 +19,6 @@ class LeaderboardPage extends StatefulWidget {
 }
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
-  // 覆写页面希望保持存在状态开关
-  // bool get wantKeepAlive => true;
 
   // 声明网络连接状态,默认状态为不好
   bool is_connection_good = false;
@@ -122,19 +120,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: height*0.1,
-              width: width*0.5,
+              height: 80,
+              width: 500,
               child: MyRadio_SelectNewOrMost(
-                width: width,
-                height: height,
                 onChanged:(value) async {
                   // 从回调函数拿来返回值
-                  if (mounted)
-                    {
-                      setState(() {
-                        radio_choice = value;
-                      });
-                    }
+                  if (mounted) setState(() {
+                    radio_choice = value;
+                  });
                   // 再执行页面重载函数
                   await loadPage();
                 },
@@ -147,21 +140,17 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     // 先设置网格UI样式
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: gridViewCrossAxisCount, // 设置水平网格个数
-                      mainAxisSpacing: height * 0.02,
-                      crossAxisSpacing: width * 0.02,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
                     ),
                     children: radio_choice == 1
                       ? NewestAppGridItems(
                         NewestAppsList: AppsRakingList,
                         context: context,
-                        height: height * 0.9,
-                        width: height * 0.8,
                       ).Items()
                       : MostDownloadAppGridItems(
                         NewestAppsList: AppsRakingList,
                         context: context,
-                        height: height * 0.9,
-                        width: height * 0.8,
                       ).Items(),
                   ),
                 )
@@ -187,17 +176,21 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: height * 0.06,
-                        width: height * 0.06,
-                        child: CircularProgressIndicator (
-                          color: Colors.grey.shade500,
-                          strokeWidth: 4.5,
+                        height: 50,
+                        width: 50,
+                        child: RepaintBoundary(
+                          child: CircularProgressIndicator(
+                            color: Colors.grey.shade500,
+                            strokeWidth: 5,
+                          ),
                         ),
                       ),
-                      SizedBox(height: height * 0.03),
+                      SizedBox(height: 30,),
                       Text(
-                        "稍等片刻,正在加载应用排行榜信息 ~",
-                        style: TextStyle(fontSize: height * 0.022),
+                        "稍等一下,信息正在加载中哦 ~",
+                        style: TextStyle(
+                          fontSize: 22,
+                        ),
                       ),
                     ],
                   ),
