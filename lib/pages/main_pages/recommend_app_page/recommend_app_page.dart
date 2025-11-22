@@ -201,18 +201,18 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: height*0.06,
-                width: height*0.06,
+                height: 50,
+                width: 50,
                 child: CircularProgressIndicator(
                   color: Colors.grey.shade500,
-                  strokeWidth: 4.5,
+                  strokeWidth: 5,
                 ),
               ),
-              SizedBox(height: height*0.03,),
+              SizedBox(height: 30,),
               Text(
                 "稍等一下,信息正在加载中哦 ~",
                 style: TextStyle(
-                  fontSize: width*0.015,
+                  fontSize: 22,
                 ),
               ),
             ],
