@@ -107,45 +107,45 @@ class AppInfoViewState extends State<AppInfoView> {
     return Consumer <ApplicationState> (
       builder: (context, appState, child) {
         // 初始化安装按钮对象
-      DownloadState state = DownloadState.none;
+        DownloadState state = DownloadState.none;
 
-      // 先看看下载列表里有没有这个应用和对应版本
-      if (appState.downloadingAppsQueue.isNotEmpty) { 
-        // 进行检查
-        LinyapsPackageInfo cur_downloading_app = appState.downloadingAppsQueue.firstWhere(
-          (app) => app.id == widget.app_info.id && app.version == widget.app_info.version,
-          // 没有就返回空对象
-          orElse: () => LinyapsPackageInfo(
-            id: '', 
-            name: '', 
-            version: '', 
-            description: '',
-              arch: '',
-          )
-        );
-        // 如果找到了对应应用实例
-        if (cur_downloading_app.id != '') state = cur_downloading_app.downloadState??DownloadState.none;
-      } 
-
-      // 初始化按钮
-      button_install = MyButton_Install(
-        text: Text(
-          "安装",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-          ),
-        ), 
-        // 初始化按钮按下状态时检查其下载状态是不是1.在下载 2.在下载的路上,如果是,就设置按钮被按下,因为你这应用的确在安装的路上
-        is_pressed: (state == DownloadState.waiting || state == DownloadState.downloading) ? ValueNotifier<bool>(true) : ValueNotifier<bool>(false),
-        indicator_width: 16, 
-        onPressed: () async {
-          await widget.install_app(
-            widget.app_info,
-            button_install,
+        // 先看看下载列表里有没有这个应用和对应版本
+        if (appState.downloadingAppsQueue.isNotEmpty) { 
+          // 进行检查
+          LinyapsPackageInfo cur_downloading_app = appState.downloadingAppsQueue.firstWhere(
+            (app) => app.id == widget.app_info.id && app.version == widget.app_info.version,
+            // 没有就返回空对象
+            orElse: () => LinyapsPackageInfo(
+              id: '', 
+              name: '', 
+              version: '', 
+              description: '',
+                arch: '',
+            )
           );
-        },
-      );
+          // 如果找到了对应应用实例
+          if (cur_downloading_app.id != '') state = cur_downloading_app.downloadState??DownloadState.none;
+        } 
+
+        // 初始化按钮
+        button_install = MyButton_Install(
+          text: Text(
+            "安装",
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+            ),
+          ), 
+          // 初始化按钮按下状态时检查其下载状态是不是1.在下载 2.在下载的路上,如果是,就设置按钮被按下,因为你这应用的确在安装的路上
+          is_pressed: (state == DownloadState.waiting || state == DownloadState.downloading) ? ValueNotifier<bool>(true) : ValueNotifier<bool>(false),
+          indicator_width: 16, 
+          onPressed: () async {
+            await widget.install_app(
+              widget.app_info,
+              button_install,
+            );
+          },
+        );
 
         // 初始化启动应用按钮对象
         button_launchapp = MyButton_LaunchApp(
@@ -160,6 +160,7 @@ class AppInfoViewState extends State<AppInfoView> {
           indicator_width: 16, 
           onPressed: () => launch_app(widget.app_info.id),
         );
+
         return Padding(
           padding: const EdgeInsets.only(right: 11.0),     // 微操避开右侧滚轮
           child: Container(
