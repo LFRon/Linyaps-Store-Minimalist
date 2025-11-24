@@ -182,23 +182,28 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
         Future.microtask(() async {
           // 更新当前页面状态为加载中
           await setPageLoading();
+          // 更新已安装的应用信息
+          await updateInstalledAppsList();
           if (await CheckInternetConnectionStatus.staus_is_good()) {
-            // 更新已安装的应用信息
-            await updateInstalledAppsList();
             await setPageLoaded();
             await updateInstalledAppsIcon();
-          }
-          // 在这里设置页面已加载完未在加载状态
-          await setPageNotLoading();
+            await setPageNotLoading();
+          } else {    // 当网络连接异常的时候只设置页面加载完成
+            await setPageLoaded();
+            await setPageNotLoading();
+          }      
         });
         // 再暴力异步加载可更新应用信息
         Future.microtask(() async {
-          // 获取应用更新详情
-          await updateUpgradableAppsList();
-          // 设置可更新应用信息已完全加载
-          setUpgradableAppLoaded();
+          // 只在网络连接良好条件下进行检查应用更新
+          if (is_connection_good) {
+            // 获取应用更新详情
+            await updateUpgradableAppsList();
+            // 设置可更新应用信息已完全加载
+            setUpgradableAppLoaded();
+          }
         });
-      // 如果页面是之后的刷新
+      // 如果页面已经不是第一次加载, 那么只进行页面刷新操作
       } else {
         _refreshPageData();
       }
@@ -232,13 +237,15 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 那就先检查网络连接状态
     await updateConnectionStatus();
     // 网络好的话那么就更新已安装的应用信息
-    if (!is_page_loading && is_connection_good) {
+    if (!is_page_loading) {
       // 先设置页面为加载中状态
       await setPageLoading();
       // 再执行具体更新函数功能
       await updateInstalledAppsList();
-      await updateUpgradableAppsList();
-      await updateInstalledAppsIcon();
+      if (is_connection_good) {
+        await updateUpgradableAppsList();
+        await updateInstalledAppsIcon();
+      }
       // 设置页面更新状态为已完成
       await setPageNotLoading();
     }

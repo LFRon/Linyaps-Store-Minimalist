@@ -98,11 +98,15 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
             },
           );
         }
+        // 广播页面信息加载已完成
+        if (mounted) setState(() {
+          is_page_loaded =true;
+        });
+      } else {
+        if (mounted) setState(() {
+          is_page_loaded =true;
+        });
       }
-      // 广播页面信息加载已完成
-      if (mounted) setState(() {
-        is_page_loaded =true;
-      });
     });
 
   }
@@ -127,89 +131,99 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     else gridViewCrossAxisCount = 3;
     return Scaffold(
       body: is_page_loaded 
-        ? Padding(
-          padding: EdgeInsets.only(top: 20,left: 30,right: 50),
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  CarouselSlider(
-                    carouselController: carousel_controller,
-                    items: RecommendAppSliderItems(
+        ? is_connection_good
+          ? Padding(
+            padding: EdgeInsets.only(top: 20,left: 30,right: 50),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    CarouselSlider(
+                      carouselController: carousel_controller,
+                      items: RecommendAppSliderItems(
+                        context: context,
+                        RecommendAppsList: RecommendAppsList, 
+                        height: height, 
+                        width: width,
+                      ).Items(), 
+                      // 设定连播图详情
+                      options: CarouselOptions(
+                        height: height*0.3,   // 设置高度
+                        autoPlay: true,
+                        autoPlayInterval: Duration(seconds: 7),
+                        autoPlayAnimationDuration: Duration(seconds: 3),
+                        enableInfiniteScroll: true,
+                      ),
+                    ),
+                
+                    // 通过精准定位设置左右轮换按钮
+                    Positioned(
+                      top: height*0.08,
+                      left: width*0.01,
+                      child: Center(
+                        child: FloatingActionButton(
+                          heroTag: "RecommendAppPage_FloatingActionButton_Left",
+                          backgroundColor: Colors.grey.withValues(alpha: 0.1),
+                          child: Icon(Icons.keyboard_double_arrow_left),
+                          onPressed: (){
+                            carousel_controller.previousPage();
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: height*0.08,
+                      right: width*0.01,
+                      child: Center(
+                        child: FloatingActionButton(
+                          heroTag: "RecommendAppPage_FloatingActionButton_Right",
+                          backgroundColor: Colors.grey.withValues(alpha: 0.1),
+                          child: Icon(Icons.keyboard_double_arrow_right),
+                          onPressed: (){
+                            carousel_controller.nextPage();
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: height*0.025,),   // 设置控件间间距
+                Text(
+                  "玲珑小编推荐 ~",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: height*0.03,
+                  ),
+                ),
+                SizedBox(height: height*0.045,),   // 设置控件间间距
+                Flexible(
+                  child: GridView(
+                    // 先设置网格UI样式
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: gridViewCrossAxisCount,    // 设置水平网格个数
+                      mainAxisSpacing: height*0.02,
+                      crossAxisSpacing: width*0.02,
+                    ), 
+                    children: WelcomeAppGridItems(
+                      WelcomeAppsList: WelcomeAppsList, 
                       context: context,
-                      RecommendAppsList: RecommendAppsList, 
-                      height: height, 
-                      width: width,
-                    ).Items(), 
-                    // 设定连播图详情
-                    options: CarouselOptions(
-                      height: height*0.3,   // 设置高度
-                      autoPlay: true,
-                      autoPlayInterval: Duration(seconds: 7),
-                      autoPlayAnimationDuration: Duration(seconds: 3),
-                      enableInfiniteScroll: true,
-                    ),
+                      height: height*0.9, 
+                      width: height*0.8,
+                    ).Items(),
                   ),
-              
-                  // 通过精准定位设置左右轮换按钮
-                  Positioned(
-                    top: height*0.08,
-                    left: width*0.01,
-                    child: Center(
-                      child: FloatingActionButton(
-                        heroTag: "RecommendAppPage_FloatingActionButton_Left",
-                        backgroundColor: Colors.grey.withValues(alpha: 0.1),
-                        child: Icon(Icons.keyboard_double_arrow_left),
-                        onPressed: (){
-                          carousel_controller.previousPage();
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: height*0.08,
-                    right: width*0.01,
-                    child: Center(
-                      child: FloatingActionButton(
-                        heroTag: "RecommendAppPage_FloatingActionButton_Right",
-                        backgroundColor: Colors.grey.withValues(alpha: 0.1),
-                        child: Icon(Icons.keyboard_double_arrow_right),
-                        onPressed: (){
-                          carousel_controller.nextPage();
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: height*0.025,),   // 设置控件间间距
-              Text(
-                "玲珑小编推荐 ~",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: height*0.03,
                 ),
+              ],
+            ),
+          )
+          : Center(
+            child: Text(
+              '糟糕,网络连接好像丢掉了呢 :(',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey.shade600,
               ),
-              SizedBox(height: height*0.045,),   // 设置控件间间距
-              Flexible(
-                child: GridView(
-                  // 先设置网格UI样式
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: gridViewCrossAxisCount,    // 设置水平网格个数
-                    mainAxisSpacing: height*0.02,
-                    crossAxisSpacing: width*0.02,
-                  ), 
-                  children: WelcomeAppGridItems(
-                    WelcomeAppsList: WelcomeAppsList, 
-                    context: context,
-                    height: height*0.9, 
-                    width: height*0.8,
-                  ).Items(),
-                ),
-              ),
-            ],
-          ),
-        )
+            ),
+          )
         : Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -231,7 +245,8 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
               ),
             ],
           ),
-        ),
+        )
+        
     );
   }
 }

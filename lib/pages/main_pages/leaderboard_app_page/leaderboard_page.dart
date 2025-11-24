@@ -98,7 +98,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   Widget build(BuildContext context) {
     
     // 获取当前窗口的相对长宽
-    double height = MediaQuery.of(context).size.height;
+    // double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     // 声明GridView网格视图中当前应该显示多少列对象(跟随屏幕像素改变而改变)
@@ -160,13 +160,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     children: [
                       Center(
                         child: Text(
-                          "啊哦,网络连接好像被吃掉了呢 :(",
+                          '糟糕,网络连接好像丢掉了呢 :(',
                           style: TextStyle(
-                            fontSize: height*0.03,
-                            color: Colors.grey.shade600
+                            fontSize: 20,
+                            color: Colors.grey.shade600,
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 )
