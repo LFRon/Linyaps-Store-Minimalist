@@ -54,9 +54,6 @@ class AppInfoViewState extends State<AppInfoView> {
   // 声明启动应用按钮对象
   late MyButton_LaunchApp button_launchapp;
 
-  // 得到正在安装的应用列表
-  // List <LinyapsPackageInfo>  get downloading_apps_queue => Provider.of<ApplicationState>(context,listen: false).downloadingAppsQueue;
-
   // 该页面启动应用的方法
   void launch_app (String appId) async {
     // 设置按钮被按下
