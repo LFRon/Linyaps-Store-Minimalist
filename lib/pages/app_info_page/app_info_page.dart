@@ -92,21 +92,17 @@ class AppInfoPageState extends State<AppInfoPage> {
     // 如果应用存在
     if (installed_apps != "") {
       // 立刻通知页面重构获取安装的应用的版本
-      if (mounted) {
-        setState(() {
-          cur_installed_version = installed_apps.version;
-        });
-      }
+      if (mounted) setState(() {
+        cur_installed_version = installed_apps.version;
+      });
     }
   }
   
   // 设置页面响应已完成的函数
   Future <void> set_page_loaded () async {
-    if (mounted) {
-      setState(() {
-        is_page_loaded = true;
-      });
-    }
+    if (mounted) setState(() {
+      is_page_loaded = true;
+    });
   }
 
   // 设置安装函数实现,用于被ListView.builder里的控件当回调函数调用
