@@ -14,10 +14,14 @@ class LinyapsCliHelper {
   // 用于判断是否安装了玲珑
   static Future <bool> is_installed_linyaps () async {
     ProcessResult is_installed_linyaps;
-    // 获取结果
-    is_installed_linyaps = await Process.run('ll-cli', ['--version']);
-    if (is_installed_linyaps.exitCode == 0) return true;
-    else return false;
+    try {
+      // 获取结果
+      is_installed_linyaps = await Process.run('ll-cli', ['--version']);
+      if (is_installed_linyaps.exitCode == 0) return true;
+      else return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   // 用于返回玲珑所有安装信息的方法

@@ -73,13 +73,14 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
       // 1. 更新轮播图与欢迎应用列表
       // 2. 检查应用自身更新
       if (!await LinyapsCliHelper.is_installed_linyaps()) {
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) {
               return InstallLinyapsPage();
             },
           ),
+          (route) => false,
         );
       }
       // 异步获取网络连接状态
