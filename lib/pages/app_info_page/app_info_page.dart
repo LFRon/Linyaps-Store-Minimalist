@@ -454,11 +454,11 @@ class AppInfoPageState extends State<AppInfoPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  height: height*0.06,
-                                  width: height*0.06,
+                                  height: 50,
+                                  width: 50,
                                   child: CircularProgressIndicator(
                                     color: Colors.grey.shade500,
-                                    strokeWidth: 4.5,
+                                    strokeWidth: 5,
                                   ),
                                 ),
                                 SizedBox(height: height*0.03,),
