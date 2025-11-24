@@ -393,7 +393,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                                     app_info: cur_app_info[index],
                                                     downloadingAppsQueue: appState.downloadingAppsQueue,
                                                     is_cur_version_installed: cur_app_info[index].version == cur_installed_version ? true : false,
-                                                    cur_installed_app_version: cur_installed_version==''?null:cur_installed_version,
+                                                    cur_installed_app_version: cur_installed_version=='' ? null : cur_installed_version,
                                                     install_app: (appInfo, button_install) async {
                                                       await install_app(appInfo, button_install);
                                                     },
