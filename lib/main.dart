@@ -44,12 +44,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   @override
-  void initState ()
-    {
-      super.initState();
-      // 检测操作系统是不是Linux,不是的话赶紧跑路
-      if (!Platform.isLinux) exit(0);
-    }
+  void initState () {
+    super.initState();
+    // 检测操作系统是不是Linux,不是的话赶紧跑路
+    if (!Platform.isLinux) exit(0);
+  }
 
   // This widget is the root of your application.
   @override
