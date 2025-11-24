@@ -179,7 +179,7 @@ class AppInfoPageState extends State<AppInfoPage> {
   void didChangeDependencies () async {
     super.didChangeDependencies();
     // 延迟250ms刷新状态
-    await Future.delayed(Duration(milliseconds: 250));
+    await Future.delayed(Duration(milliseconds: 350));
     // 进行刷新本地安装的应用信息
     await globalAppState.updateInstalledAppsList_Online();
     await update_app_installed_status(widget.appId);
