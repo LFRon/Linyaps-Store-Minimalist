@@ -68,7 +68,6 @@ class _MyAppState extends State<MyApp> {
           secondary: Colors.white,
         ),
       ),
-      // home: MainMiddlePage(),    等调试完成再去实现
       home: MainMiddlePage(),
     );
   }
