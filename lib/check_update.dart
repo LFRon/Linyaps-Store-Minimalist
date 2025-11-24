@@ -4,12 +4,13 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:dio/dio.dart';
+import 'package:linglong_store_flutter/main.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
 
 class CheckAppUpdate {
     // 声明当前版本号
     // 目前刻意调整成低版本调试用
-    static String cur_version = "1.0.0";
+    static String cur_version = MyApp.cur_version;
     // 检查程序更新的函数
     static Future <bool> isAppHaveUpate () async {
         Dio dio = Dio();     // 创建Dio网络请求对象
