@@ -98,7 +98,9 @@ class MostDownloadAppGridItems {
                         ),
                         SizedBox(height: 20,),    // 设置控件间间距
                         Text(
-                          "下载量: ${appinfo.installCount==null?"未知":appinfo.installCount!} 次",
+                          appinfo.installCount==null
+                          ? "下载量: 未知"
+                          : "下载量: ${appinfo.installCount} 次",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
