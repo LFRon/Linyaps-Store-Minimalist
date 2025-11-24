@@ -5,13 +5,15 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/check_update.dart';
 import 'package:linglong_store_flutter/pages/install_linyaps_page/install_linyaps_page.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/CarouselSliderItems.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/WelcomeAppsItems.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/Dialog_AppHaveUpdate.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/Items_CarouselSlider.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/Items_WelcomeApps.dart';
 
 class RecommendAppPage extends StatefulWidget {
 
@@ -66,7 +68,10 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     WidgetsBinding.instance.addObserver(this);
     // 进行暴力异步加载页面
     Future.delayed(Duration.zero).then((_) async {
-      // 先检测玲珑是否安装了, 若未安装则直接跳转
+      // 先检测玲珑是否安装了, 若未安装则直接跳转报错页面
+      // 当网络连接正常时,进行:
+      // 1. 更新轮播图与欢迎应用列表
+      // 2. 检查应用自身更新
       if (!await LinyapsCliHelper.is_installed_linyaps()) {
         Navigator.push(
           context,
@@ -77,18 +82,26 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
           ),
         );
       }
-      // 先异步获取网络连接状态
+      // 异步获取网络连接状态
       is_connection_good = await CheckInternetConnectionStatus.staus_is_good();
       if (is_connection_good) {
         await updateRecommendAppsList();
         await updateWelcomeAppsList();
+        if (await CheckAppUpdate.isAppHaveUpate()) {
+          // 如果应用有更新就弹出对话框
+          showDialog(
+            context: context, 
+            barrierDismissible: false,    // 禁止用户按空白部分关掉对话框
+            builder: (BuildContext context) {
+              return MyDialog_AppHaveUpdate();
+            },
+          );
+        }
       }
       // 广播页面信息加载已完成
-      if (mounted) {
-        setState(() {
-          is_page_loaded =true;
-        });
-      }
+      if (mounted) setState(() {
+        is_page_loaded =true;
+      });
     });
 
   }
