@@ -27,22 +27,6 @@ class LinyapsStoreApiService {
     repo_arch = await getOSArchInfo.getLinyapsStoreApiArch();
   }
   
-  // 初始化响应总线
-  Dio init_service () {
-    return Dio(
-      BaseOptions(
-        baseUrl: serverHost_Store, 
-        connectTimeout: Duration(seconds: 10),   // 设置最长连接响应时间
-        receiveTimeout: Duration(seconds: 15),    // 设置最长获取响应时间
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          'Access-Control-Allow-Origin': '*',   // 设置允许的域名
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-        },
-      ),
-    );
-  }
-  
   // 获取首页连播图信息用函数
   Future <List<LinyapsPackageInfo>> get_welcome_carousel_list () async {
     await update_os_arch();    // 更新系统架构信息
