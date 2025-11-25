@@ -20,8 +20,7 @@ class InstalledAppsGridItems {
   // 获取页面必须的上下文
   BuildContext context;
 
-  // 透传自己的
-
+  // 获取必需变量信息
   InstalledAppsGridItems({
     required this.installed_app_info,
     required this.context,
