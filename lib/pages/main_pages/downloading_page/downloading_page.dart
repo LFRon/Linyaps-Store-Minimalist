@@ -4,9 +4,9 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/downloading_page/downloading_app_list_item.dart';
-import 'package:provider/provider.dart';
 
 class DownloadingPage extends StatefulWidget {
   const DownloadingPage({super.key});
@@ -15,7 +15,7 @@ class DownloadingPage extends StatefulWidget {
   State<DownloadingPage> createState() => _DownloadingPageState();
 }
 
-class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, ChangeNotifier {
+class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
 
   // 覆写页面希望保持存在状态开关
   @override
@@ -26,8 +26,8 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
     super.build(context);
 
     // 全局监听下载列表
-    return Consumer <ApplicationState> (
-      builder: (context, appState, child) {
+    return GetBuilder <ApplicationState> (
+      builder: (appState) {
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.only(top: 20,left: 10,right: 30),
