@@ -4,7 +4,9 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:toastification/toastification.dart';
@@ -22,8 +24,9 @@ void main() async {
       await WindowManager.instance.setMinimumSize(const Size(1200,600));
     }
 
-  // 创建一个共享的ApplicationState实例
-  ApplicationState appGlobalInfo = ApplicationState();
+  // 创建GetX管理共享的ApplicationState实例
+  Get.put(ApplicationState());
+  ApplicationState appGlobalInfo = Get.find<ApplicationState>();
 
   // 启动时更新系统架构信息
   await appGlobalInfo.getUnameArch();

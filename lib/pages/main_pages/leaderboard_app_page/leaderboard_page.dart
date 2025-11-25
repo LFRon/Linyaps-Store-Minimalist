@@ -45,8 +45,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   // 从API服务中获取顶栏展示应用列表信息
   Future<void> updateAppsRakingList(int radio_choice) async {
     List<LinyapsPackageInfo> await_get = [];
-    if (radio_choice == 1) await_get = await LinyapsStoreApiService().get_newest_app_list();
-    else if (radio_choice == 2) await_get = await LinyapsStoreApiService().get_most_downloaded_app_list();
+    if (radio_choice == 1) await_get = await LinyapsStoreApiService.get_newest_app_list();
+    else if (radio_choice == 2) await_get = await LinyapsStoreApiService.get_most_downloaded_app_list();
     if (mounted) {
       setState(() {
         AppsRakingList = await_get;

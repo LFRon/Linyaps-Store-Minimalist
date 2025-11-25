@@ -4,7 +4,6 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -13,7 +12,7 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 class LinyapsAppManagerApi {
   
   // 将待安装应用推送到安装队列里函数,而非直接安装
-  static Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async {
+  static Future <void> install_app (LinyapsPackageInfo newApp) async {
     // 将需要安装的应用统一推送
     Get.find<ApplicationState>().addDownloadingApp(newApp);
     return;

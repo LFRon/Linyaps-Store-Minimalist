@@ -105,7 +105,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
   // 加载具体的应用信息方法
   Future <void> updateAppList () async {
     // 声明新的变量用来承接新获得的应用信息
-    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_app_list(
+    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService.get_app_list(
       curPageStart, 
       curPageSize, 
     );
@@ -125,7 +125,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
   // 与后端中间件对接的搜索方法
   Future <void> getSearchResult (String searchId) async {
     // 声明新的变量用来承接新获得的应用信息
-    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_search_results(
+    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService.get_search_results(
       searchId,
     );
     // 更新应用列表

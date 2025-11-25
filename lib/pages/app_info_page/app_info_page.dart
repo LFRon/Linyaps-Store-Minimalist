@@ -5,6 +5,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/AppListView/app_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
@@ -63,7 +64,7 @@ class AppInfoPageState extends State<AppInfoPage> {
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
   Future <bool> getAppDetails (String appId) async {
     // 从玲珑后端API中获得玲珑应用数据
-    List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService().get_app_details_list(appId);
+    List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService.get_app_details_list(appId);
 
     // 检查应用是否存在,不存在直接调商店没有此应用的对话框
     if (get_app_info.isEmpty) {
@@ -114,7 +115,7 @@ class AppInfoPageState extends State<AppInfoPage> {
     // 设置按钮被按下
     // 设置安装按钮被按下
     button_install.is_pressed.value = true;
-    await LinyapsAppManagerApi().install_app(appInfo,context);
+    await LinyapsAppManagerApi.install_app(appInfo);
     // 设置安装按钮被释放
     button_install.is_pressed.value = true;
     if (mounted) setState(() {});
@@ -195,8 +196,8 @@ class AppInfoPageState extends State<AppInfoPage> {
     // 更新globalAppState对象
     globalAppState = context.watch<ApplicationState>();
 
-    return Consumer <ApplicationState> (
-      builder: (context, appState, child) {
+    return GetBuilder <ApplicationState> (
+      builder: (appState) {
         return Scaffold(
           // 总布局采用行式
           body: is_page_loaded
@@ -391,7 +392,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                                   padding: EdgeInsets.only(top:5.0,bottom: 5.0),
                                                   child: AppInfoView(
                                                     app_info: cur_app_info[index],
-                                                    downloadingAppsQueue: appState.downloadingAppsQueue,
+                                                    downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
                                                     is_cur_version_installed: cur_app_info[index].version == cur_installed_version ? true : false,
                                                     cur_installed_app_version: cur_installed_version=='' ? null : cur_installed_version,
                                                     install_app: (appInfo, button_install) async {

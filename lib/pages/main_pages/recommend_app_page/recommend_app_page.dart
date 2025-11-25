@@ -44,7 +44,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
 
   // 从API服务中获取顶栏展示应用列表信息
   Future <void> updateRecommendAppsList () async {
-    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService().get_welcome_carousel_list();
+    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService.get_welcome_carousel_list();
     if (mounted) setState(() {
       RecommendAppsList = await_get;
     });
@@ -52,7 +52,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
   
   // 声明从API服务获取的推荐应用列表信息对象
   Future <void> updateWelcomeAppsList () async {
-    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService().get_welcome_app_list();
+    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService.get_welcome_app_list();
     if (mounted) setState(() {
       WelcomeAppsList = await_get;
     });
