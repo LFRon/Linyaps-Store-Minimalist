@@ -4,6 +4,8 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, use_build_context_synchronously, unnecessary_overrides
 
 import 'package:flutter/material.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/state_manager.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -13,7 +15,6 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/upgradable_app_grid_item.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_all_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
-import 'package:provider/provider.dart';
 
 class AppsManagementPage extends StatefulWidget {
 
@@ -59,50 +60,40 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 更新当前网络连接状态
   Future <void> updateConnectionStatus () async {
     bool get_connection_status = await CheckInternetConnectionStatus.staus_is_good();
-    if (mounted) {
-      setState(() {
-        is_connection_good = get_connection_status;
-      });
-    }
+    if (mounted) setState(() {
+      is_connection_good = get_connection_status;
+    });
   }
 
   // 更新页面加载状态为加载中的方法
   Future <void> setPageLoading () async {
-    if (mounted){
-      setState(() {
-        is_page_loading = true;
-      });
-    }
+    if (mounted) setState(() {
+      is_page_loading = true;
+    });
     return;
   }
   
   // 更新页面加载状态为加载完成的方法
   Future <void> setPageNotLoading () async {
-    if (mounted) {
-      setState(() {
-        is_page_loading = false;
-      });
-    }
+    if (mounted) setState(() {
+      is_page_loading = false;
+    });
     return;
   }
 
   // 更新页面为加载完成的方法
   Future <void> setPageLoaded () async {
-    if (mounted) {
-      setState(() {
-        is_page_loaded = true;
-      });
-    }
+    if (mounted) setState(() {
+      is_page_loaded = true;
+    });
     return;
   }
   
   // 更新页面应用更新情况已完成的方法
   Future <void> setUpgradableAppLoaded () async {
-    if (mounted) {
-      setState(() {
-        is_upgradable_app_loaded = true;
-      });
-    }
+    if (mounted) setState(() {
+      is_upgradable_app_loaded = true;
+    });
     return;
   }
 
@@ -124,7 +115,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 获取本地已安装应用图标的方法
   Future <void> updateInstalledAppsIcon () async {
     // 用于存储了带了AppIcon链接的Icon列表
-    List <LinyapsPackageInfo> newAppsList = await LinyapsStoreApiService().updateAppIcon(globalAppState.installedAppsList);
+    List <LinyapsPackageInfo> newAppsList = await LinyapsStoreApiService.updateAppIcon(globalAppState.installedAppsList.cast<LinyapsPackageInfo>());
     // 用于调试新商店接口用
     // await LinyapsStoreApiService().get_app_details('com.tencent.wechat');
     /*
@@ -142,25 +133,23 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       );
     }
     */
-    if (mounted) {
-      setState(() {
-        globalAppState.updateInstalledAppsList(newAppsList);
-      });
-    }
+    if (mounted) setState(() {
+      globalAppState.updateInstalledAppsList(newAppsList);
+    });
     return;
   }
 
   // 更新全部应用的方法
   Future <void> upgradeAllApp (MyButton_UpgradeAll button_upgradeAll,) async {
-    for (var i in globalAppState.upgradableAppsList) {
-      await LinyapsAppManagerApi().install_app(i, context);
+    for (LinyapsPackageInfo i in globalAppState.upgradableAppsList) {
+      await LinyapsAppManagerApi.install_app(i);
     }
   }
 
   // 进行应用更新 (通过ListView.builder控件按"升级"按钮进行触发)
   Future <void> upgradeApp (LinyapsPackageInfo cur_app_info) async {
     // 将应用推入下载列表
-    await LinyapsAppManagerApi().install_app(cur_app_info, context);
+    await LinyapsAppManagerApi.install_app(cur_app_info);
     // if (mounted) setState(() {});
     return;
   }
@@ -172,7 +161,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     if(!is_page_loading) {      
       if(_is_page_first_loading) {
         // 首次加载时初始化globalAppState
-        globalAppState = context.watch<ApplicationState>();
+        globalAppState = Get.find<ApplicationState>();
         _is_page_first_loading = false;
         // 先暴力异步加载页面信息
         Future.microtask(() async {
@@ -180,14 +169,24 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           await setPageLoading();
           // 更新已安装的应用信息
           await updateInstalledAppsList();
-          if (await CheckInternetConnectionStatus.staus_is_good()) {
-            await setPageLoaded();
-            await updateInstalledAppsIcon();
-            // 获取应用更新详情
-            await updateUpgradableAppsList();
-            // 设置可更新应用信息已完全加载
-            await setUpgradableAppLoaded();
-            await setPageNotLoading();
+          // 再更新网络连接状态
+          await updateConnectionStatus();
+          if (is_connection_good) {
+            Future.microtask(() async {
+              await setPageLoaded();
+              await updateInstalledAppsIcon();
+              await setPageNotLoading();
+            });
+            Future.microtask(() async {
+              // 应用更新的检查只在联网状态下完成
+              if (is_connection_good) {
+                // 获取应用更新详情
+                await updateUpgradableAppsList();
+                // 设置可更新应用信息已完全加载
+                await setUpgradableAppLoaded();
+                await setPageNotLoading();
+              }    
+            });
           } else {    // 当网络连接异常的时候只设置页面加载完成
             await setPageLoaded();
             await setPageNotLoading();
@@ -264,8 +263,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     else gridViewCrossAxisCount = 3;
 
     // 使用Consumer对ApplicationState实例进行监听
-    return Consumer <ApplicationState> (
-      builder: (context, appState, child) {
+    return GetBuilder <ApplicationState> (
+      builder: (appState) {
         // 先假设每个应用都在进行升级
         is_apps_all_upgrading = true;
         // 然后通过遍历下载中的列表来验证真的假的
@@ -433,7 +432,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                 crossAxisSpacing: width * 0.02,
                               ), 
                               children: InstalledAppsGridItems(
-                                installed_app_info: appState.installedAppsList, 
+                                installed_app_info: appState.installedAppsList.cast<LinyapsPackageInfo>(), 
                                 context: context, 
                                 height: height, 
                                 width: width,
