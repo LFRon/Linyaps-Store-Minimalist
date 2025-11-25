@@ -5,10 +5,13 @@
 
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/os_arch_info_middleware/get_os_arch_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
+import 'package:provider/provider.dart';
 
 class LinyapsStoreApiService {
 
@@ -17,15 +20,9 @@ class LinyapsStoreApiService {
   static String serverHost_Repo = "https://mirror-repo-linglong.deepin.com";
   static String serverHost_RepoExtra = "https://cdn-linglong.odata.cc/icon/main";
 
-  // 存储操作系统对应架构信息
-  static String os_arch = "";
-  static String repo_arch = "";
-
-  // 进行操作系统架构更新函数
-  Future <void> update_os_arch () async {
-    os_arch = await getOSArchInfo.getUnameArch();
-    repo_arch = await getOSArchInfo.getLinyapsStoreApiArch();
-  }
+  // 进行系统架构更新
+  static String get os_arch(BuildContext context) 
+  static String get repo_arch(BuildContext context) 
   
   // 获取首页连播图信息用函数
   Future <List<LinyapsPackageInfo>> get_welcome_carousel_list () async {

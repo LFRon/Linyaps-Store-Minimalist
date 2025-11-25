@@ -4,9 +4,9 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -29,13 +29,13 @@ void main() async {
   await appGlobalInfo.getUnameArch();
   await appGlobalInfo.getLinyapsStoreApiArch();
 
+  // 启动应用及控制器
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => appGlobalInfo,
-      child: ToastificationWrapper(
+    GetMaterialApp(
+      home: ToastificationWrapper(
         child: MyApp(),
       ),
-    )
+    ),
   );
 }
 
