@@ -18,7 +18,6 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/back_button.
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_color/my_color.dart';
-import 'package:provider/provider.dart';
 
 class AppInfoPage extends StatefulWidget {
 
@@ -194,7 +193,7 @@ class AppInfoPageState extends State<AppInfoPage> {
     double width = MediaQuery.of(context).size.width;
 
     // 更新globalAppState对象
-    globalAppState = context.watch<ApplicationState>();
+    globalAppState = Get.find<ApplicationState>();
 
     return GetBuilder <ApplicationState> (
       builder: (appState) {
