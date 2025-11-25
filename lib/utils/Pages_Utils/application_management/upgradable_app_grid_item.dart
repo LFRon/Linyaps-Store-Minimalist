@@ -5,11 +5,12 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/state_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
-import 'package:provider/provider.dart';
 
 class UpgradableAppListItems {
 
@@ -27,7 +28,7 @@ class UpgradableAppListItems {
   // 返回所有控件
   Widget item () {
     // 拿到我们当前的存储全局变量类的响应实例
-    ApplicationState appState = context.watch<ApplicationState>();
+    ApplicationState appState = Get.find<ApplicationState>();
     // 先判断应用是否已经在下载,如果是,用downloading_app用于存储当前下载中的应用对象
     final downloading_app = appState.downloadingAppsQueue.firstWhere(
       (app) => cur_upgradable_app_info.id == app.id && cur_upgradable_app_info.version == app.version,

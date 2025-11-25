@@ -192,14 +192,11 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
             await setPageNotLoading();
           }      
         });
-      // 如果页面已经不是第一次加载, 那么只进行页面刷新操作
-      } else {
-        _refreshPageData();
       }
     }
   }
 
-  /*
+  
   // 当用户重新切回页面时执行函数
   @override
   void didChangeAppLifecycleState (AppLifecycleState state) async {
@@ -209,7 +206,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
     if (state == AppLifecycleState.resumed && !is_page_loading) await _refreshPageData();
   }
-  */  
+  
 
   // 覆写父类构造函数
   @override
