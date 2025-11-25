@@ -68,8 +68,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
   // 更新页面加载状态为加载中的方法
   Future <void> setPageLoading () async {
-    // ignore: avoid_print
-    print("- set <is_page_loading> to true");
     if (mounted){
       setState(() {
         is_page_loading = true;
@@ -80,8 +78,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   
   // 更新页面加载状态为加载完成的方法
   Future <void> setPageNotLoading () async {
-    // ignore: avoid_print
-    print("- set <is_page_loading> to false");
     if (mounted) {
       setState(() {
         is_page_loading = false;
