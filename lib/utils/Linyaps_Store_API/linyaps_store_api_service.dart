@@ -431,7 +431,10 @@ class LinyapsStoreApiService {
         app_info_from_store.id == 'org.deepin.foundation' ||
         app_info_from_store.id == 'org.deepin.Runtime' ||
         app_info_from_store.id == 'org.deepin.runtime.dtk' || 
-        app_info_from_store.id == 'org.deepin.runtime.gtk4'
+        app_info_from_store.id == 'org.deepin.runtime.gtk4' ||
+        app_info_from_store.id == 'org.deepin.base.flatpak.freedesktop' ||
+        app_info_from_store.id == 'org.deepin.base.flatpak.kde' ||
+        app_info_from_store.id == 'org.deepin.base.flatpak.gnome'
       ) continue;
       // 如果发现有更高版本
       if (
