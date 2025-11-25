@@ -13,13 +13,13 @@ import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/v
 class LinyapsStoreApiService {
 
   // 初始化指定API总线链接地址
-  String serverHost_Store = "https://storeapi.linyaps.org.cn";
-  String serverHost_Repo = "https://mirror-repo-linglong.deepin.com";
-  String serverHost_RepoExtra = "https://cdn-linglong.odata.cc/icon/main";
+  static String serverHost_Store = "https://storeapi.linyaps.org.cn";
+  static String serverHost_Repo = "https://mirror-repo-linglong.deepin.com";
+  static String serverHost_RepoExtra = "https://cdn-linglong.odata.cc/icon/main";
 
   // 存储操作系统对应架构信息
-  String os_arch = "";
-  String repo_arch = "";
+  static String os_arch = "";
+  static String repo_arch = "";
 
   // 进行操作系统架构更新函数
   Future <void> update_os_arch () async {

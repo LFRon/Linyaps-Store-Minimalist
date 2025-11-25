@@ -5,7 +5,9 @@
 
 
 // 关闭VSCode非必要报错
-// ignore_for_file: non_constant_identifier_names, avoid_print
+// ignore_for_file: non_constant_identifier_names, avoid_print, curly_braces_in_flow_control_structures
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
@@ -14,6 +16,10 @@ import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_i
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 
 class ApplicationState extends ChangeNotifier {
+
+  // 初始化系统架构和商店返回的架构信息
+  String os_arch = '';
+  String repo_arch = '';
 
   // 初始化私有可更新应用列表
   List <LinyapsPackageInfo> upgradableAppsList = [];
@@ -24,6 +30,32 @@ class ApplicationState extends ChangeNotifier {
   // 初始化正在下载的应用列表
   List <LinyapsPackageInfo> downloadingAppsQueue = [];
   bool isProcessingQueue = false;   // 用于标记是否正在处理下载队列
+
+  // 用于返回按照"uname -m"标准命令输出的架构信息
+  Future <void> getUnameArch () async {
+    ProcessResult arch_result;
+    arch_result = await Process.run('uname', ['-m']);
+    // 更新操作系统架构信息
+    String get_arch = arch_result.stdout.toString().trim();
+    os_arch = get_arch;
+    notifyListeners();
+    return;
+  }
+
+  // 用于返回按照玲珑商店架构要求的架构信息
+  Future <void> getLinyapsStoreApiArch () async {
+    ProcessResult arch_result;
+    arch_result = await Process.run('uname', ['-m']);
+    // 更新操作系统架构信息
+    String os_arch = arch_result.stdout.toString().trim();
+    String get_arch = "";
+    if (os_arch == 'aarch64') get_arch = 'arm64';
+    else get_arch = os_arch;
+    // 更新变量信息
+    repo_arch = get_arch;
+    notifyListeners();
+    return;
+  }
 
   // 在线更新应用更新状况方法
   Future <void> updateUpgradableAppsList_Online () async {

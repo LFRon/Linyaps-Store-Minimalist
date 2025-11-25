@@ -25,6 +25,10 @@ void main() async {
   // 创建一个共享的ApplicationState实例
   ApplicationState appGlobalInfo = ApplicationState();
 
+  // 启动时更新系统架构信息
+  await appGlobalInfo.getUnameArch();
+  await appGlobalInfo.getLinyapsStoreApiArch();
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => appGlobalInfo,
