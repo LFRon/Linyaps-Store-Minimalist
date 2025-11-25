@@ -404,7 +404,9 @@ class LinyapsStoreApiService {
         app_info_from_store.id == 'org.deepin.runtime.gtk4' ||
         app_info_from_store.id == 'org.deepin.base.flatpak.freedesktop' ||
         app_info_from_store.id == 'org.deepin.base.flatpak.kde' ||
-        app_info_from_store.id == 'org.deepin.base.flatpak.gnome'
+        app_info_from_store.id == 'org.deepin.base.flatpak.gnome' ||
+        app_info_from_store.id == 'org.deepin.base.wine' ||
+        app_info_from_store.id == 'org.deepin.runtime.wine'
       ) continue;
       // 如果发现有更高版本
       if (
