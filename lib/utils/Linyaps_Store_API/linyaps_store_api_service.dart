@@ -5,13 +5,11 @@
 
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/os_arch_info_middleware/get_os_arch_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
-import 'package:provider/provider.dart';
 
 class LinyapsStoreApiService {
 
@@ -20,13 +18,15 @@ class LinyapsStoreApiService {
   static String serverHost_Repo = "https://mirror-repo-linglong.deepin.com";
   static String serverHost_RepoExtra = "https://cdn-linglong.odata.cc/icon/main";
 
+  // 拿到GetX的全局应用信息
+  static ApplicationState globalAppState = Get.find<ApplicationState>();
+
   // 进行系统架构更新
-  static String get os_arch(BuildContext context) 
-  static String get repo_arch(BuildContext context) 
+  static String os_arch = globalAppState.os_arch.value;
+  static String repo_arch = globalAppState.repo_arch.value;
   
   // 获取首页连播图信息用函数
-  Future <List<LinyapsPackageInfo>> get_welcome_carousel_list () async {
-    await update_os_arch();    // 更新系统架构信息
+  static Future <List<LinyapsPackageInfo>> get_welcome_carousel_list () async {
     String serverUrl = "$serverHost_Store/visit/getWelcomeCarouselList";
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
@@ -60,8 +60,7 @@ class LinyapsStoreApiService {
   }
 
   // 获取首页最受欢迎的No.a到No.b的应用
-  Future <List<LinyapsPackageInfo>> get_welcome_app_list () async {
-    await update_os_arch();   // 更新系统架构信息
+  static Future <List<LinyapsPackageInfo>> get_welcome_app_list () async {
     String serverUrl = "$serverHost_Store/visit/getWelcomeAppList";
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
@@ -102,8 +101,7 @@ class LinyapsStoreApiService {
   }
 
   // 获取排行榜里最新上架的前100个应用
-  Future <List<LinyapsPackageInfo>> get_newest_app_list () async {
-    await update_os_arch();   // 更新系统架构信息
+  static Future <List<LinyapsPackageInfo>> get_newest_app_list () async {
     String serverUrl = "$serverHost_Store/visit/getNewAppList";
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
@@ -143,8 +141,7 @@ class LinyapsStoreApiService {
   }
 
   // 获取排行榜里下载量最高的前100个应用
-  Future <List<LinyapsPackageInfo>> get_most_downloaded_app_list () async {
-    await update_os_arch();   // 更新系统架构信息
+  static Future <List<LinyapsPackageInfo>> get_most_downloaded_app_list () async {
     String serverUrl = "$serverHost_Store/visit/getInstallAppList";
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
@@ -189,8 +186,7 @@ class LinyapsStoreApiService {
    // 获取从startPage页开始,一页数量为pageSize里的应用信息,之所以要加入app_list是因为每次获取到的应用信息都是叠加的
    // 举个例子,startPage = 2,pageSize = 100就是说明显示从第101个到第200个应用
    ///
-  Future <List <LinyapsPackageInfo>> get_app_list (int startPage,int pageSize) async {
-    await update_os_arch();   // 更新系统架构信息
+  static Future <List <LinyapsPackageInfo>> get_app_list (int startPage,int pageSize) async {
     String serverUrl = "$serverHost_Store/visit/getSearchAppList";
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
@@ -233,8 +229,7 @@ class LinyapsStoreApiService {
   }
 
   // 获取用户搜索结果的后端对接方法
-  Future <List<LinyapsPackageInfo>> get_search_results (String searchId) async {
-    await update_os_arch();   // 更新系统架构信息
+  static Future <List<LinyapsPackageInfo>> get_search_results (String searchId) async {
     String serverUrl = '$serverHost_Store/visit/getSearchAppList';
     Dio dio = Dio ();    // 创建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
@@ -278,9 +273,7 @@ class LinyapsStoreApiService {
 
   // 获取具体应用的详细信息的方法2: 此方法是仅返回应用的最新版本信息
   // 当能获取到应用信息时返回对应类, 否则返回null
-  Future <LinyapsPackageInfo?> get_app_detail_latest (String appId) async {
-    // 更新系统架构信息
-    await update_os_arch();   
+  static Future <LinyapsPackageInfo?> get_app_detail_latest (String appId) async {  
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
     // 创建Dio请求对象
@@ -316,9 +309,7 @@ class LinyapsStoreApiService {
   }
 
   // 单开获取本地应用图标的函数, 同步进行减少应用加载时间
-  Future <List<LinyapsPackageInfo>> updateAppIcon (List<LinyapsPackageInfo> installed_apps) async {
-    // 更新系统架构信息
-    await update_os_arch();   
+  static Future <List<LinyapsPackageInfo>> updateAppIcon (List<LinyapsPackageInfo> installed_apps) async {
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
     
@@ -358,9 +349,7 @@ class LinyapsStoreApiService {
   }
 
   // 返回应用可更新列表
-  Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
-    // 更新系统架构信息
-    await update_os_arch();   
+  static Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
 
@@ -442,9 +431,7 @@ class LinyapsStoreApiService {
   }
 
   // 获取具体应用的详细信息的方法2: 此方法是返回一个应用的每个版本的列表信息
-  Future <List<LinyapsPackageInfo>> get_app_details_list (String appId) async {
-    // 更新系统架构信息
-    await update_os_arch();   
+  static Future <List<LinyapsPackageInfo>> get_app_details_list (String appId) async {
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
     Dio dio = Dio ();    // 创建Dio请求对象
