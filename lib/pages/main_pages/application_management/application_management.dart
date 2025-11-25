@@ -187,21 +187,15 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           if (await CheckInternetConnectionStatus.staus_is_good()) {
             await setPageLoaded();
             await updateInstalledAppsIcon();
+            // 获取应用更新详情
+            await updateUpgradableAppsList();
+            // 设置可更新应用信息已完全加载
+            await setUpgradableAppLoaded();
             await setPageNotLoading();
           } else {    // 当网络连接异常的时候只设置页面加载完成
             await setPageLoaded();
             await setPageNotLoading();
           }      
-        });
-        // 再暴力异步加载可更新应用信息
-        Future.microtask(() async {
-          // 只在网络连接良好条件下进行检查应用更新
-          if (is_connection_good) {
-            // 获取应用更新详情
-            await updateUpgradableAppsList();
-            // 设置可更新应用信息已完全加载
-            setUpgradableAppLoaded();
-          }
         });
       // 如果页面已经不是第一次加载, 那么只进行页面刷新操作
       } else {
