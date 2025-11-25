@@ -4,18 +4,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 class VersionCompare {
-
-  // 获取待比较的版本信息
-  String ver1;
-  String ver2;
-
-  VersionCompare({
-    required this.ver1,
-    required this.ver2,
-  });
-
   // 用于返回ver1是否大于ver2
-  bool isFirstGreaterThanSec () {
+  static bool isFirstGreaterThanSec (String ver1, String ver2) {
     List <String> parted_ver1 = ver1.split('.');
     List <String> parted_ver2 = ver2.split('.');
     int parted1 = 0,parted2 = 0;

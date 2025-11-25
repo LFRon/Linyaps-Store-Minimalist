@@ -353,7 +353,7 @@ class LinyapsStoreApiService {
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
 
-    List <LinyapsPackageInfo> installed_apps = await LinyapsAppManagerApi().get_installed_apps([]);
+    List <LinyapsPackageInfo> installed_apps = await LinyapsAppManagerApi.get_installed_apps([]);
     // 初始化待提交应用
     List <Map<String, String>> upload_installed_apps = [];
     for (dynamic i in installed_apps) {
@@ -408,10 +408,10 @@ class LinyapsStoreApiService {
       ) continue;
       // 如果发现有更高版本
       if (
-        VersionCompare(
-          ver1: app_info_from_store.version,
-          ver2: i.version,
-        ).isFirstGreaterThanSec()
+        VersionCompare.isFirstGreaterThanSec(
+          app_info_from_store.version,
+          i.version
+        )
       ) {
         // 存储最新版本应用的信息
         upgradable_apps.add(

@@ -30,7 +30,7 @@ class InstalledAppsGridItems {
 
   // 用于检查本地的应用是否在商店里
   Future <bool> isAppExistInStore (String appId) async {
-    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService().get_app_details_list(appId);
+    List <LinyapsPackageInfo> app_info_get = await LinyapsStoreApiService.get_app_details_list(appId);
     // 检查列表是否为空
     if (app_info_get.isEmpty) return false;
     else return true;

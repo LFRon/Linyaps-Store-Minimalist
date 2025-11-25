@@ -8,8 +8,6 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print, curly_braces_in_flow_control_structures
 
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
@@ -58,7 +56,7 @@ class ApplicationState extends GetxController {
 
   // 在线更新应用更新状况方法
   Future <void> updateUpgradableAppsList_Online () async {
-    List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsStoreApiService().get_upgradable_apps();
+    List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsStoreApiService.get_upgradable_apps();
     // 更新对应变量并触发页面重构
     upgradableAppsList.assignAll(get_upgradable_apps);
     return;
@@ -68,7 +66,7 @@ class ApplicationState extends GetxController {
   // 更新本地应用安装详情方法
   // 返回值是列表是否需要更新
   Future <void> updateInstalledAppsList_Online () async {
-    List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi().get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
+    List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
     // 更新对应变量并触发页面重构
     installedAppsList.assignAll(get_installed_apps);
     return;
@@ -87,7 +85,7 @@ class ApplicationState extends GetxController {
 
   //// 对下载列表的更改
   // 更新正在下载的应用列表
-  Future <void> addDownloadingApp(LinyapsPackageInfo newApp,BuildContext context) async {
+  Future <void> addDownloadingApp(LinyapsPackageInfo newApp) async {
     // 设置新加入应用的下载状态为正在下载
     newApp.downloadState = DownloadState.waiting;
 
@@ -95,7 +93,7 @@ class ApplicationState extends GetxController {
     downloadingAppsQueue.add(newApp);
     
     // 如果流水线没有更新就进行启动更新流水线
-    if (!isProcessingQueue.value) processDownloadingQueue(context);
+    if (!isProcessingQueue.value) processDownloadingQueue();
   }
 
   // 从正在下载的应用列表中移除应用
@@ -108,7 +106,7 @@ class ApplicationState extends GetxController {
   }
 
   // 处理下载队列方法
-  Future <void> processDownloadingQueue(BuildContext context) async {
+  Future <void> processDownloadingQueue() async {
     isProcessingQueue.value = true;
 
     // 进行应用安装并判断状态
@@ -122,7 +120,6 @@ class ApplicationState extends GetxController {
           currentApp.name,
           currentApp.version, 
           currentApp.current_old_version,
-          context
         ) == 0
       ) {
         // 安装成功

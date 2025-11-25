@@ -23,10 +23,10 @@ class CheckAppUpdate {
             // Gitee返回的API请求中, 最新版本为最后一位
             String newest_version = version_list[version_list.length-1]['tag_name'];
             if (
-                VersionCompare(
-                    ver1: newest_version,
-                    ver2: cur_version,
-                ).isFirstGreaterThanSec()
+                VersionCompare.isFirstGreaterThanSec(
+                  newest_version,
+                  cur_version,
+                )
             ) {
                 return true;
             } else {

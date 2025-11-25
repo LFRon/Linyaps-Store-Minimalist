@@ -73,10 +73,9 @@ class LinyapsCliHelper {
   
   // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
   // 这里需要控件上下文,是为了显示应用安装成功亦或者失败的通知
-  static Future <int> install_app (String appId,String appName,String version,String? version_last,BuildContext context) async {
+  static Future <int> install_app (String appId,String appName,String version,String? version_last) async {
     // 显示全局通知开始安装
     toastification.show(
-      context: context,
       applyBlurEffect: true,
       title: Text(
         '$appName开始安装',
@@ -93,7 +92,6 @@ class LinyapsCliHelper {
     if (result.exitCode == 0) {
       // 显示全局通知安装成功
       toastification.show(
-        context: context,
         applyBlurEffect: true,
         title: Text(
           '$appName安装成功',
@@ -108,7 +106,6 @@ class LinyapsCliHelper {
     } else {
       // 显示全局通知安装失败
       toastification.show(
-        context: context,
         applyBlurEffect: true,
         title: Text(
           '$appName安装失败',

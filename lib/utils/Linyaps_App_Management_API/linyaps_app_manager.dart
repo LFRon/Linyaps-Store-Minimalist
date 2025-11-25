@@ -5,24 +5,24 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:provider/provider.dart';
 
 class LinyapsAppManagerApi {
   
   // 将待安装应用推送到安装队列里函数,而非直接安装
-  Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async {
+  static Future <void> install_app (LinyapsPackageInfo newApp,BuildContext context) async {
     // 将需要安装的应用统一推送
-    await Provider.of<ApplicationState>(context, listen: false).addDownloadingApp(newApp,context);
+    Get.find<ApplicationState>().addDownloadingApp(newApp);
     return;
   }
 
   // 返回已经安装的应用抽象类列表
   // 需要加入already_get_list是让重新扫描已安装应用时先获取当前已经安装的应用信息
   // 然后没有的再往里加
-  Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
+  static  Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
     // 先异步获取玲珑本地信息
     dynamic linyapsLocalInfo = await LinyapsCliHelper.get_linyaps_all_local_info();
     // 再获取
