@@ -454,7 +454,7 @@ class LinyapsStoreApiService {
     dio.close();
 
     // 如果发现返回的应用信息为null则直接返回空列表
-    if (response.data['data'] == null) return [];
+    if (response.data['data'].isEmpty) return [];
 
     // 如果获取信息不为空则拿到信息
     List <dynamic> app_info_get = response.data['data'][appId];
