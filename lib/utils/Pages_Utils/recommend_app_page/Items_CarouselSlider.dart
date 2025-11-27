@@ -58,11 +58,12 @@ class RecommendAppSliderItems {
                 imageUrl: app_info.Icon==null?"":app_info.Icon!,
                 placeholder: (context, url) => Center(
                   child: SizedBox(
-                    height: height*0.05,
-                    width: height*0.05,
+                    height: height*0.06,
+                    width: height*0.06,
                     child: CircularProgressIndicator(
                       color: Colors.grey.shade300,
-                    ),  // 加载时显示进度条,
+                      strokeWidth: 4.8,
+                    ),  // 加载时显示进度条
                   ),
                 ),
                 // 无法显示图片时显示错误

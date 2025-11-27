@@ -246,7 +246,6 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
             ],
           ),
         )
-        
     );
   }
 }

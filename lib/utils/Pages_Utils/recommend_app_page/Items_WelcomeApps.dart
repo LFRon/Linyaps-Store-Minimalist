@@ -64,10 +64,11 @@ class WelcomeAppGridItems {
                         imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
                         placeholder: (context, url) => Center(
                           child: SizedBox(
-                            height: height*0.02,
-                            width: height*0.02,
+                            height: height*0.06,
+                            width: height*0.06,
                             child: CircularProgressIndicator(
                               color: Colors.grey.shade300,
+                              strokeWidth: 4.8,
                             ),  // 加载时显示进度条
                           ),
                         ),
