@@ -65,7 +65,7 @@ class LinyapsStoreApiService {
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
       "repoName": "stable",
-      "arch": "x86_64",
+      "arch": repo_arch,
       "pageNo": 1,
       "pageSize": 10,
     };
