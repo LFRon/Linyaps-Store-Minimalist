@@ -30,8 +30,7 @@ class LinyapsAppManagerApi {
     // 初始化待返回临时对象
     List<LinyapsPackageInfo> returnItems = [];
     // 开始遍历本地的应用安装信息
-    dynamic i;
-    for (i in linyapsLocalInfo['layers']) {
+    for (dynamic i in linyapsLocalInfo['layers']) {
       // 先检查已知的应用列表是否为空省去不必要的循环
       if (already_get_list.isEmpty) {
         returnItems.add(
