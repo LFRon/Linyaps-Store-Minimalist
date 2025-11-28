@@ -13,11 +13,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
 
   @override
-  void initState () {
-      super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // 获取并使用屏幕的相对长宽
     double height = MediaQuery.of(context).size.height;
