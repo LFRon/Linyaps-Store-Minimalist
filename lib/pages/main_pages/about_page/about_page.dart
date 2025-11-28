@@ -4,6 +4,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/main.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/launch_url_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +16,9 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+
+  // 通过MyApp类获取当前应用本体版本号
+  String cur_version = MyApp.cur_version;
 
   // 用于在关于页面统一全局启动对应链接的方法
   // 注意: 其中launch_number形参用法为:
@@ -75,6 +79,23 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
             const SizedBox(height: 50,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  size: 30,
+                  Icons.info_outline_rounded
+                ),
+                const SizedBox(width: 10,),
+                Text(
+                  '当前应用商店版本: $cur_version',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25,),
             // 玲珑友情链接UI
             Row(
               children: [
