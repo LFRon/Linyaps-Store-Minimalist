@@ -394,7 +394,7 @@ class LinyapsStoreApiService {
           description: '', 
           arch: ''
         );
-      // 如果找不到对应应用,或者发现是base则直接跳过
+      // 如果找不到对应应用,或者发现是base/runtime则直接跳过
       if (
         app_info_from_store.id == '' || 
         app_info_from_store.id == 'org.deepin.base' || 
