@@ -13,7 +13,6 @@ import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
-  // 启动时检测操作系统环境与架构
 
   WidgetsFlutterBinding.ensureInitialized();   // 确保程序主窗口已加载
   if (!kIsWasm && !kIsWeb)
