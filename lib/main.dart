@@ -15,13 +15,12 @@ import 'package:window_manager/window_manager.dart';
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();   // 确保程序主窗口已加载
-  if (!kIsWasm && !kIsWeb)
-    {
-      // 设置窗口参数
-      await WindowManager.instance.setTitle("玲珑应用商店");
-      // 设置窗口最小大小
-      await WindowManager.instance.setMinimumSize(const Size(1200,600));
-    }
+  if (!kIsWasm && !kIsWeb) {
+    // 设置窗口参数
+    await WindowManager.instance.setTitle("玲珑应用商店");
+    // 设置窗口最小大小
+    await WindowManager.instance.setMinimumSize(const Size(1200,600));
+  }
 
   // 创建GetX管理共享的ApplicationState实例
   Get.put(ApplicationState());
