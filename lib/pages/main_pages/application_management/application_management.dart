@@ -30,14 +30,22 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   @override
   bool get wantKeepAlive => true; 
 
+  // 检查页面自身是否为打开应用后的第一次加载,初始化为真
+  bool _is_page_first_loading = true;
+
   // 检查网络连接是否正常的开关,初始化为假
   bool is_connection_good = false;
 
-  // 检查页面自身是否在加载的状态开关
-  bool is_page_loading = false;
+  // 检查页面应用图标获取进程是否在进行
+  bool is_app_icons_loading = false;
 
-  // 检查页面自身是否为打开应用后的第一次加载,初始化为真
-  bool _is_page_first_loading = true;
+  // 检查页面待更新应用获取进程是否在进行
+  bool is_upgradable_apps_loading = false;
+
+  // 检查是否为第一次打开页面时进行的应用更新获取操作
+  // 之所以要设置这个变量, 是因为之后应用静默刷新时是不会导致动画切换的
+  // 单独设置这个变量可以有效避免后续应用后台的刷新引起页面UI切换回动画
+  bool is_upgradable_apps_first_load = true;
 
   // 检查当前页面所有应用是否都在下载队列里,默认为真
   bool is_apps_all_upgrading = true;
@@ -46,7 +54,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 在这里页面加载只用于判断所有应用信息是否加载完成,而不涉及应用更新
   // 判断应用更新情况是否加载完成需要额外的开关
   bool is_page_loaded = false;
-  bool is_upgradable_app_loaded = false;
 
   // 声明全局应用列表对象
   late ApplicationState globalAppState;
@@ -65,22 +72,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     });
   }
 
-  // 更新页面加载状态为加载中的方法
-  Future <void> setPageLoading () async {
-    if (mounted) setState(() {
-      is_page_loading = true;
-    });
-    return;
-  }
-  
-  // 更新页面加载状态为加载完成的方法
-  Future <void> setPageNotLoading () async {
-    if (mounted) setState(() {
-      is_page_loading = false;
-    });
-    return;
-  }
-
   // 更新页面为加载完成的方法
   Future <void> setPageLoaded () async {
     if (mounted) setState(() {
@@ -88,21 +79,43 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     });
     return;
   }
+
+  // 设置页面正在获取应用图标的方法
+  Future <void> setAppsIconLoading () async {
+    if (mounted) setState(() {
+      is_app_icons_loading = true;
+    });
+    return;
+  }
+
+  // 设置页面已完成获取应用图标的方法
+  Future <void> setAppsIconLoaded () async {
+    if (mounted) setState(() {
+      is_app_icons_loading = false;
+    });
+    return;
+  }
+
+  // 设置页面正在获取待更新应用的方法
+  Future <void> setUpgradableAppLoading () async {
+    if (mounted) setState(() {
+      is_upgradable_apps_loading = true;
+    });
+    return;
+  }
   
-  // 更新页面应用更新情况已完成的方法
+  // 设置页面获取待更新应用已完成的方法
   Future <void> setUpgradableAppLoaded () async {
     if (mounted) setState(() {
-      is_upgradable_app_loaded = true;
+      is_upgradable_apps_loading = false;
     });
     return;
   }
 
   // 更新待更新应用列表方法
   Future <void> updateUpgradableAppsList () async {
-    // List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsAppManagerApi().get_upgradable_apps();
     // 更新对应变量并触发页面重构
     await globalAppState.updateUpgradableAppsList_Online();
-    // if (mounted) setState(() {});
     return;
   }
   
@@ -150,49 +163,44 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> upgradeApp (LinyapsPackageInfo cur_app_info) async {
     // 将应用推入下载列表
     await LinyapsAppManagerApi.install_app(cur_app_info);
-    // if (mounted) setState(() {});
     return;
   }
 
   @override
   void didChangeDependencies () {
     super.didChangeDependencies();
-    // 在页面第一次加载的时候拿到可更新应用和已安装应用的列表
-    if(!is_page_loading) {      
-      if(_is_page_first_loading) {
-        // 首次加载时初始化globalAppState
-        globalAppState = Get.find<ApplicationState>();
-        _is_page_first_loading = false;
-        // 先暴力异步加载页面信息
-        Future.microtask(() async {
-          // 更新当前页面状态为加载中
-          await setPageLoading();
-          // 更新已安装的应用信息
-          await updateInstalledAppsList();
-          // 再更新网络连接状态
-          await updateConnectionStatus();
-          if (is_connection_good) {
-            // 如果网络状态好, 则并发进行应用图标获取与检查更新操作
-            Future.microtask(() async {
-              await setPageLoaded();
-              await updateInstalledAppsIcon();
-              await setPageNotLoading();
+    if(_is_page_first_loading) {
+      // 首次加载时初始化globalAppState
+      globalAppState = Get.find<ApplicationState>();
+      _is_page_first_loading = false;
+      // 先暴力异步加载页面信息
+      Future.microtask(() async {
+        // 更新已安装的应用信息
+        await updateInstalledAppsList();
+        // 再更新网络连接状态
+        await updateConnectionStatus();
+        await setPageLoaded();
+        if (is_connection_good) {
+          // 如果网络状态好, 则并发进行应用图标获取与检查更新操作
+          Future.microtask(() async {
+            await updateInstalledAppsIcon();
+          });
+          Future.microtask(() async {
+            // 通知页面开始更新页面信息
+            await setUpgradableAppLoading();
+            // 获取应用更新详情
+            await updateUpgradableAppsList();
+            // 设置可更新应用信息已完全加载
+            await setUpgradableAppLoaded();
+            // 在应用第一次获取更新后, 关闭首次加载待更新应用状态开关, 以实现后台静默加载待更新应用功能
+            if (mounted) setState(() {
+              is_upgradable_apps_first_load = false;
             });
-            Future.microtask(() async {
-              if (is_connection_good) {
-                // 获取应用更新详情
-                await updateUpgradableAppsList();
-                // 设置可更新应用信息已完全加载
-                await setUpgradableAppLoaded();
-                await setPageNotLoading();
-              }    
-            });
-          } else {    // 当网络连接异常的时候只设置页面加载完成
-            await setPageLoaded();
-            await setPageNotLoading();
-          }      
-        });
-      }
+          });
+        } else {    // 当网络连接异常的时候只设置页面加载完成
+          await setPageLoaded();
+        }      
+      });
     }
   }
 
@@ -204,7 +212,14 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // ignore: avoid_print
     print('Lifecycle state changed to: $state'); // 添加日志用于调试
     // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
-    if (state == AppLifecycleState.resumed && !is_page_loading) await _refreshPageData();
+    if (state == AppLifecycleState.resumed) {
+      if (!is_app_icons_loading) Future.microtask(() async {
+        await refreshAppIcons();
+      });
+      if (!is_upgradable_apps_loading) Future.microtask(() async {
+        await refreshUpgradableApps();
+      });
+    }
   }
   
 
@@ -218,26 +233,32 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
   // 抽象出数据加载过程
   // 且仅在页面状态为没有加载时进行加载
-  Future <void> _refreshPageData () async {
+  Future <void> refreshAppIcons () async {
     // 如果页面当前处于暂停加载的状态
     // 那就先检查网络连接状态
-    await updateConnectionStatus();
+    bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
     // 网络好的话那么就更新已安装的应用信息
-    if (!is_page_loading) {
+    if (!is_app_icons_loading) {
       // 先设置页面为加载中状态
-      await setPageLoading();
+      await setAppsIconLoading();
       // 再执行具体更新函数功能
-      await updateInstalledAppsList();
-      if (is_connection_good) {
-        Future.microtask(() async {
-          await updateInstalledAppsIcon();
-        });
-        Future.microtask(() async {
-          await updateUpgradableAppsList();
-        });
-      }
+      if (connection_status) await updateInstalledAppsIcon();
       // 设置页面更新状态为已完成
-      await setPageNotLoading();
+      await setAppsIconLoaded();
+    }
+  }
+
+  Future <void> refreshUpgradableApps () async {
+    // 如果页面当前处于暂停加载的状态
+    // 那就先检查网络连接状态
+    bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
+    // 网络好的话那么就更新已安装的应用信息
+    if (!is_upgradable_apps_loading) {
+      // 先设置页面为加载中状态
+      await setUpgradableAppLoading();
+      if (connection_status) await updateUpgradableAppsList();
+      // 设置页面更新状态为已完成
+      await setUpgradableAppLoaded();
     }
   }
 
@@ -339,7 +360,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                             ),
                           ),
                           // 根据是否有可更新应用输出不同内容
-                          is_upgradable_app_loaded
+                          // 只有当首次加载且页面在检查应用更新, 才显示加载动画
+                          (is_upgradable_apps_loading == false || is_upgradable_apps_first_load == false)
                             ? appState.upgradableAppsList.isEmpty
                               ? SizedBox(
                                 height: 150,
