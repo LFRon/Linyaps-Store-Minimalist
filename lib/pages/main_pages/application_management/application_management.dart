@@ -229,8 +229,12 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       // 再执行具体更新函数功能
       await updateInstalledAppsList();
       if (is_connection_good) {
-        await updateUpgradableAppsList();
-        await updateInstalledAppsIcon();
+        Future.microtask(() async {
+          await updateInstalledAppsIcon();
+        });
+        Future.microtask(() async {
+          await updateUpgradableAppsList();
+        });
       }
       // 设置页面更新状态为已完成
       await setPageNotLoading();
