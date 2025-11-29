@@ -25,7 +25,7 @@ class LinyapsCliHelper {
   }
 
   // 用于返回玲珑所有安装信息的方法
-  static Future <dynamic> get_linyaps_all_local_info () async {
+  static Future <Map<String, dynamic>?> get_linyaps_all_local_info () async {
     // 指定玲珑的states.json路径
     String linyaps_states_path = '/var/lib/linglong/states.json';
     File file = File(linyaps_states_path);
@@ -36,15 +36,15 @@ class LinyapsCliHelper {
       Map<String, dynamic> jsonData = jsonDecode(get_states_content) as Map<String, dynamic>;
       return jsonData;
     }
-    else return null;
+    else return Future.value(null);
   }
   
   // 用于返回应用安装的版本方法
-  static Future <dynamic> get_app_installed_info (String appId) async {
+  static Future <LinyapsPackageInfo?> get_app_installed_info (String appId) async {
     // 先获取玲珑读取的信息
-    dynamic linyaps_info = await get_linyaps_all_local_info();
+    Map<String, dynamic>? linyaps_info = await get_linyaps_all_local_info();
     // 如果用户未安装玲珑则直接跟没有安装一样返回
-    if (linyaps_info == null) return "";
+    if (linyaps_info == null) return null;
     LinyapsPackageInfo installed_app;
     int i=0;  // 用于下方循环查找应用
     for (i=0;i<linyaps_info['layers'].length;i++) {
@@ -61,7 +61,7 @@ class LinyapsCliHelper {
         return installed_app;
       }
     }
-    return "";
+    return null;
   }
 
   // 启动玲珑应用的方法

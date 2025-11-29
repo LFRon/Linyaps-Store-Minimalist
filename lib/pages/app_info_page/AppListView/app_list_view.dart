@@ -1,7 +1,7 @@
 // 用于在应用详情页显示
 
 // 关闭VSCode非必要报错
-// ignore_for_file: prefer_const_constructors_in_immutables, non_constant_identifier_names, must_be_immutable, prefer_if_null_operators
+// ignore_for_file: prefer_const_constructors_in_immutables, non_constant_identifier_names, must_be_immutable, prefer_if_null_operators, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
@@ -18,10 +18,7 @@ class AppInfoView extends StatefulWidget {
   // 声明需要传入的下载应用列表
   List <LinyapsPackageInfo> downloadingAppsQueue;
 
-  // 声明需要当前应用已经安装的版本
-  String? cur_installed_app_version;
-
-  // 声明判定当前版本是否安装的对象
+  // 声明当前版本是否安装
   bool is_cur_version_installed;
 
   // 声明需要安装应用的回调函数
@@ -33,12 +30,11 @@ class AppInfoView extends StatefulWidget {
 
   AppInfoView({
     super.key,
-    required this.is_cur_version_installed,
     required this.install_app,
     required this.uninstall_app,
     required this.app_info,
     required this.downloadingAppsQueue,
-    this.cur_installed_app_version,
+    required this.is_cur_version_installed,
   });
 
   @override
@@ -100,10 +96,7 @@ class AppInfoViewState extends State<AppInfoView> {
     LinyapsPackageInfo app_info = widget.app_info;
 
     // 从传入全局的下载列表
-  List <LinyapsPackageInfo> downloadingAppsQueue = widget.downloadingAppsQueue;
-
-    // 传入当前版本是否安装对象
-    bool is_cur_version_installed = widget.is_cur_version_installed;
+    List <LinyapsPackageInfo> downloadingAppsQueue = widget.downloadingAppsQueue;
 
     // 初始化安装按钮对象
     DownloadState state = DownloadState.none;
@@ -119,7 +112,7 @@ class AppInfoViewState extends State<AppInfoView> {
           name: '', 
           version: '', 
           description: '',
-            arch: '',
+          arch: '',
         )
       );
       // 如果找到了对应应用实例
@@ -182,7 +175,7 @@ class AppInfoViewState extends State<AppInfoView> {
               ),
               Text("分发模式: ${app_info.channel}"),
               Text("下载量: ${app_info.installCount==null?'未知':app_info.installCount}"),
-              is_cur_version_installed
+              widget.is_cur_version_installed
                 ? SizedBox(
                   height: 30,
                   width: 80,
@@ -192,7 +185,7 @@ class AppInfoViewState extends State<AppInfoView> {
                   height: 30,
                   width: 80,
                 ),
-              is_cur_version_installed
+              widget.is_cur_version_installed
                 ? SizedBox(
                   height: 30,
                   width: 80,

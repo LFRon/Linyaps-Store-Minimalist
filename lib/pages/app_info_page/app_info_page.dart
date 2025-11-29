@@ -3,6 +3,8 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_print, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +35,10 @@ class AppInfoPage extends StatefulWidget {
   State<AppInfoPage> createState() => AppInfoPageState();
 }
 
-class AppInfoPageState extends State<AppInfoPage> {
+class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
+
+  // 启用页面监视定时器
+  Timer? checkTimer;
 
   // 声明网络连接的状态对象,默认为假
   bool is_connection_good = false;
@@ -45,10 +50,10 @@ class AppInfoPageState extends State<AppInfoPage> {
   late List <LinyapsPackageInfo> cur_app_info;
 
   // 声明读取全局应用变量实例类
-  late ApplicationState globalAppState;
+  late ApplicationState appState;
 
   // 声明存储当前应用安装的第几个版本,默认为字符串为空代表没有安装
-  String cur_installed_version = '';
+  String? cur_installed_version;
 
   // 获取当前网络具体状况函数
   Future <void> get_connection_status () async {
@@ -91,9 +96,9 @@ class AppInfoPageState extends State<AppInfoPage> {
   
   // 获取应用具体安装状态与安装版本的函数
   Future <void> update_app_installed_status (String appId) async {
-    dynamic installed_apps = await LinyapsCliHelper.get_app_installed_info(appId);
+    LinyapsPackageInfo? installed_apps = await LinyapsCliHelper.get_app_installed_info(appId);
     // 如果应用存在
-    if (installed_apps != '') {
+    if (installed_apps != null) {
       // 立刻通知页面重构获取安装的应用的版本
       if (mounted) setState(() {
         cur_installed_version = installed_apps.version;
@@ -143,7 +148,7 @@ class AppInfoPageState extends State<AppInfoPage> {
       print('Uninstalled version from $cur_installed_version');
       if (mounted) {
         setState(() {
-          cur_installed_version = '';
+          cur_installed_version = null;
         });
       }
     }
@@ -152,8 +157,12 @@ class AppInfoPageState extends State<AppInfoPage> {
   @override
   void initState () {
     super.initState();
+    // 增加应用/页面状态观察者
+    WidgetsBinding.instance.addObserver(this);  
     // 初始化应用信息
     cur_app_info = [];
+    // 初始化appState
+    appState = Get.find<ApplicationState>();
     // 暴力异步获取应用信息
     Future.delayed(Duration.zero).then((_) async {
       // 先检连接状态
@@ -172,17 +181,35 @@ class AppInfoPageState extends State<AppInfoPage> {
       // 没有这个应用就始终设置页面未加载完成防止不必要的Exceptions
       else await set_page_loaded();
     });
+
+    // 开启定时器定时检查
+    checkTimer = Timer.periodic(Duration(milliseconds: 350), (timer) async {
+      if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused) {
+        if (is_page_loaded) {
+          // 延迟250ms刷新状态
+          await Future.delayed(Duration(milliseconds: 250));
+          // 进行刷新本地安装的应用信息
+          await appState.updateInstalledAppsList_Online();
+          await update_app_installed_status(widget.appId);
+        }
+      }
+    });
   }
 
-  // 复写父类持续运行的后台函数
   @override
-  void didChangeDependencies () async {
-    super.didChangeDependencies();
-    // 延迟250ms刷新状态
-    await Future.delayed(Duration(milliseconds: 350));
-    // 进行刷新本地安装的应用信息
-    await globalAppState.updateInstalledAppsList_Online();
-    await update_app_installed_status(widget.appId);
+  void didChangeAppLifecycleState (AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    print('Lifecycle state changed to: $state'); // 添加日志用于调试
+    return;
+  }
+
+  @override
+  void dispose () {
+    super.dispose();
+    // 在析构函数里移除观察者
+    WidgetsBinding.instance.removeObserver(this);  
+    // 再移除定时器
+    checkTimer?.cancel();
   }
 
   @override
@@ -192,294 +219,286 @@ class AppInfoPageState extends State<AppInfoPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    // 更新globalAppState对象
-    globalAppState = Get.find<ApplicationState>();
-
-    return GetBuilder <ApplicationState> (
-      builder: (appState) {
-        return Scaffold(
-          // 总布局采用行式
-          body: is_page_loaded
-            ? Padding(
-              padding: EdgeInsets.only(left: width*0.02,top: height*0.02,right: width*0.02),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 70,
-                    height: 40,
-                    child: MyButton_Back(
-                      // 定义返回操作
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      size: 20,
-                    ),
-                  ),
-                  // 水平列用来放置应用具体信息UI
-                  // Expanded用于占据剩下的空间
-                  Expanded(
-                    child: is_connection_good
-                      ? Padding(
-                        padding: EdgeInsets.only(top:height*0.025,left: width*0.02,right: width*0.02),
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: MyColor().secondary(context),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: height*0.2,
-                                    child: Row(
+    return Scaffold(
+      // 总布局采用行式
+      body: is_page_loaded
+        ? Padding(
+          padding: EdgeInsets.only(left: width*0.02,top: height*0.02,right: width*0.02),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 70,
+                height: 40,
+                child: MyButton_Back(
+                  // 定义返回操作
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  size: 20,
+                ),
+              ),
+              // 水平列用来放置应用具体信息UI
+              // Expanded用于占据剩下的空间
+              Expanded(
+                child: is_connection_good
+                  ? Padding(
+                    padding: EdgeInsets.only(top:height*0.025,left: width*0.02,right: width*0.02),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: MyColor().secondary(context),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: height*0.2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // 先显示图片
+                                    Column(    // 这个子行控件只是纯粹地用来控制图片显示到中央
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        // 先显示图片
-                                        Column(    // 这个子行控件只是纯粹地用来控制图片显示到中央
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            CachedNetworkImage(
-                                              height: height*0.15,
-                                              width: height*0.15,
-                                              imageUrl: cur_app_info[cur_app_info.length-1].Icon ?? '',
-                                              placeholder: (context, url) => Center(
-                                                child: SizedBox(
-                                                  height: height*0.02,
-                                                  width: height*0.02,
-                                                  child: SizedBox(
-                                                    height: 16,width: 16,
-                                                    child: CircularProgressIndicator(
-                                                      color: Colors.grey.shade300,
-                                                      strokeWidth:2.5,     // 设置加载条宽度
-                                                    ),
-                                                  ),  // 加载时显示进度条
+                                        CachedNetworkImage(
+                                          height: height*0.15,
+                                          width: height*0.15,
+                                          imageUrl: cur_app_info[cur_app_info.length-1].Icon ?? '',
+                                          placeholder: (context, url) => Center(
+                                            child: SizedBox(
+                                              height: height*0.02,
+                                              width: height*0.02,
+                                              child: SizedBox(
+                                                height: 16,width: 16,
+                                                child: CircularProgressIndicator(
+                                                  color: Colors.grey.shade300,
+                                                  strokeWidth:2.5,     // 设置加载条宽度
                                                 ),
-                                              ),
-                                              // 无法显示图片时显示错误
-                                              errorWidget: (context, error, stackTrace) => Center(
-                                                child: SizedBox(
-                                                  width: height*0.14,
-                                                  height: height*0.14,
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                      'assets/images/linyaps-generic-app.png',
-                                                    ),
-                                                  ),
+                                              ),  // 加载时显示进度条
+                                            ),
+                                          ),
+                                          // 无法显示图片时显示错误
+                                          errorWidget: (context, error, stackTrace) => Center(
+                                            child: SizedBox(
+                                              width: height*0.14,
+                                              height: height*0.14,
+                                              child: Image(
+                                                image: AssetImage(
+                                                  'assets/images/linyaps-generic-app.png',
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        SizedBox(width: width*0.2,),
-                                        Flexible(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max, // 填满父 Row 的高度
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Text(    // 显示应用名字用控件
-                                                cur_app_info[0].name,    
-                                                style: TextStyle(
-                                                  fontSize: 40,
-                                                ),
-                                              ),
-                                              SizedBox(height: height*0.01,),
-                                              SizedBox(
-                                                width: width*0.4,
-                                                child: Center(
-                                                  child: Text(
-                                                    "介绍: ${cur_app_info[cur_app_info.length-1].description}",
-                                                    style: TextStyle(
-                                                      fontSize: 25,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: height*0.045,),
-                            // 下面的列式布局用于放置应用Runtime信息与具体介绍
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(    // 设置底部控件高度
-                                  height: height*0.6, 
-                                  width: width*0.32,
-                                  decoration: BoxDecoration(
-                                    color: MyColor().secondary(context),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: height*0.015,left: width*0.01,right: width*0.01),
-                                    child: ListView(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "应用维护者: ${cur_app_info[0].devName ?? '未知'}",
-                                              style: TextStyle(
-                                                color: Colors.grey.shade800,
-                                                fontSize: 21,
-                                              ),
-                                            ),
-                                            SizedBox(height: height*0.02,),
-                                            Text(
-                                              "应用基础环境: ${cur_app_info[0].base}",
-                                              style: TextStyle(
-                                                color: Colors.grey.shade800,
-                                                fontSize: 21,
-                                              ),
-                                            ),
-                                            SizedBox(height: height*0.02,),
-                                            Text(
-                                              "应用运行环境: ${(cur_app_info[0].runtime=='' || cur_app_info[0].runtime=='null')?'无':cur_app_info[0].runtime}",
-                                              style: TextStyle(
-                                                color: Colors.grey.shade800,
-                                                fontSize: 21,
-                                              ),
-                                            ),
-                                            SizedBox(height: height*0.02,),
-                                            Text(
-                                              "应用完整介绍: ${cur_app_info[0].description}",
-                                              style: TextStyle(
-                                                color: Colors.grey.shade800,
-                                                fontSize: 21,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child:Container(
-                                    height: height*0.6,
-                                    width: width*0.56,
-                                    decoration: BoxDecoration(
-                                      color: MyColor().secondary(context),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 8.0,right: 2.0,bottom: 8.0,top: 8.0),
+                                    SizedBox(width: width*0.2,),
+                                    Flexible(
                                       child: Column(
+                                        mainAxisSize: MainAxisSize.max, // 填满父 Row 的高度
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "应用安装信息",
+                                          Text(    // 显示应用名字用控件
+                                            cur_app_info[0].name,    
                                             style: TextStyle(
-                                              fontSize: height*0.025,
+                                              fontSize: 40,
                                             ),
                                           ),
-                                          SizedBox(height: height*0.006,),
-                                          Flexible(
-                                            child: ListView.builder(
-                                              itemCount: cur_app_info.length,
-                                              itemBuilder: (context,index) {
-                                                return Padding(
-                                                  padding: EdgeInsets.only(top:5.0,bottom: 5.0),
-                                                  child: AppInfoView(
-                                                    app_info: cur_app_info[index],
-                                                    downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
-                                                    is_cur_version_installed: cur_app_info[index].version == cur_installed_version ? true : false,
-                                                    cur_installed_app_version: cur_installed_version=='' ? null : cur_installed_version,
-                                                    install_app: (appInfo, button_install) async {
-                                                      await install_app(appInfo, button_install);
-                                                    },
-                                                    uninstall_app: (appId, button_uninstall) async {
-                                                      await uninstall_app(appId, button_uninstall);
-                                                    },
-                                                  ),
-                                                );
-                                              },
+                                          SizedBox(height: height*0.01,),
+                                          SizedBox(
+                                            width: width*0.4,
+                                            child: Center(
+                                              child: Text(
+                                                "介绍: ${cur_app_info[cur_app_info.length-1].description}",
+                                                style: TextStyle(
+                                                  fontSize: 25,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                      : Center(
-                        child: Text(
-                          '糟糕,网络连接好像丢掉了呢 :(',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey.shade600,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                  ),
-                ],
-              ),
-            )
-            : Padding(
-              padding: EdgeInsets.only(left: width*0.02,top: height*0.02,right: width*0.02,bottom:  height*0.04),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 70,
-                    height: 40,
-                    child: MyButton_Back(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      size: 20,
-                    ),
-                  ),
-                  Flexible(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                        SizedBox(height: height*0.045,),
+                        // 下面的列式布局用于放置应用Runtime信息与具体介绍
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.grey.shade500,
-                                    strokeWidth: 5,
+                            Container(    // 设置底部控件高度
+                              height: height*0.6, 
+                              width: width*0.32,
+                              decoration: BoxDecoration(
+                                color: MyColor().secondary(context),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(top: height*0.015,left: width*0.01,right: width*0.01),
+                                child: ListView(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "应用维护者: ${cur_app_info[0].devName ?? '未知'}",
+                                          style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 21,
+                                          ),
+                                        ),
+                                        SizedBox(height: height*0.02,),
+                                        Text(
+                                          "应用基础环境: ${cur_app_info[0].base}",
+                                          style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 21,
+                                          ),
+                                        ),
+                                        SizedBox(height: height*0.02,),
+                                        Text(
+                                          "应用运行环境: ${(cur_app_info[0].runtime=='' || cur_app_info[0].runtime=='null')?'无':cur_app_info[0].runtime}",
+                                          style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 21,
+                                          ),
+                                        ),
+                                        SizedBox(height: height*0.02,),
+                                        Text(
+                                          "应用完整介绍: ${cur_app_info[0].description}",
+                                          style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 21,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child:Container(
+                                height: height*0.6,
+                                width: width*0.56,
+                                decoration: BoxDecoration(
+                                  color: MyColor().secondary(context),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8.0,right: 2.0,bottom: 8.0,top: 8.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "应用安装信息",
+                                        style: TextStyle(
+                                          fontSize: height*0.025,
+                                        ),
+                                      ),
+                                      SizedBox(height: height*0.006,),
+                                      Flexible(
+                                        child: ListView.builder(
+                                          itemCount: cur_app_info.length,
+                                          itemBuilder: (context,index) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(top:5.0,bottom: 5.0),
+                                              child: AppInfoView(
+                                                app_info: cur_app_info[index],
+                                                downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
+                                                is_cur_version_installed: (cur_installed_version == null) ? false : (cur_app_info[index].version == cur_installed_version!) ? true : false,
+                                                install_app: (appInfo, button_install) async {
+                                                  await install_app(appInfo, button_install);
+                                                },
+                                                uninstall_app: (appId, button_uninstall) async {
+                                                  await uninstall_app(appId, button_uninstall);
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(height: height*0.03,),
-                                Text(
-                                  "稍等片刻,正在加载应用详情 ~",
-                                  style: TextStyle(
-                                    fontSize: height*0.03
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
+                  )
+                  : Center(
+                    child: Text(
+                      '糟糕,网络连接好像丢掉了呢 :(',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
                   ),
-                ],
               ),
-            ),
-        );
-      }
+            ],
+          ),
+        )
+        : Padding(
+          padding: EdgeInsets.only(left: width*0.02,top: height*0.02,right: width*0.02,bottom:  height*0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 70,
+                height: 40,
+                child: MyButton_Back(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  size: 20,
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator(
+                                color: Colors.grey.shade500,
+                                strokeWidth: 5,
+                              ),
+                            ),
+                            SizedBox(height: height*0.03,),
+                            Text(
+                              "稍等片刻,正在加载应用详情 ~",
+                              style: TextStyle(
+                                fontSize: height*0.03
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
     );
   }
 }
