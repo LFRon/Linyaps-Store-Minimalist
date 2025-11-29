@@ -93,7 +93,7 @@ class AppInfoPageState extends State<AppInfoPage> {
   Future <void> update_app_installed_status (String appId) async {
     dynamic installed_apps = await LinyapsCliHelper.get_app_installed_info(appId);
     // 如果应用存在
-    if (installed_apps != "") {
+    if (installed_apps != '') {
       // 立刻通知页面重构获取安装的应用的版本
       if (mounted) setState(() {
         cur_installed_version = installed_apps.version;
