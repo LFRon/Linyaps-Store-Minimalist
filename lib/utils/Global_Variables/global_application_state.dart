@@ -21,13 +21,13 @@ class ApplicationState extends GetxController {
   RxString repo_arch = ''.obs;
 
   // 初始化私有可更新应用列表
-  RxList upgradableAppsList = <LinyapsPackageInfo>[].obs;
+  RxList upgradableAppsList = RxList<LinyapsPackageInfo>();
 
   // 初始化私有已安装应用列表
-  RxList installedAppsList = <LinyapsPackageInfo>[].obs;
+  RxList installedAppsList = RxList<LinyapsPackageInfo>();
 
   // 初始化正在下载的应用列表
-  RxList downloadingAppsQueue = <LinyapsPackageInfo>[].obs;
+  RxList downloadingAppsQueue = RxList<LinyapsPackageInfo>();
   RxBool isProcessingQueue = false.obs;   // 用于标记是否正在处理下载队列
 
   // 用于返回按照"uname -m"标准命令输出的架构信息
@@ -37,6 +37,7 @@ class ApplicationState extends GetxController {
     // 更新操作系统架构信息
     String get_arch = arch_result.stdout.toString().trim();
     os_arch.value = get_arch;
+    update();
     return;
   }
 
@@ -51,6 +52,7 @@ class ApplicationState extends GetxController {
     else get_arch = os_arch;
     // 更新变量信息
     repo_arch.value = get_arch;
+    update();
     return;
   }
 
@@ -59,6 +61,7 @@ class ApplicationState extends GetxController {
     List <LinyapsPackageInfo> get_upgradable_apps = await LinyapsStoreApiService.get_upgradable_apps();
     // 更新对应变量并触发页面重构
     upgradableAppsList.assignAll(get_upgradable_apps);
+    update();
     return;
   }
 
@@ -69,17 +72,20 @@ class ApplicationState extends GetxController {
     List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
     // 更新对应变量并触发页面重构
     installedAppsList.assignAll(get_installed_apps);
+    update();
     return;
   }
 
   // 这个离线方法需要传入新列表手动刷新
   void updateUpgradableAppsList(List <LinyapsPackageInfo> newList) {
     upgradableAppsList.assignAll(newList);
+    update();
   }
 
   // 这个离线方法需要手动传入新列表刷新本地已安装应用
   void updateInstalledAppsList(List <LinyapsPackageInfo> newList) {
     installedAppsList.assignAll(newList);
+    update();
   }
   ////
 
@@ -91,6 +97,9 @@ class ApplicationState extends GetxController {
 
     // 创建新列表实例以确保触发更新
     downloadingAppsQueue.add(newApp);
+
+    // 通知监听者变化
+    update();
     
     // 如果流水线没有更新就进行启动更新流水线
     if (!isProcessingQueue.value) processDownloadingQueue();
@@ -108,12 +117,13 @@ class ApplicationState extends GetxController {
   // 处理下载队列方法
   Future <void> processDownloadingQueue() async {
     isProcessingQueue.value = true;
-
+    print('当前下载列表: $downloadingAppsQueue');
     // 进行应用安装并判断状态
     while (downloadingAppsQueue.isNotEmpty) {
       LinyapsPackageInfo currentApp = downloadingAppsQueue.first;
       // 更新下载状态
       currentApp.downloadState = DownloadState.downloading;
+      update();
       if (
         await LinyapsCliHelper.install_app(
           currentApp.id, 
@@ -126,11 +136,13 @@ class ApplicationState extends GetxController {
         currentApp.downloadState = DownloadState.completed;
         // 将其从列表中移除
         downloadingAppsQueue.remove(currentApp);
+        update();
         print('当前下载列表: $downloadingAppsQueue');
       } else {
         // 安装失败
         currentApp.downloadState = DownloadState.failed;
         downloadingAppsQueue.remove(currentApp);
+        update();
         print('当前下载列表: $downloadingAppsQueue');
       }
     }
