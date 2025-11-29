@@ -172,13 +172,13 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           // 再更新网络连接状态
           await updateConnectionStatus();
           if (is_connection_good) {
+            // 如果网络状态好, 则并发进行应用图标获取与检查更新操作
             Future.microtask(() async {
               await setPageLoaded();
               await updateInstalledAppsIcon();
               await setPageNotLoading();
             });
             Future.microtask(() async {
-              // 应用更新的检查只在联网状态下完成
               if (is_connection_good) {
                 // 获取应用更新详情
                 await updateUpgradableAppsList();
