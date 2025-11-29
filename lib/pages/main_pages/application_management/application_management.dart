@@ -3,6 +3,8 @@
 // 忽略VSCode非必要报错
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, use_build_context_synchronously, unnecessary_overrides
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
@@ -29,6 +31,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 覆写页面希望保持存在状态开关
   @override
   bool get wantKeepAlive => true; 
+
+  // 增加页面检查定时器
+  Timer? checkTimer;
 
   // 检查页面自身是否为打开应用后的第一次加载,初始化为真
   bool _is_page_first_loading = true;
@@ -169,6 +174,24 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   @override
   void didChangeDependencies () {
     super.didChangeDependencies();
+  }
+
+  
+  // 当用户重新切回页面时执行函数
+  @override
+  void didChangeAppLifecycleState (AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    // ignore: avoid_print
+    print('Lifecycle state changed to: $state'); // 添加日志用于调试
+  }
+  
+
+  // 覆写父类构造函数
+  @override
+  void initState () {
+    super.initState();
+    // 添加页面观察者
+    WidgetsBinding.instance.addObserver(this); 
     if(_is_page_first_loading) {
       // 首次加载时初始化globalAppState
       globalAppState = Get.find<ApplicationState>();
@@ -183,7 +206,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
         if (is_connection_good) {
           // 如果网络状态好, 则并发进行应用图标获取与检查更新操作
           Future.microtask(() async {
+            await setAppsIconLoading();
             await updateInstalledAppsIcon();
+            await setAppsIconLoaded();
           });
           Future.microtask(() async {
             // 通知页面开始更新页面信息
@@ -201,34 +226,21 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           await setPageLoaded();
         }      
       });
-    }
-  }
+    } 
 
-  
-  // 当用户重新切回页面时执行函数
-  @override
-  void didChangeAppLifecycleState (AppLifecycleState state) async {
-    super.didChangeAppLifecycleState(state);
-    // ignore: avoid_print
-    print('Lifecycle state changed to: $state'); // 添加日志用于调试
-    // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
-    if (state == AppLifecycleState.resumed) {
-      if (!is_app_icons_loading) Future.microtask(() async {
-        await refreshAppIcons();
-      });
-      if (!is_upgradable_apps_loading) Future.microtask(() async {
-        await refreshUpgradableApps();
-      });
-    }
-  }
-  
-
-  // 覆写父类构造函数
-  @override
-  void initState () {
-    super.initState();
-    // 添加页面观察者
-    WidgetsBinding.instance.addObserver(this);  
+    // 开启定时器开始定时更新页面信息
+    checkTimer = Timer.periodic(Duration(milliseconds: 250), (timer) async {
+      // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
+      if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+        if (!is_app_icons_loading) Future.microtask(() async {
+          await refreshAppIcons();
+        });
+        if (!is_upgradable_apps_loading) Future.microtask(() async {
+          await refreshUpgradableApps();
+        });
+      }
+    });
+    
   }
 
   // 抽象出数据加载过程
@@ -266,6 +278,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   void dispose () {
     // 销毁时移除观察者
     WidgetsBinding.instance.removeObserver(this); 
+    // 销毁定时器
+    checkTimer?.cancel();
     super.dispose();
   }
 
