@@ -74,7 +74,7 @@ class AppInfoPageState extends State<AppInfoPage> {
           return MyDialog_AppNotExistInStore();
         },
       );
-      Navigator.of(context).popUntil((route){
+      Navigator.of(context).popUntil((route) {
         return route.isFirst;
       });
       return false;
@@ -244,7 +244,7 @@ class AppInfoPageState extends State<AppInfoPage> {
                                             CachedNetworkImage(
                                               height: height*0.15,
                                               width: height*0.15,
-                                              imageUrl: cur_app_info[cur_app_info.length-1].Icon==null?"":cur_app_info[cur_app_info.length-1].Icon!,
+                                              imageUrl: cur_app_info[cur_app_info.length-1].Icon ?? '',
                                               placeholder: (context, url) => Center(
                                                 child: SizedBox(
                                                   height: height*0.02,
