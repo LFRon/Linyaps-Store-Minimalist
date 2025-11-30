@@ -233,6 +233,9 @@ class _AllAppsPageState extends State<AllAppsPage> {
       is_pressed: ValueNotifier<bool>(false), 
       indicator_width: 10, 
       onPressed: () async {
+        // 先清空页面控制器内容
+        _controller_searchtext.text = '';
+        // 再重新加载页面内容
         await reloadPage_all();
       },
     );
