@@ -113,7 +113,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
     // 触发页面重构并修改对应变量
     if (mounted) setState(() {
       // 将获得的元素信息加入cur_app_list
-      app_info_get.forEach((app_info){
+      app_info_get.forEach((app_info) {
         cur_app_list.add(app_info);
       });
       // 起始页面信息后移
