@@ -170,12 +170,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     await LinyapsAppManagerApi.install_app(cur_app_info);
     return;
   }
-
-  @override
-  void didChangeDependencies () {
-    super.didChangeDependencies();
-  }
-
   
   // 当用户重新切回页面时执行函数
   @override
