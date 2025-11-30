@@ -80,7 +80,7 @@ class _MySideMenuState extends State<MySideMenu> {
         ],
         fontSize: 16,
       ),
-      onTap: (page){
+      onTap: (page) { 
         try {
           pageController.jumpToPage(page);
         }
