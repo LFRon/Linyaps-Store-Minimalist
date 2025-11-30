@@ -65,7 +65,7 @@ class InstalledAppsGridItems {
             splashFactory: NoSplash.splashFactory,
           ),
           child: Padding(
-            padding: EdgeInsets.only(top: height*0.03,bottom: height*0.03),
+            padding: EdgeInsets.only(top: 30,bottom: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
