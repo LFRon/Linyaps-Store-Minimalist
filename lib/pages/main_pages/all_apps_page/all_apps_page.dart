@@ -280,7 +280,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                         onSubmitted: (value) => reloadPage_searchResult(),
                         decoration: InputDecoration(
                           // 设定垂直内边距
-                          contentPadding: EdgeInsets.symmetric(vertical: height*0.01, horizontal: width*0.01), 
+                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), 
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
