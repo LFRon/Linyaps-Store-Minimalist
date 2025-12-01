@@ -392,7 +392,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "您安装的所有应用都为最新, 或者在更新的路上 :)",
+                                            "您安装的所有应用都为最新 :)",
                                             style: TextStyle(
                                               fontSize: 18,
                                             ),
