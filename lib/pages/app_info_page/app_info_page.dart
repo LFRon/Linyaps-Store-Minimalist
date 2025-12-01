@@ -184,7 +184,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
     // 开启定时器定时检查
     checkTimer = Timer.periodic(Duration(milliseconds: 350), (timer) async {
-      if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused) {
+      if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused || WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive) {
         if (is_page_loaded) {
           // 延迟250ms刷新状态
           await Future.delayed(Duration(milliseconds: 250));
