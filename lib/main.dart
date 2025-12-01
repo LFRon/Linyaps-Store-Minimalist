@@ -20,6 +20,9 @@ void main() async {
     await WindowManager.instance.setTitle("玲珑应用商店");
     // 设置窗口最小大小
     await WindowManager.instance.setMinimumSize(const Size(1200,600));
+    // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
+    bool isSingleInstance = await windowManager.isPreventClose();
+    if (!isSingleInstance) exit(0);
   }
 
   // 创建GetX管理共享的ApplicationState实例
