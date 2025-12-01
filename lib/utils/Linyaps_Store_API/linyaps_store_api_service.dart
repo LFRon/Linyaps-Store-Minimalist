@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
 
@@ -352,8 +351,9 @@ class LinyapsStoreApiService {
   static Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
-
-    List <LinyapsPackageInfo> installed_apps = await LinyapsAppManagerApi.get_installed_apps([]);
+    ApplicationState globalAppState = Get.find<ApplicationState>();
+    List <LinyapsPackageInfo> installed_apps = globalAppState.installedAppsList.cast<LinyapsPackageInfo>();
+    List <LinyapsPackageInfo> downloading_apps = globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>();
     // 初始化待提交应用
     List <Map<String, String>> upload_installed_apps = [];
     for (dynamic i in installed_apps) {
@@ -394,7 +394,7 @@ class LinyapsStoreApiService {
           description: '', 
           arch: ''
         );
-      // 如果找不到对应应用,或者发现是base/runtime则直接跳过
+      // 1. 如果找不到对应应用,或者发现是base/runtime则直接跳过
       if (
         app_info_from_store.id == '' || 
         app_info_from_store.id == 'org.deepin.base' || 
@@ -410,6 +410,25 @@ class LinyapsStoreApiService {
         app_info_from_store.id == 'org.deepin.runtime.qt5' ||
         app_info_from_store.id == 'org.deepin.runtime.webengine'
       ) continue;
+      
+      // 2. 如果发现待升级应用正好在下载队列中则设置其下载状态
+      // 先在下载队列里进行查询
+      LinyapsPackageInfo app_find_in_downloading_queue =  downloading_apps.cast<LinyapsPackageInfo>().firstWhere(
+        (app) => app.id == i.id && app.version == i.version && (app.downloadState == DownloadState.downloading || app.downloadState == DownloadState.waiting),
+        orElse: () => LinyapsPackageInfo(
+          id: '', 
+          name: '', 
+          version: '', 
+          description: '', 
+          arch: ''
+        ),
+      );
+      // 如果发现真的在下载队列中则更新其下载状态
+      if (
+        app_find_in_downloading_queue.id != ''
+      ) {
+        i.downloadState = app_find_in_downloading_queue.downloadState;
+      }
       // 如果发现有更高版本
       if (
         VersionCompare.isFirstGreaterThanSec(

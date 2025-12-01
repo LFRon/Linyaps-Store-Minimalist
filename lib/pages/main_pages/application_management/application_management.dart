@@ -162,12 +162,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     for (LinyapsPackageInfo i in globalAppState.upgradableAppsList) {
       await LinyapsAppManagerApi.install_app(i);
     }
-  }
-
-  // 进行应用更新 (通过ListView.builder控件按"升级"按钮进行触发)
-  Future <void> upgradeApp (LinyapsPackageInfo cur_app_info) async {
-    // 将应用推入下载列表
-    await LinyapsAppManagerApi.install_app(cur_app_info);
     return;
   }
   
@@ -223,9 +217,10 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     } 
 
     // 开启定时器开始定时更新页面信息
-    checkTimer = Timer.periodic(Duration(milliseconds: 250), (timer) async {
+    checkTimer = Timer.periodic(Duration(milliseconds: 450), (timer) async {
       // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
-      if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+      if (mounted && (WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive || WidgetsBinding.instance.lifecycleState == null)) {
+        await refreshInstalledApps();
         if (!is_app_icons_loading) Future.microtask(() async {
           await refreshAppIcons();
         });
@@ -239,33 +234,43 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
   // 抽象出数据加载过程
   // 且仅在页面状态为没有加载时进行加载
+  // 用于刷新已安装状态的应用
+  Future <void> refreshInstalledApps () async {
+    // 如果页面当前处于暂停加载的状态
+    // 网络好的话那么就更新已安装的应用信息
+    await globalAppState.updateInstalledAppsList_Online();
+    return;
+  }
+
+  // 用于刷新应用图标的函数
   Future <void> refreshAppIcons () async {
     // 如果页面当前处于暂停加载的状态
-    // 那就先检查网络连接状态
-    bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
     // 网络好的话那么就更新已安装的应用信息
     if (!is_app_icons_loading) {
-      // 先设置页面为加载中状态
       await setAppsIconLoading();
+      // 那就先检查网络连接状态
+      bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
       // 再执行具体更新函数功能
       if (connection_status) await updateInstalledAppsIcon();
       // 设置页面更新状态为已完成
       await setAppsIconLoaded();
     }
+    return;
   }
 
   Future <void> refreshUpgradableApps () async {
     // 如果页面当前处于暂停加载的状态
-    // 那就先检查网络连接状态
-    bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
     // 网络好的话那么就更新已安装的应用信息
     if (!is_upgradable_apps_loading) {
       // 先设置页面为加载中状态
       await setUpgradableAppLoading();
+      // 那就先检查网络连接状态
+      bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
       if (connection_status) await updateUpgradableAppsList();
       // 设置页面更新状态为已完成
       await setUpgradableAppLoaded();
     }
+    return;
   }
 
   @override
@@ -387,7 +392,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "您安装的所有应用都为最新 :)",
+                                            "您安装的所有应用都为最新, 或者在更新的路上 :)",
                                             style: TextStyle(
                                               fontSize: 18,
                                             ),

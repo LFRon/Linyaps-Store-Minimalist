@@ -48,7 +48,6 @@ class UpgradableAppListItems {
       is_pressed: (downloading_app.id != '') ? ValueNotifier<bool>(true) : ValueNotifier<bool>(false), 
       indicator_width: 20, 
       onPressed: () async {
-        // await widget.exposeUpgradeButton(button_upgrade);
         // 将应用推入下载列表
         await LinyapsAppManagerApi.install_app(cur_upgradable_app_info);
       },
