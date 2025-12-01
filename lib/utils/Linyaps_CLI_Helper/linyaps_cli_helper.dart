@@ -127,8 +127,50 @@ class LinyapsCliHelper {
     ProcessResult result;
     // 卸载前先杀死容器进程
     await Process.run('ll-cli', ['kill',appId]);
+    // 显示全局通知开始卸载
+    toastification.show(
+      applyBlurEffect: true,
+      title: Text(
+        '$appId开始卸载',
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
+      style: ToastificationStyle.flat,
+      type: ToastificationType.info,
+      autoCloseDuration: const Duration(seconds: 3),
+    );
+
     // 进行应用强制安装
     result = await Process.run('pkexec',['ll-cli','uninstall','$appId']);
+    
+    if (result.exitCode != 0) {   
+      toastification.show(
+        applyBlurEffect: true,
+        title: Text(
+          '$appId卸载失败',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        style: ToastificationStyle.flat,
+        type: ToastificationType.error,
+        autoCloseDuration: const Duration(seconds: 3),
+      );
+    } else {
+      toastification.show(
+        applyBlurEffect: true,
+        title: Text(
+          '$appId卸载成功',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        style: ToastificationStyle.flat,
+        type: ToastificationType.success,
+        autoCloseDuration: const Duration(seconds: 3),
+      );
+    }
     // 返回命令退出码
     return result.exitCode;    
   }
