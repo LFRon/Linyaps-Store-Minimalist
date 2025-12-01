@@ -18,6 +18,7 @@ class NewestAppGridItems {
     required this.NewestAppsList,
     required this.context,
   });
+  
   List <Widget> Items ()
     {
       List <Widget> returnItem = [];    // returnItem为最终返回的控件

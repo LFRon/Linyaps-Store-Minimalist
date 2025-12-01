@@ -334,8 +334,6 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     return AppGridItem(
                       cur_app: cur_app_list[index], 
                       context: context, 
-                      height: height, 
-                      width: width
                     ).items();
                   },
                 )

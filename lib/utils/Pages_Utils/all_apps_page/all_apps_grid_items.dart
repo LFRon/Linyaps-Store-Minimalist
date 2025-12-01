@@ -10,9 +10,6 @@ import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_i
 
 class AppGridItem {
 
-  // 获取窗口当前的像素宽高
-  double height,width;
-
   // 获取当前应用信息
   LinyapsPackageInfo cur_app;
 
@@ -22,14 +19,12 @@ class AppGridItem {
   AppGridItem({
     required this.cur_app,
     required this.context,
-    required this.height,
-    required this.width,
   });
 
   Widget items () {
     return Container(
-      height: height*0.01,
-      width: width*0.01,
+      height: 150,
+      width: 150,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(12),
@@ -54,7 +49,7 @@ class AppGridItem {
           splashFactory: NoSplash.splashFactory,
         ),
         child: Padding(
-          padding: EdgeInsets.only(top: height*0.03,bottom: height*0.03),
+          padding: EdgeInsets.only(top: 30,bottom: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
