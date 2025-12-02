@@ -58,6 +58,28 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
     });
   }
 
+  // 更新当前页面网络连接状态用函数
+  Future <void> updateConnectionStatus () async {
+    bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
+    if (mounted) setState(() {
+      is_connection_good = connection_status;
+    });
+  }
+
+  // 设置页面加载状态为未完全加载的函数
+  Future <void> setPageNotLoaded () async {
+    if (mounted) setState(() {
+      is_page_loaded = false;
+    });
+  }
+
+  // 设置页面加载状态为已完全加载的函数
+  Future <void> setPageLoaded () async {
+    if (mounted) setState(() {
+      is_page_loaded = true;
+    });
+  }
+
   // 声明连播图控制器
   CarouselSliderController carousel_controller = CarouselSliderController();
 
@@ -65,13 +87,14 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
   @override
   void initState () {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // 添加页面观察者
+    WidgetsBinding.instance.addObserver(this); 
     // 进行暴力异步加载页面
     Future.delayed(Duration.zero).then((_) async {
-      // 先检测玲珑是否安装了, 若未安装则直接跳转报错页面
+      // 1.先检测玲珑是否安装了, 若未安装则直接跳转报错页面
       // 当网络连接正常时,进行:
-      // 1. 更新轮播图与欢迎应用列表
-      // 2. 检查应用自身更新
+      // 2. 更新轮播图与欢迎应用列表
+      // 3. 检查应用自身更新
       if (!await LinyapsCliHelper.is_installed_linyaps()) {
         Navigator.pushAndRemoveUntil(
           context,
@@ -83,11 +106,13 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
           (route) => false,
         );
       }
-      // 异步获取网络连接状态
-      is_connection_good = await CheckInternetConnectionStatus.staus_is_good();
+      
+      // 再更新网络连接状态
+      await updateConnectionStatus();
       if (is_connection_good) {
         await updateRecommendAppsList();
         await updateWelcomeAppsList();
+        // 最后检查应用更新情况
         if (await CheckAppUpdate.isAppHaveUpate()) {
           // 如果应用有更新就弹出对话框
           showDialog(
@@ -99,16 +124,31 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
           );
         }
         // 广播页面信息加载已完成
-        if (mounted) setState(() {
-          is_page_loaded =true;
-        });
+        await setPageLoaded();
       } else {
-        if (mounted) setState(() {
-          is_page_loaded =true;
-        });
+        await setPageLoaded();
       }
     });
 
+  }
+
+  // 在页面被重新切换回来 (不论是从其他页面切回来还是app从后台切回前台的该页面) 时重载信息
+  @override
+  void didChangeAppLifecycleState (AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // 先检查网络连接状态, 如果之前是不好也就是断网触发UI报错的, 先检查是不是这个情况
+      if (!is_connection_good) {
+        await updateConnectionStatus();
+        // 如果网路正常就进行页面信息更新
+        if (is_connection_good) {
+          await setPageNotLoaded();
+          await updateRecommendAppsList();
+          await updateWelcomeAppsList();
+          await setPageLoaded();
+        }
+      }
+    }
   }
   
   // 覆写父类析构函数
