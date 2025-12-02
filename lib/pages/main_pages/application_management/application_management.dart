@@ -244,6 +244,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     if (!is_app_icons_loading) {
       await setAppsIconLoading();
       // 那就先检查网络连接状态
+      // 这里之所以没有进行全局刷新, 是因为考虑到用户可能同时按下刷新待更新应用并同时获取图标的行为
+      // 直接await updateConnectionStatus();很可能会带来不可测的问题
+      // 因此这里进行独立检查
       bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
       // 再执行具体更新函数功能
       if (connection_status) await updateInstalledAppsIcon();
@@ -260,8 +263,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       // 先设置页面为加载中状态
       await setUpgradableAppLoading();
       // 那就先检查网络连接状态
-      bool connection_status = await CheckInternetConnectionStatus.staus_is_good();
-      if (connection_status) await updateUpgradableAppsList();
+      await updateConnectionStatus();
+      if (is_connection_good) await updateUpgradableAppsList();
       // 设置页面更新状态为已完成
       await setUpgradableAppLoaded();
     }
@@ -403,58 +406,71 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                           // 根据是否有可更新应用输出不同内容
                           // 只有当首次加载且页面在检查应用更新, 才显示加载动画
                           (!is_upgradable_apps_loading)
-                            ? appState.upgradableAppsList.isEmpty
-                              ? SizedBox(
-                                height: 150,
+                            ? is_connection_good
+                              ? appState.upgradableAppsList.isEmpty
+                                ? SizedBox(
+                                  height: 150,
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          size: 50,
+                                          color: Colors.black.withValues(alpha: 0.5),
+                                          Icons.update,
+                                        ),
+                                        SizedBox(width: 30,),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "您安装的所有应用都为最新 :)",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            Text(
+                                              "然而您并未站在世界之巅 ~ (坏笑)",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                : Padding(    // 设置上下控件间距离
+                                  padding: EdgeInsets.only(top:12.0,bottom: 15.0,right: width*0.01),
+                                  child: ListView.builder(    // 不使用ListView.builder方便按下
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),    // 禁止滚动
+                                    itemCount: appState.upgradableAppsList.length,
+                                    itemBuilder:(context, index) {
+                                      return UpgradableAppListItems(
+                                        cur_upgradable_app_info: appState.upgradableAppsList[index], 
+                                        upgrade_cur_app: (cur_upgradable_app_info) async {
+                                          await upgradeApp(cur_upgradable_app_info);
+                                        },
+                                        context: context, 
+                                      ).item();
+                                    }, 
+                                  ),
+                                )
+                              // 如果应用可更新信息未加载完
+                              : SizedBox(
+                                height: 120,
                                 child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        size: 50,
-                                        color: Colors.black.withValues(alpha: 0.5),
-                                        Icons.update,
-                                      ),
-                                      SizedBox(width: 30,),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "您安装的所有应用都为最新 :)",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          Text(
-                                            "然而您并未站在世界之巅 ~ (坏笑)",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                  child: Text(
+                                    '糟糕, 网络连接好像丢掉了呢 :(',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey.shade600
+                                    ),
                                   ),
                                 ),
                               )
-                              : Padding(    // 设置上下控件间距离
-                                padding: EdgeInsets.only(top:12.0,bottom: 15.0,right: width*0.01),
-                                child: ListView.builder(    // 不使用ListView.builder方便按下
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),    // 禁止滚动
-                                  itemCount: appState.upgradableAppsList.length,
-                                  itemBuilder:(context, index) {
-                                    return UpgradableAppListItems(
-                                      cur_upgradable_app_info: appState.upgradableAppsList[index], 
-                                      upgrade_cur_app: (cur_upgradable_app_info) async {
-                                        await upgradeApp(cur_upgradable_app_info);
-                                      },
-                                      context: context, 
-                                    ).item();
-                                  }, 
-                                ),
-                              )
-                            // 如果应用可更新信息未加载完
                             : SizedBox(
                               height: 120,
                               child: Column(
