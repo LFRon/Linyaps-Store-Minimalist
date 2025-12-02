@@ -66,14 +66,15 @@ class ApplicationState extends GetxController {
   }
 
   //// 对本地应用变量更改
-  // 更新本地应用安装详情方法
-  // 返回值是列表是否需要更新
-  Future <void> updateInstalledAppsList_Online () async {
-    List <LinyapsPackageInfo> get_installed_apps = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
+  // 走后端应用管理API, 进行全局实例变量的更新
+  // 返回值是否更新, true为更新了, false为没有
+  Future <bool> updateInstalledAppsList_Online () async {
+    List <dynamic> get_installed_info = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
+    List <LinyapsPackageInfo> get_installed_apps = get_installed_info[0];
     // 更新对应变量并触发页面重构
     installedAppsList.assignAll(get_installed_apps);
     update();
-    return;
+    return get_installed_info[1];
   }
 
   // 这个离线方法需要传入新列表手动刷新
@@ -136,6 +137,11 @@ class ApplicationState extends GetxController {
         currentApp.downloadState = DownloadState.completed;
         // 将其从列表中移除
         downloadingAppsQueue.remove(currentApp);
+        // 再检查其是否在待升级列表中, 如果在则移除
+        LinyapsPackageInfo? app_exist_in_upgradable_list = upgradableAppsList.cast<LinyapsPackageInfo>().firstWhereOrNull(
+          (app) => app.id == currentApp.id && app.version == currentApp.version,
+        );
+        if (app_exist_in_upgradable_list != null) upgradableAppsList.remove(app_exist_in_upgradable_list);
         update();
         print('当前下载列表: $downloadingAppsQueue');
       } else {

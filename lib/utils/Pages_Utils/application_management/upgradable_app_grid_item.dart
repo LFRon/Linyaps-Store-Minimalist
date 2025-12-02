@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
@@ -17,12 +16,16 @@ class UpgradableAppListItems {
   // 获取必要的当前应用信息
   LinyapsPackageInfo cur_upgradable_app_info;
 
+  // 通过回调函数进行升级操作
+  Future <void> Function(LinyapsPackageInfo cur_upgradable_app_info) upgrade_cur_app;
+
   // 获取必要的父页面构建上下文
   BuildContext context;
 
   UpgradableAppListItems({
     required this.cur_upgradable_app_info,
     required this.context,
+    required this.upgrade_cur_app,
   });
 
   // 返回所有控件
@@ -49,7 +52,7 @@ class UpgradableAppListItems {
       indicator_width: 20, 
       onPressed: () async {
         // 将应用推入下载列表
-        await LinyapsAppManagerApi.install_app(cur_upgradable_app_info);
+        await upgrade_cur_app(cur_upgradable_app_info);
       },
     );
     

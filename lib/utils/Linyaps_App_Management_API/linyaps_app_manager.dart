@@ -19,21 +19,32 @@ class LinyapsAppManagerApi {
   }
 
   // 返回已经安装的应用抽象类列表
+  // 返回值:
+  // 第0项为列表本体, 第1项为列表是否被更新
   // 需要加入already_get_list是让重新扫描已安装应用时先获取当前已经安装的应用信息
   // 然后没有的再往里加
-  static  Future <List<LinyapsPackageInfo>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
+  static  Future <List<dynamic>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
+    
     // 先异步获取玲珑本地信息
     dynamic linyapsLocalInfo = await LinyapsCliHelper.get_linyaps_all_local_info();
-    // 再获取
+    
     // 遇到没有安装玲珑或者没安装应用等情况,直接返回空列表
     if (linyapsLocalInfo == null) return [];
-    // 初始化待返回临时对象
-    List<LinyapsPackageInfo> returnItems = [];
+    
+    // 初始化待返回已安装应用的临时对象
+    List<LinyapsPackageInfo> installedItems = [];
+
+    // 检查应用列表是否被更新, 默认为假
+    bool is_installed_apps_updated = false;
+    
+    // 提前检查列表是否为空, 为空必然进行了更新, 故直接设置为true
+    if (already_get_list.isEmpty) is_installed_apps_updated = true;
+
     // 开始遍历本地的应用安装信息
     for (dynamic i in linyapsLocalInfo['layers']) {
       // 先检查已知的应用列表是否为空省去不必要的循环
       if (already_get_list.isEmpty) {
-        returnItems.add(
+        installedItems.add(
           LinyapsPackageInfo(
             id: i['info']['id'], 
             name: i['info']['name'], 
@@ -47,7 +58,7 @@ class LinyapsAppManagerApi {
       // 如果已安装应用列表已初始化过则对比版本号是否发生变化
       else {
         // 先检查应用是否存在
-        dynamic existingApp = already_get_list.firstWhere(
+        LinyapsPackageInfo existingApp = already_get_list.firstWhere(
           (app) => app.id == i['info']['id'],
           orElse: () => LinyapsPackageInfo(
             id: '',     // 找不到就返回空对象,下面检测也用这个空id作为识别
@@ -59,21 +70,23 @@ class LinyapsAppManagerApi {
         );
         // 如果应用没有录入就进行录入
         if (existingApp.id == '') {
-          returnItems.add(
+          installedItems.add(
             LinyapsPackageInfo(
               id: i['info']['id'], 
               name: i['info']['name'], 
               version: i['info']['version'], 
               description: i['info']['description'], 
               arch: i['info']['arch'][0],
-              Icon: existingApp.Icon,     // 此时图标链接为空
+              Icon: '',     // 此时未获取图标链接, 故为空
             ),
           );
+          is_installed_apps_updated = true;
         }
         // 如果发现录入了,就检查版本是否一致,不一致就更新版本
         else {
           if (existingApp.version != i['info']['version']) {
-            returnItems.add(
+            is_installed_apps_updated = true;
+            installedItems.add(
               LinyapsPackageInfo(
                 id: i['info']['id'], 
                 name: i['info']['name'], 
@@ -84,7 +97,7 @@ class LinyapsAppManagerApi {
               ),
             );
           } else {
-            returnItems.add(
+            installedItems.add(
               LinyapsPackageInfo(
                 id: i['info']['id'], 
                 name: i['info']['name'], 
@@ -98,6 +111,9 @@ class LinyapsAppManagerApi {
         }
       }
     }
+    List<dynamic> returnItems = [];
+    returnItems.add(installedItems);
+    returnItems.add(is_installed_apps_updated);
     return returnItems;
   }
 }

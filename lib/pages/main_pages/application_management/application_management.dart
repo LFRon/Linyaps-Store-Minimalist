@@ -15,6 +15,7 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/installed_apps_grid_items.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/upgradable_app_grid_item.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/refresh_upgradable_apps_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_all_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
 
@@ -47,11 +48,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 检查页面待更新应用获取进程是否在进行
   bool is_upgradable_apps_loading = false;
 
-  // 检查是否为第一次打开页面时进行的应用更新获取操作
-  // 之所以要设置这个变量, 是因为之后应用静默刷新时是不会导致动画切换的
-  // 单独设置这个变量可以有效避免后续应用后台的刷新引起页面UI切换回动画
-  bool is_upgradable_apps_first_load = true;
-
   // 检查当前页面所有应用是否都在下载队列里,默认为真
   bool is_apps_all_upgrading = true;
 
@@ -65,6 +61,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
 
   // 声明"一键升级"按钮对象
   late MyButton_UpgradeAll button_all_upgrade;
+
+  // 声明"刷新待更新应用"按钮对象
+  late MyButton_RefreshUpgradableApps button_refresh_upgradable_apps;
 
   // 用于存储ListView.builder里所有升级对象
   List <MyButton_Upgrade> button_upgrade_list = [];
@@ -157,12 +156,17 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     return;
   }
 
-  // 更新全部应用的方法
-  Future <void> upgradeAllApp (MyButton_UpgradeAll button_upgradeAll,) async {
+  // 更新全部应用的回调方法, 用于待更新列表内函数实现
+  Future <void> upgradeAllApp () async {
     for (LinyapsPackageInfo i in globalAppState.upgradableAppsList) {
       await LinyapsAppManagerApi.install_app(i);
     }
     return;
+  }
+
+  // 更新指定应用的回调方法, 用于待更新列表内函数实现
+  Future <void> upgradeApp (LinyapsPackageInfo wait_upgrade_app) async {
+    await LinyapsAppManagerApi.install_app(wait_upgrade_app);
   }
   
   // 当用户重新切回页面时执行函数
@@ -205,10 +209,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
             await updateUpgradableAppsList();
             // 设置可更新应用信息已完全加载
             await setUpgradableAppLoaded();
-            // 在应用第一次获取更新后, 关闭首次加载待更新应用状态开关, 以实现后台静默加载待更新应用功能
-            if (mounted) setState(() {
-              is_upgradable_apps_first_load = false;
-            });
           });
         } else {    // 当网络连接异常的时候只设置页面加载完成
           await setPageLoaded();
@@ -217,29 +217,24 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     } 
 
     // 开启定时器开始定时更新页面信息
-    checkTimer = Timer.periodic(Duration(milliseconds: 450), (timer) async {
+    checkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
       // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
       if (mounted && (WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive || WidgetsBinding.instance.lifecycleState == null)) {
-        await refreshInstalledApps();
-        if (!is_app_icons_loading) Future.microtask(() async {
-          await refreshAppIcons();
-        });
-        if (!is_upgradable_apps_loading) Future.microtask(() async {
-          await refreshUpgradableApps();
-        });
+        bool is_installed_apps_updated = await refreshInstalledApps();
+        if (is_installed_apps_updated) await refreshAppIcons();
       }
     });
     
   }
 
-  // 抽象出数据加载过程
+  //// 抽象出页面二次加载时的数据加载过程
   // 且仅在页面状态为没有加载时进行加载
-  // 用于刷新已安装状态的应用
-  Future <void> refreshInstalledApps () async {
+  // 用于刷新已安装状态的应用, 如果安装的应用有更新则返回true, 否则返回false
+  Future <bool> refreshInstalledApps () async {
     // 如果页面当前处于暂停加载的状态
     // 网络好的话那么就更新已安装的应用信息
-    await globalAppState.updateInstalledAppsList_Online();
-    return;
+    bool is_installed_apps_updated = await globalAppState.updateInstalledAppsList_Online();
+    return is_installed_apps_updated;
   }
 
   // 用于刷新应用图标的函数
@@ -300,10 +295,11 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 使用Consumer对ApplicationState实例进行监听
     return GetBuilder <ApplicationState> (
       builder: (appState) {
+
         // 先假设每个应用都在进行升级
         is_apps_all_upgrading = true;
         // 然后通过遍历下载中的列表来验证真的假的
-        for (var i in appState.upgradableAppsList) {
+        for (var i in globalAppState.upgradableAppsList) {
           // 寻找下载列表里有没有待升级应用
           LinyapsPackageInfo cur_app = appState.downloadingAppsQueue.firstWhere(
             (app) => app.id == i.id && app.version == i.version,
@@ -321,6 +317,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
             break;
           }
         }
+
         // 初始化"一键升级"按钮对象
         button_all_upgrade = MyButton_UpgradeAll(
           text: Text(
@@ -334,13 +331,28 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           is_pressed: ValueNotifier<bool>(is_apps_all_upgrading), 
           indicator_width: 22, 
           onPressed: () async {
-            await upgradeAllApp(button_all_upgrade);
+            await upgradeAllApp();
           },
         );
+
+        // 初始化"刷新待更新应用"按钮对象
+        button_refresh_upgradable_apps = MyButton_RefreshUpgradableApps(
+          onPressed: () async {
+            await refreshUpgradableApps();
+          }, 
+          text: Text(
+            '刷新待更新应用',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white
+            ),
+          ),
+        );
+
         return Scaffold(
           body: is_page_loaded
             ? Padding(
-              padding: EdgeInsets.only(left: width*0.02,right: width*0.03,top: height*0.03,bottom: height*0.03),
+              padding: EdgeInsets.only(left: 30,right: 30, top: 20,bottom: 20),
               child: ListView(
                 children: [
                   // 第一个子行用于显示应用应用更新信息
@@ -351,7 +363,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                         children: [
                           // 只是设置右侧"一键升级"与右侧的间距而已
                           Padding(
-                            padding: EdgeInsets.only(right: width*0.01),
+                            padding: EdgeInsets.only(right: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -361,20 +373,36 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                     fontSize: 25,
                                   ),
                                 ),
-                                // 如果有可更新的应用则全部更新
-                                appState.upgradableAppsList.isNotEmpty
-                                  ? SizedBox(
-                                    height: 45,
-                                    width: 120,
-                                    child: button_all_upgrade
-                                  )
-                                  : SizedBox(),
+                                // 页面是否在获取待更新应用, 如果是则仅显示加载动画
+                                is_upgradable_apps_loading
+                                  ? SizedBox()
+                                  : appState.upgradableAppsList.isNotEmpty
+                                    ? Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 45,
+                                          width: 170,
+                                          child: button_refresh_upgradable_apps
+                                        ),
+                                        const SizedBox(width: 20,),
+                                        SizedBox(
+                                          height: 45,
+                                          width: 120,
+                                          child: button_all_upgrade
+                                        )
+                                      ],
+                                    )
+                                    : SizedBox(
+                                      height: 45,
+                                      width: 170,
+                                      child: button_refresh_upgradable_apps
+                                    ),
                               ],
                             ),
                           ),
                           // 根据是否有可更新应用输出不同内容
                           // 只有当首次加载且页面在检查应用更新, 才显示加载动画
-                          (is_upgradable_apps_loading == false || is_upgradable_apps_first_load == false)
+                          (!is_upgradable_apps_loading)
                             ? appState.upgradableAppsList.isEmpty
                               ? SizedBox(
                                 height: 150,
@@ -418,6 +446,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                   itemBuilder:(context, index) {
                                     return UpgradableAppListItems(
                                       cur_upgradable_app_info: appState.upgradableAppsList[index], 
+                                      upgrade_cur_app: (cur_upgradable_app_info) async {
+                                        await upgradeApp(cur_upgradable_app_info);
+                                      },
                                       context: context, 
                                     ).item();
                                   }, 
