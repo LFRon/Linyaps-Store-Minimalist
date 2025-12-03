@@ -1,9 +1,12 @@
 // 主程序总线
-// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously
+
+// 关闭VSCode非必要报错
+// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_single_instance/flutter_single_instance.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/utils.dart';
@@ -16,14 +19,17 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();   // 确保程序主窗口已加载
   if (!kIsWasm && !kIsWeb) {
+
     // 设置窗口参数
     await WindowManager.instance.setTitle("玲珑应用商店");
     // 设置窗口最小大小
     await WindowManager.instance.setMinimumSize(const Size(1200,600));
+    await windowManager.ensureInitialized();
+
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
-    // bool isSingleInstance = await windowManager.isPreventClose();
-    // if (!isSingleInstance) exit(0);
-  }
+    bool isSingleInstance = await FlutterSingleInstance().isFirstInstance();
+    if (!isSingleInstance) exit(0);
+  } else exit(0);
 
   // 创建GetX管理共享的ApplicationState实例
   Get.put(ApplicationState());
