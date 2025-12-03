@@ -44,6 +44,7 @@ dependencies:
   cached_network_image: ^3.4.1
   url_launcher: ^6.3.2
   get: ^4.7.3
+  flutter_single_instance: ^1.7.0
 
 dev_dependencies:
   flutter_test:
