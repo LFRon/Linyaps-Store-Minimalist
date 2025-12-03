@@ -293,7 +293,7 @@ class LinyapsStoreApiService {
 
     // 在这里提前读获取的应用信息,若为Null直接返回
     if (response.data['data'][appId] == null) return null;
-    Map <dynamic,dynamic> app_info_get = response.data['data'][appId][0];
+    Map <dynamic, dynamic> app_info_get = response.data['data'][appId][0];
     
     // 进行解析并返回应用详情
     return LinyapsPackageInfo(
