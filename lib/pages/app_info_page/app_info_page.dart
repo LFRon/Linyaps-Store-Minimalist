@@ -4,7 +4,6 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_print, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
