@@ -6,7 +6,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
@@ -33,9 +33,8 @@ class UpgradableAppListItems {
     // 拿到我们当前的存储全局变量类的响应实例
     ApplicationState appState = Get.find<ApplicationState>();
     // 先判断应用是否已经在下载,如果是,用downloading_app用于存储当前下载中的应用对象
-    final downloading_app = appState.downloadingAppsQueue.firstWhere(
+    LinyapsPackageInfo? downloading_app = appState.downloadingAppsQueue.firstWhereOrNull(
       (app) => cur_upgradable_app_info.id == app.id && cur_upgradable_app_info.version == app.version,
-      orElse: () => LinyapsPackageInfo(id: '', name: '', version: '', description: '', arch: ''), 
     );
     
     // 初始化升级按钮对象
@@ -48,7 +47,7 @@ class UpgradableAppListItems {
         ),
       ), 
       // 如果应用正在升级,则直接设置按钮已被按下 (也就是提醒用户你已经正在升级)
-      is_pressed: (downloading_app.id != '') ? ValueNotifier<bool>(true) : ValueNotifier<bool>(false), 
+      is_pressed: (downloading_app != null) ? ValueNotifier<bool>(true) : ValueNotifier<bool>(false), 
       indicator_width: 20, 
       onPressed: () async {
         // 将应用推入下载列表
@@ -75,7 +74,7 @@ class UpgradableAppListItems {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CachedNetworkImage(
-                      imageUrl: cur_upgradable_app_info.Icon??"",
+                      imageUrl: cur_upgradable_app_info.Icon ?? '',
                       placeholder: (context, url) => Center(
                         child: SizedBox(
                           height: 80,

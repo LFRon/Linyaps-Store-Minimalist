@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/state_manager.dart';
+import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -302,20 +303,13 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
         // 先假设每个应用都在进行升级
         is_apps_all_upgrading = true;
         // 然后通过遍历下载中的列表来验证真的假的
-        for (var i in globalAppState.upgradableAppsList) {
+        for (LinyapsPackageInfo i in globalAppState.upgradableAppsList) {
           // 寻找下载列表里有没有待升级应用
-          LinyapsPackageInfo cur_app = appState.downloadingAppsQueue.firstWhere(
+          LinyapsPackageInfo? cur_app = appState.downloadingAppsQueue.firstWhereOrNull(
             (app) => app.id == i.id && app.version == i.version,
-            // 如果找不到就返回空对象
-            orElse: () => LinyapsPackageInfo(
-              id: '', 
-              name: '', 
-              version: '', 
-              description: '', 
-              arch: ''
-            ),
+            // 如果找不到就返回Null
           );
-          if (cur_app.id == '') {
+          if (cur_app == null) {
             is_apps_all_upgrading = false;
             break;
           }

@@ -58,18 +58,11 @@ class LinyapsAppManagerApi {
       // 如果已安装应用列表已初始化过则对比版本号是否发生变化
       else {
         // 先检查应用是否存在
-        LinyapsPackageInfo existingApp = already_get_list.firstWhere(
+        LinyapsPackageInfo? existingApp = already_get_list.firstWhereOrNull(
           (app) => app.id == i['info']['id'],
-          orElse: () => LinyapsPackageInfo(
-            id: '',     // 找不到就返回空对象,下面检测也用这个空id作为识别
-            name: '', 
-            version: '', 
-            description: '', 
-            arch: '',
-          )
         );
         // 如果应用没有录入就进行录入
-        if (existingApp.id == '') {
+        if (existingApp == null) {
           installedItems.add(
             LinyapsPackageInfo(
               id: i['info']['id'], 

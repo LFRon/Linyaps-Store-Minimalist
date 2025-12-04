@@ -47,7 +47,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   bool is_page_loaded = false;
 
   // 声明当前应用对象
-  late List <LinyapsPackageInfo> cur_app_info;
+  late List <LinyapsPackageInfo>? cur_app_info;
 
   // 声明读取全局应用变量实例类
   late ApplicationState appState;
@@ -67,11 +67,12 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
   Future <bool> getAppDetails (String appId) async {
+
     // 从玲珑后端API中获得玲珑应用数据
-    List <LinyapsPackageInfo> get_app_info = await LinyapsStoreApiService.get_app_details_list(appId);
+    List <LinyapsPackageInfo>? get_app_info = await LinyapsStoreApiService.get_app_details_list(appId);
 
     // 检查应用是否存在,不存在直接调商店没有此应用的对话框
-    if (get_app_info.isEmpty) {
+    if (get_app_info == null) {
       await showDialog(     // 这里用异步是直接阻断页面继续加载
         context: context, 
         barrierDismissible: false,    // 禁止用户按别的地方关闭
@@ -160,7 +161,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 增加应用/页面状态观察者
     WidgetsBinding.instance.addObserver(this);  
     // 初始化应用信息
-    cur_app_info = [];
+    cur_app_info = null;
     // 初始化appState
     appState = Get.find<ApplicationState>();
     // 暴力异步获取应用信息
@@ -266,7 +267,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         CachedNetworkImage(
                                           height: height*0.15,
                                           width: height*0.15,
-                                          imageUrl: cur_app_info[cur_app_info.length-1].Icon ?? '',
+                                          imageUrl: cur_app_info![cur_app_info!.length-1].Icon ?? '',
                                           placeholder: (context, url) => Center(
                                             child: SizedBox(
                                               height: height*0.02,
@@ -302,7 +303,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(    // 显示应用名字用控件
-                                            cur_app_info[0].name,    
+                                            cur_app_info![0].name,    
                                             style: TextStyle(
                                               fontSize: 40,
                                             ),
@@ -312,7 +313,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                             width: width*0.4,
                                             child: Center(
                                               child: Text(
-                                                "介绍: ${cur_app_info[cur_app_info.length-1].description}",
+                                                "介绍: ${cur_app_info![cur_app_info!.length-1].description}",
                                                 style: TextStyle(
                                                   fontSize: 25,
                                                 ),
@@ -350,7 +351,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "应用维护者: ${cur_app_info[0].devName ?? '未知'}",
+                                          "应用维护者: ${cur_app_info![0].devName ?? '未知'}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -358,7 +359,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         ),
                                         SizedBox(height: height*0.02,),
                                         Text(
-                                          "应用基础环境: ${cur_app_info[0].base}",
+                                          "应用基础环境: ${cur_app_info![0].base}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -366,7 +367,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         ),
                                         SizedBox(height: height*0.02,),
                                         Text(
-                                          "应用运行环境: ${(cur_app_info[0].runtime=='' || cur_app_info[0].runtime=='null')?'无':cur_app_info[0].runtime}",
+                                          "应用运行环境: ${(cur_app_info![0].runtime=='' || cur_app_info![0].runtime=='null')?'无':cur_app_info![0].runtime}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -374,7 +375,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         ),
                                         SizedBox(height: height*0.02,),
                                         Text(
-                                          "应用完整介绍: ${cur_app_info[0].description}",
+                                          "应用完整介绍: ${cur_app_info![0].description}",
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
@@ -407,14 +408,14 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       SizedBox(height: height*0.006,),
                                       Flexible(
                                         child: ListView.builder(
-                                          itemCount: cur_app_info.length,
+                                          itemCount: cur_app_info!.length,
                                           itemBuilder: (context,index) {
                                             return Padding(
                                               padding: EdgeInsets.only(top:5.0,bottom: 5.0),
                                               child: AppInfoView(
-                                                app_info: cur_app_info[index],
+                                                app_info: cur_app_info![index],
                                                 downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
-                                                is_cur_version_installed: (cur_installed_version == null) ? false : (cur_app_info[index].version == cur_installed_version!) ? true : false,
+                                                is_cur_version_installed: (cur_installed_version == null) ? false : (cur_app_info![index].version == cur_installed_version!) ? true : false,
                                                 install_app: (appInfo, button_install) async {
                                                   await install_app(appInfo, button_install);
                                                 },

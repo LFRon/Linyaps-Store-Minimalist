@@ -6,6 +6,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
+import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
@@ -378,7 +379,7 @@ class LinyapsStoreApiService {
     LinyapsPackageInfo i;   // 先初始化遍历用迭代器
     for (i in installed_apps) {
       // 先尝试从商店获取当前应用信息,若没有则直接返回空对象
-      LinyapsPackageInfo app_info_from_store = app_info_get.containsKey(i.id)
+      LinyapsPackageInfo? app_info_from_store = app_info_get.containsKey(i.id)
         ? LinyapsPackageInfo(
           id: app_info_get[i.id][0]['appId'], 
           name: app_info_get[i.id][0]['name'], 
@@ -387,45 +388,33 @@ class LinyapsStoreApiService {
           Icon: app_info_get[i.id][0]['icon'],
           arch: repo_arch,
         )
-        : LinyapsPackageInfo(
-          id: '', 
-          name: '', 
-          version: '', 
-          description: '', 
-          arch: ''
-        );
+        : null;
       // 1. 如果找不到对应应用,或者发现是base/runtime则直接跳过
-      if (
-        app_info_from_store.id == '' || 
-        app_info_from_store.id == 'org.deepin.base' || 
-        app_info_from_store.id == 'org.deepin.foundation' ||
-        app_info_from_store.id == 'org.deepin.Runtime' ||
-        app_info_from_store.id == 'org.deepin.runtime.dtk' || 
-        app_info_from_store.id == 'org.deepin.runtime.gtk4' ||
-        app_info_from_store.id == 'org.deepin.base.flatpak.freedesktop' ||
-        app_info_from_store.id == 'org.deepin.base.flatpak.kde' ||
-        app_info_from_store.id == 'org.deepin.base.flatpak.gnome' ||
-        app_info_from_store.id == 'org.deepin.base.wine' ||
-        app_info_from_store.id == 'org.deepin.runtime.wine' ||
-        app_info_from_store.id == 'org.deepin.runtime.qt5' ||
-        app_info_from_store.id == 'org.deepin.runtime.webengine'
-      ) continue;
+      if (app_info_from_store != null) {
+        if (
+          app_info_from_store.id == 'org.deepin.base' || 
+          app_info_from_store.id == 'org.deepin.foundation' ||
+          app_info_from_store.id == 'org.deepin.Runtime' ||
+          app_info_from_store.id == 'org.deepin.runtime.dtk' || 
+          app_info_from_store.id == 'org.deepin.runtime.gtk4' ||
+          app_info_from_store.id == 'org.deepin.base.flatpak.freedesktop' ||
+          app_info_from_store.id == 'org.deepin.base.flatpak.kde' ||
+          app_info_from_store.id == 'org.deepin.base.flatpak.gnome' ||
+          app_info_from_store.id == 'org.deepin.base.wine' ||
+          app_info_from_store.id == 'org.deepin.runtime.wine' ||
+          app_info_from_store.id == 'org.deepin.runtime.qt5' ||
+          app_info_from_store.id == 'org.deepin.runtime.webengine'
+        ) continue;
+      } else continue;
       
       // 2. 如果发现待升级应用正好在下载队列中则设置其下载状态
       // 先在下载队列里进行查询
-      LinyapsPackageInfo app_find_in_downloading_queue =  downloading_apps.cast<LinyapsPackageInfo>().firstWhere(
+      LinyapsPackageInfo? app_find_in_downloading_queue =  downloading_apps.cast<LinyapsPackageInfo>().firstWhereOrNull(
         (app) => app.id == i.id && app.version == i.version && (app.downloadState == DownloadState.downloading || app.downloadState == DownloadState.waiting),
-        orElse: () => LinyapsPackageInfo(
-          id: '', 
-          name: '', 
-          version: '', 
-          description: '', 
-          arch: ''
-        ),
       );
       // 如果发现真的在下载队列中则更新其下载状态
       if (
-        app_find_in_downloading_queue.id != ''
+        app_find_in_downloading_queue != null
       ) {
         i.downloadState = app_find_in_downloading_queue.downloadState;
       }
@@ -454,7 +443,7 @@ class LinyapsStoreApiService {
   }
 
   // 获取具体应用的详细信息的方法2: 此方法是返回一个应用的每个版本的列表信息
-  static Future <List<LinyapsPackageInfo>> get_app_details_list (String appId) async {
+  static Future <List<LinyapsPackageInfo>?> get_app_details_list (String appId) async {
     // 指定具体响应API地址
     String serverUrl = '$serverHost_Store/app/getAppDetail';
     Dio dio = Dio ();    // 创建Dio请求对象
@@ -473,7 +462,7 @@ class LinyapsStoreApiService {
     dio.close();
 
     // 如果发现返回的应用信息为空则直接返回空列表
-    if (response.data['data'].isEmpty) return [];
+    if (response.data['data'].isEmpty) return null;
 
     // 如果获取信息不为空则拿到信息
     List <dynamic> app_info_get = response.data['data'][appId];

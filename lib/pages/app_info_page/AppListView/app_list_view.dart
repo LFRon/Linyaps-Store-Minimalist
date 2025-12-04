@@ -4,6 +4,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, non_constant_identifier_names, must_be_immutable, prefer_if_null_operators, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/install_button.dart';
@@ -104,19 +105,11 @@ class AppInfoViewState extends State<AppInfoView> {
     // 先看看下载列表里有没有这个应用和对应版本
     if (downloadingAppsQueue.isNotEmpty) { 
       // 进行检查
-      LinyapsPackageInfo cur_downloading_app = downloadingAppsQueue.firstWhere(
+      LinyapsPackageInfo? cur_downloading_app = downloadingAppsQueue.firstWhereOrNull(
         (app) => app.id == widget.app_info.id && app.version == widget.app_info.version,
-        // 没有就返回空对象
-        orElse: () => LinyapsPackageInfo(
-          id: '', 
-          name: '', 
-          version: '', 
-          description: '',
-          arch: '',
-        )
       );
       // 如果找到了对应应用实例
-      if (cur_downloading_app.id != '') state = cur_downloading_app.downloadState??DownloadState.none;
+      if (cur_downloading_app != null) state = cur_downloading_app.downloadState??DownloadState.none;
     } 
 
     // 初始化按钮
