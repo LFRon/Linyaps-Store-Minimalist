@@ -115,7 +115,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   // 设置安装函数实现,用于被ListView.builder里的控件当回调函数调用
   // 该页面安装应用的方法,version代表当前安装的目标版本,cur_app_version代表如果有的本地安装版本
-  Future <void> install_app (LinyapsPackageInfo appInfo,MyButton_Install button_install) async {
+  Future <void> install_app (LinyapsPackageInfo appInfo, MyButton_Install button_install) async {
     // 设置按钮被按下
     // 设置安装按钮被按下
     button_install.is_pressed.value = true;
