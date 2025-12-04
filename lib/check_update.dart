@@ -13,27 +13,27 @@ class CheckAppUpdate {
     static String cur_version = MyApp.cur_version;
     // 检查程序更新的函数
     static Future <bool> isAppHaveUpate () async {
-        Dio dio = Dio();     // 创建Dio网络请求对象
-        // 初始化检查更新的API链接
-        String check_update_url = 'https://gitee.com/api/v5/repos/LFRon/Linyaps-Store-Minimalist/releases';
-        // 拿到response响应, 如果请求错误则默认没有更新
-        try {
-            Response response = await dio.get(check_update_url);
-            List <dynamic> version_list = response.data;
-            // Gitee返回的API请求中, 最新版本为最后一位
-            String newest_version = version_list[version_list.length-1]['tag_name'];
-            if (
-                VersionCompare.isFirstGreaterThanSec(
-                  newest_version,
-                  cur_version,
-                )
-            ) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (e) {
-            return false;
+      Dio dio = Dio();     // 创建Dio网络请求对象
+      // 初始化检查更新的API链接
+      String check_update_url = 'https://gitee.com/api/v5/repos/LFRon/Linyaps-Store-Minimalist/releases';
+      // 拿到response响应, 如果请求错误则默认没有更新
+      try {
+        Response response = await dio.get(check_update_url);
+        List <dynamic> version_list = response.data;
+        // Gitee返回的API请求中, 最新版本为最后一位
+        String newest_version = version_list[version_list.length-1]['tag_name'];
+        if (
+          VersionCompare.isFirstGreaterThanSec(
+            newest_version,
+            cur_version,
+          )
+        ) {
+          return true;
+        } else {
+          return false;
         }
+      } catch (e) {
+        return false;
+      }
     }
 }
