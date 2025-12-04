@@ -205,9 +205,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                           heroTag: "RecommendAppPage_FloatingActionButton_Left",
                           backgroundColor: Colors.grey.withValues(alpha: 0.1),
                           child: Icon(Icons.keyboard_double_arrow_left),
-                          onPressed: (){
-                            carousel_controller.previousPage();
-                          },
+                          onPressed: () => carousel_controller.previousPage(),
                         ),
                       ),
                     ),
@@ -219,9 +217,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                           heroTag: "RecommendAppPage_FloatingActionButton_Right",
                           backgroundColor: Colors.grey.withValues(alpha: 0.1),
                           child: Icon(Icons.keyboard_double_arrow_right),
-                          onPressed: (){
-                            carousel_controller.nextPage();
-                          },
+                          onPressed: () => carousel_controller.nextPage(),
                         ),
                       ),
                     ),
