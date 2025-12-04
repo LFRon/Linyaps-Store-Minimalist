@@ -8,8 +8,8 @@ import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/version_compare/version_compare.dart';
 
 class LinyapsStoreApiService {
 

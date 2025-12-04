@@ -5,7 +5,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:linglong_store_flutter/main.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/version_compare/version_compare.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/version_compare/version_compare.dart';
 
 class CheckAppUpdate {
     // 声明当前版本号

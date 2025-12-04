@@ -5,8 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/all_apps_page/all_apps_grid_items.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/all_apps_page/bottom_loading_widget.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';

@@ -9,10 +9,10 @@
 
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_App_Management_API/linyaps_app_manager.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_store_api_service.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_App_Management_API/linyaps_app_manager.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 
 class ApplicationState extends GetxController {
 

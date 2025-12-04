@@ -5,8 +5,8 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
 
 import 'package:get/get.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_CLI_Helper/linyaps_cli_helper.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 
 class LinyapsAppManagerApi {

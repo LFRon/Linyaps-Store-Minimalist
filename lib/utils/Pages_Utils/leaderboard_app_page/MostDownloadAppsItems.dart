@@ -6,7 +6,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
-import 'package:linglong_store_flutter/utils/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 
 class MostDownloadAppGridItems {
   List<LinyapsPackageInfo> NewestAppsList;
