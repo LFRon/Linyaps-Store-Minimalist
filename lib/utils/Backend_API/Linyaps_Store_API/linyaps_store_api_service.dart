@@ -250,8 +250,7 @@ class LinyapsStoreApiService {
 
     // 循环加入最终结果对象中
     List <LinyapsPackageInfo> returnItems = [];
-    dynamic i;
-    for (i in search_info_get) {
+    for (dynamic i in search_info_get) {
       returnItems.add(
         LinyapsPackageInfo(
           id: i['id']==null?i['appId']:i['id'], 
@@ -357,7 +356,7 @@ class LinyapsStoreApiService {
     List <LinyapsPackageInfo> downloading_apps = globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>();
     // 初始化待提交应用
     List <Map<String, String>> upload_installed_apps = [];
-    for (dynamic i in installed_apps) {
+    for (LinyapsPackageInfo i in installed_apps) {
       upload_installed_apps.add({
         'appId': i.id,
         'arch': repo_arch
