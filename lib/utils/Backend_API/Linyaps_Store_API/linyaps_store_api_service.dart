@@ -40,9 +40,8 @@ class LinyapsStoreApiService {
     );  
     dio.close();
     List <LinyapsPackageInfo> WelcomeCarouseApps = [];     // 新建具体化的欢迎应用列表
-    int i=0;
     // 将API响应的信息经过精准切割,加入到欢迎应用列表中
-    for (i=0;i<response.data['data'].length;i++) {
+    for (int i=0;i<response.data['data'].length;i++) {
       WelcomeCarouseApps.add(
         LinyapsPackageInfo(
           id: response.data['data'][i]['appId'], 
@@ -79,8 +78,7 @@ class LinyapsStoreApiService {
     
     // 将API响应的信息经过精准切割,加入到应用列表中
     List<LinyapsPackageInfo> welcome_app_list = [];
-    dynamic i;
-    for (i in response.data['data']['records']) {
+    for (dynamic i in response.data['data']['records']) {
       welcome_app_list.add(
         LinyapsPackageInfo(
           id: i['appId'], 
@@ -119,8 +117,7 @@ class LinyapsStoreApiService {
 
     // 将API响应的信息经过精准切割,加入到应用列表中
     List <LinyapsPackageInfo> newest_app_list = [];
-    int i=0;
-    for (i=0;i<response.data['data']['records'].length;i++) {
+    for (int i=0;i<response.data['data']['records'].length;i++) {
       newest_app_list.add(
         LinyapsPackageInfo(
           id: response.data['data']['records'][i]['appId'], 
@@ -207,8 +204,7 @@ class LinyapsStoreApiService {
     List <LinyapsPackageInfo> app_list = [];
 
     // 将API响应的信息经过精准切割,加入到应用列表中
-    dynamic i;
-    for (i in response.data['data']['records']) {
+    for (dynamic i in response.data['data']['records']) {
       app_list.add(
         LinyapsPackageInfo(
           id: i['appId'], 
@@ -293,6 +289,7 @@ class LinyapsStoreApiService {
 
     // 在这里提前读获取的应用信息,若为Null直接返回
     if (response.data['data'][appId] == null) return null;
+
     Map <dynamic, dynamic> app_info_get = response.data['data'][appId][0];
     
     // 进行解析并返回应用详情
@@ -375,8 +372,7 @@ class LinyapsStoreApiService {
     List <LinyapsPackageInfo> upgradable_apps = [];
 
     // 遍历已安装的应用
-    LinyapsPackageInfo i;   // 先初始化遍历用迭代器
-    for (i in installed_apps) {
+    for (LinyapsPackageInfo i in installed_apps) {
       // 先尝试从商店获取当前应用信息,若没有则直接返回空对象
       LinyapsPackageInfo? app_info_from_store = app_info_get.containsKey(i.id)
         ? LinyapsPackageInfo(
