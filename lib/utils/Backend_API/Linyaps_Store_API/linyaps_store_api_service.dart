@@ -307,13 +307,15 @@ class LinyapsStoreApiService {
   // 单开获取本地应用图标的函数, 同步进行减少应用加载时间
   static Future <List<LinyapsPackageInfo>> updateAppIcon (List<LinyapsPackageInfo> installed_apps) async {
     // 指定具体响应API地址
-    String serverUrl = '$serverHost_Store/app/getAppDetail';
+    String serverUrl = '$serverHost_Store/visit/getAppDetails';
     
     // 初始化待提交应用
     List <Map<String, String>> upload_installed_apps = [];
-    for (dynamic i in installed_apps) {
+    for (LinyapsPackageInfo i in installed_apps) {
       upload_installed_apps.add({
         'appId': i.id,
+        'channel': 'main',
+        'module': 'binary',
         'arch': repo_arch
       });
     }
@@ -326,19 +328,33 @@ class LinyapsStoreApiService {
     );  
     dio.close();
 
-    Map <String, dynamic> app_info_get = response.data['data'];
-    // 拿到请求后准备逐个返回
+    List <dynamic> app_info_get = response.data['data'];
     List <LinyapsPackageInfo> returnItems = [];
-    int i=0;
-    for (LinyapsPackageInfo cur_app_info in installed_apps) {
+
+    // 拿到请求后遍历返回的列表逐个加入后, 进行标准玲珑应用类返回
+    for (dynamic i in app_info_get) {
+      // 先检查返回的应用信息是否在已安装应用里
+      LinyapsPackageInfo app_local_info = installed_apps.firstWhere(
+        (app) => app.id == i['appId'],
+        orElse: () => LinyapsPackageInfo(
+          id: '', 
+          name: '', 
+          version: '', 
+          description: '', 
+          arch: ''
+        )
+      );
       // 不管其他,先加入元素
-      returnItems.add(cur_app_info);
-      String? IconUrl;
-      if (app_info_get.containsKey(returnItems[i].id)) {
-        IconUrl = app_info_get[returnItems[i].id][0]['icon'];
-        returnItems[i].Icon = IconUrl;
-      }
-      i++;
+      returnItems.add(
+        LinyapsPackageInfo(
+          id: i['appId'], 
+          name: app_local_info.name, 
+          version: app_local_info.version, 
+          description: i['description'] ?? app_local_info.description, 
+          arch: i['arch'] ?? app_local_info.arch,
+          Icon: i['icon'],
+        )
+      );
     }
 
     return returnItems;
