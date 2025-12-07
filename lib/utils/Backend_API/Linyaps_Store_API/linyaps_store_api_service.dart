@@ -344,7 +344,7 @@ class LinyapsStoreApiService {
           arch: ''
         )
       );
-      // 不管其他,先加入元素
+      // 依次加入元素
       returnItems.add(
         LinyapsPackageInfo(
           id: i['appId'], 
