@@ -109,4 +109,5 @@ class LinyapsAppManagerApi {
     returnItems.add(is_installed_apps_updated);
     return returnItems;
   }
+
 }

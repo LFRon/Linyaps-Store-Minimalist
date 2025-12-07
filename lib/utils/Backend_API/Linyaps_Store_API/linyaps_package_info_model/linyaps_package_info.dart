@@ -16,12 +16,11 @@ class LinyapsPackageInfo {
   // 声明玲珑应用必须有的信息
   String id;   // 应用包名
   String name;  // 应用名称
-  String version;   // 应用版本信息
   String description;    // 应用介绍信息
   String arch;  // 应用架构
-
-  // 如果应用不是最新的,存储一下它当前版本,这用于检查应用更新用
-  String? current_old_version;
+  // 应用版本信息
+  String version;    // 必须返回当前版本
+  String? newVersion;  // 应用有无新版本, 如果有就加在这里
 
   // 下载状态
   DownloadState? downloadState;
@@ -42,7 +41,6 @@ class LinyapsPackageInfo {
   String? permissions;    // 应用所需权限
   String? extensions;    // 该应用所需扩展
   // String? oldVersion;   // 应用的老版本
-  String? newVersion;  // 应用的新版本
 
   // 声明应用后台接口信息
   String? zhName;    // 应用在后台的名称
@@ -62,7 +60,6 @@ class LinyapsPackageInfo {
     this.Icon,
     // this.IconUpdated,
     this.repoName,
-    this.current_old_version,
     this.downloadState,
     this.channel,
     this.kind,

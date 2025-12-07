@@ -47,7 +47,7 @@ class ApplicationState extends GetxController {
     arch_result = await Process.run('uname', ['-m']);
     // 更新操作系统架构信息
     String os_arch = arch_result.stdout.toString().trim();
-    String get_arch = "";
+    String get_arch = '';
     if (os_arch == 'aarch64') get_arch = 'arm64';
     else get_arch = os_arch;
     // 更新变量信息
@@ -130,7 +130,6 @@ class ApplicationState extends GetxController {
           currentApp.id, 
           currentApp.name,
           currentApp.version, 
-          currentApp.current_old_version,
         ) == 0
       ) {
         // 安装成功

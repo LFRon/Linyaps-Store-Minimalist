@@ -156,6 +156,17 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     return;
   }
 
+  // 同时获取本地应用图标链接与待更新应用的方法
+  Future <void> updateAppsIconAndUpgradeAppsList () async {
+    // 用于存储了带了AppIcon链接的Icon列表
+    List <List<LinyapsPackageInfo>> newAppsList = await LinyapsStoreApiService.get_upgradable_apps_and_icon(globalAppState.installedAppsList.cast<LinyapsPackageInfo>());
+    if (mounted) setState(() {
+      globalAppState.updateInstalledAppsList(newAppsList[0]);
+      globalAppState.updateUpgradableAppsList(newAppsList[1]);
+    });
+    return;
+  }
+
   // 更新全部应用的回调方法, 用于待更新列表内函数实现
   Future <void> upgradeAllApp () async {
     for (LinyapsPackageInfo i in globalAppState.upgradableAppsList) {
@@ -196,20 +207,14 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
         await updateConnectionStatus();
         await setPageLoaded();
         if (is_connection_good) {
-          // 如果网络状态好, 则并发进行应用图标获取与检查更新操作
-          Future.microtask(() async {
-            await setAppsIconLoading();
-            await updateInstalledAppsIcon();
-            await setAppsIconLoaded();
-          });
-          Future.microtask(() async {
-            // 通知页面开始更新页面信息
-            await setUpgradableAppLoading();
-            // 获取应用更新详情
-            await updateUpgradableAppsList();
-            // 设置可更新应用信息已完全加载
-            await setUpgradableAppLoaded();
-          });
+          // 如果网络状态好, 则同时进行获取应用图标与待更新应用信息
+          await setAppsIconLoading();
+          await setUpgradableAppLoading();
+          // 直接一气呵成获取待更新应用列表与应用图标
+          await updateAppsIconAndUpgradeAppsList();
+          // 然后同时设置加载完成
+          await setAppsIconLoaded();
+          await setUpgradableAppLoaded();
         } else {    // 当网络连接异常的时候只设置页面加载完成
           await setPageLoaded();
         }      

@@ -73,7 +73,7 @@ class LinyapsCliHelper {
   
   // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
   // 这里需要控件上下文,是为了显示应用安装成功亦或者失败的通知
-  static Future <int> install_app (String appId,String appName,String version,String? version_last) async {
+  static Future <int> install_app (String appId,String appName,String version) async {
     // 显示全局通知开始安装
     toastification.show(
       applyBlurEffect: true,
