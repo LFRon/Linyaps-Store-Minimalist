@@ -6,6 +6,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button_static.dart';
 
 class DownloadingAppListItem extends StatelessWidget {
 
@@ -35,7 +36,7 @@ class DownloadingAppListItem extends StatelessWidget {
               child: Row(
                 children: [
                   CachedNetworkImage(
-                    imageUrl: cur_app_info.Icon??"",
+                    imageUrl: cur_app_info.Icon ?? '',
                     placeholder: (context, url) => Center(
                       child: SizedBox(
                         height: 70,
@@ -109,11 +110,26 @@ class DownloadingAppListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     cur_app_info.downloadState == DownloadState.waiting
-                      ? Text(
-                        '正在等待下载',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                      ? Row(
+                        children: [
+                          Text(
+                            '正在等待下载',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 30,),
+                          MyStaticButton_FatalWarning(
+                            onPressed: () async {}, 
+                            text: Text(
+                              '取消',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
                       )
                       : SizedBox(),
                   ],
