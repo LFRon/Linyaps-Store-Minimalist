@@ -560,6 +560,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.3"
+  single_touch_gesture:
+    dependency: "direct main"
+    description:
+      name: single_touch_gesture
+      sha256: "8bc53681b099397006ab56c5ae329e4b3d1bf7d239aa0ea0bbfba32768c9bef0"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.3.2
   get: ^4.7.3
   flutter_single_instance: ^1.7.0
+  single_touch_gesture: ^1.0.1
 
 dev_dependencies:
   flutter_test:
