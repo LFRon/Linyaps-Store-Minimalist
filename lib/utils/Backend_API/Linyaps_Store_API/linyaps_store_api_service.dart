@@ -249,7 +249,7 @@ class LinyapsStoreApiService {
     for (dynamic i in search_info_get) {
       returnItems.add(
         LinyapsPackageInfo(
-          id: i['id']==null?i['appId']:i['id'], 
+          id: i['id']==null ? i['appId'] : i['id'], 
           name: i['name'], 
           version: i['version'], 
           description: i['description'], 
