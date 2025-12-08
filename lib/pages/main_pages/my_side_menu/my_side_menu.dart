@@ -74,7 +74,7 @@ class _MySideMenuState extends State<MySideMenu> {
       // 强制指定字体用于修复ARM架构的Linux发行版下CJK字体渲染问题
       textStyle: TextStyle(
         color: Colors.white,
-        fontFamily: "HarmonyOS Sans SC",
+        fontFamily: 'HarmonyOS Sans SC',
         fontFamilyFallback: [
           'Noto Color Emoji',
         ],
