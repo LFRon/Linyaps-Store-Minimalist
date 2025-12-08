@@ -93,7 +93,6 @@ class LinyapsAppManagerApi {
         // 如果发现录入了,就检查版本是否一致,不一致就更新版本
         else {
           if (existingApp.version != i['info']['version']) {
-            is_installed_apps_updated = true;
             installedItems.add(
               LinyapsPackageInfo(
                 id: i['info']['id'], 
@@ -104,6 +103,7 @@ class LinyapsAppManagerApi {
                 Icon: existingApp.Icon,    
               ),
             );
+            is_installed_apps_updated = true;
           } else {
             installedItems.add(
               LinyapsPackageInfo(
@@ -120,9 +120,15 @@ class LinyapsAppManagerApi {
       }
     }
     List<dynamic> returnItems = [];
+    // 由于玲珑在刚安装完应用的瞬间会创建两个应用版本对象, 而导致应用安装信息里出现两个一模一样的应用
+    // 但是安装完之后JSON列表里又会变成一个应用对象
+    // 因此在下一次检查时要比对加好的列表(installedItems)与现有列表长度, 如果不一样就意味着列表必然进行了更新
+    // 因此要额外进行长度比对
+    if (installedItems.length!=already_get_list.length) is_installed_apps_updated = true;
+    
     if (is_installed_apps_updated) returnItems.add(installedItems);
-    // 如果本地应用列表并没有更新则原封不动地返回原列表
     else returnItems.add(already_get_list);
+
     returnItems.add(is_installed_apps_updated);
     return returnItems;
   }
