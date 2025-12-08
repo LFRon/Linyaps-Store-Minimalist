@@ -5,13 +5,18 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button_static.dart';
 
 class DownloadingAppListItem extends StatelessWidget {
 
   // 获取当前应用下载信息
   LinyapsPackageInfo cur_app_info;
+
+  // 获取到全局应用实例
+  ApplicationState globalAppState = Get.find<ApplicationState>();
 
   DownloadingAppListItem({
     super.key,
@@ -118,14 +123,22 @@ class DownloadingAppListItem extends StatelessWidget {
                               fontSize: 20,
                             ),
                           ),
-                          const SizedBox(width: 30,),
-                          MyStaticButton_FatalWarning(
-                            onPressed: () async {}, 
-                            text: Text(
-                              '取消',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
+                          const SizedBox(width: 40,),
+                          SizedBox(
+                            width: 100,
+                            height: 40,
+                            child: MyStaticButton_FatalWarning(
+                              onPressed: () {
+                                globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>().removeWhere(
+                                  (app) => app.id == cur_app_info.id && app.version == cur_app_info.version
+                                );
+                              }, 
+                              text: Text(
+                                '取消',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           )
