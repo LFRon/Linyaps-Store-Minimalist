@@ -72,8 +72,10 @@ class ApplicationState extends GetxController {
     List <dynamic> get_installed_info = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
     List <LinyapsPackageInfo> get_installed_apps = get_installed_info[0];
     // 更新对应变量并触发页面重构
-    installedAppsList.assignAll(get_installed_apps);
-    update();
+    if (get_installed_info[1]) {
+      installedAppsList.assignAll(get_installed_apps);
+      update();
+    }
     return get_installed_info[1];
   }
 

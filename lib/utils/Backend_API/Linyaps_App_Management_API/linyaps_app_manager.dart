@@ -42,6 +42,21 @@ class LinyapsAppManagerApi {
 
     // 开始遍历本地的应用安装信息
     for (dynamic i in linyapsLocalInfo['layers']) {
+      // 检测到玲珑base/runtime直接跳过
+      if (
+        i['info']['id'] == 'org.deepin.base' ||
+        i['info']['id'] == 'org.deepin.foundation' ||
+        i['info']['id'] == 'org.deepin.Runtime' || 
+        i['info']['id'] == 'org.deepin.runtime.dtk' ||
+        i['info']['id'] == 'org.deepin.runtime.gtk4' ||
+        i['info']['id'] == 'org.deepin.base.flatpak.freedesktop' ||
+        i['info']['id'] == 'org.deepin.base.flatpak.kde'  ||
+        i['info']['id'] == 'org.deepin.base.flatpak.gnome'   ||
+        i['info']['id'] == 'org.deepin.base.wine'   ||
+        i['info']['id'] == 'org.deepin.runtime.wine'   ||
+        i['info']['id'] == 'org.deepin.runtime.qt5'   ||
+        i['info']['id'] == 'org.deepin.runtime.webengine'
+      ) continue;
       // 先检查已知的应用列表是否为空省去不必要的循环
       if (already_get_list.isEmpty) {
         installedItems.add(
@@ -105,7 +120,9 @@ class LinyapsAppManagerApi {
       }
     }
     List<dynamic> returnItems = [];
-    returnItems.add(installedItems);
+    if (is_installed_apps_updated) returnItems.add(installedItems);
+    // 如果本地应用列表并没有更新则原封不动地返回原列表
+    else returnItems.add(already_get_list);
     returnItems.add(is_installed_apps_updated);
     return returnItems;
   }
