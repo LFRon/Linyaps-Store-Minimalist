@@ -29,6 +29,7 @@ void main() async {
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
     bool isSingleInstance = await FlutterSingleInstance().isFirstInstance();
     if (!isSingleInstance) exit(0);
+    
   } else exit(0);
 
   // 创建GetX管理共享的ApplicationState实例
