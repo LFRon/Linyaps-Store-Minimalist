@@ -71,8 +71,9 @@ class LinyapsCliHelper {
     return;
   }
   
-  // 安装玲珑应用的方法,version_last代表这个应用在进行安装前在本地的版本
-  // 这里需要控件上下文,是为了显示应用安装成功亦或者失败的通知
+  // 安装玲珑应用的方法, version代表该应用的当前将会安装的版本
+  // 在正常前端页面开发时, 你不应当直接调用这个方法
+  // 而是应该调用应用管理的安装应用方法, 将应用推入安装列表中进行队列式安装
   static Future <int> install_app (String appId,String appName,String version) async {
     // 显示全局通知开始安装
     toastification.show(
