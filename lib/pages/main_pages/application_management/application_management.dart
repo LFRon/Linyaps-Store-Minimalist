@@ -42,16 +42,19 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   // 检查网络连接是否正常的开关,初始化为假
   bool is_connection_good = false;
 
-  // 检查页面应用图标获取进程是否在进行
+  // 检查页面本地应用信息是否在加载的开关
+  bool is_installed_apps_loading = false;
+
+  // 检查页面应用图标获取进程是否在进行的状态开关
   bool is_app_icons_loading = false;
 
-  // 检查页面待更新应用获取进程是否在进行
+  // 检查页面待更新应用获取进程是否在进行的状态开关
   bool is_upgradable_apps_loading = false;
 
-  // 检查当前页面所有应用是否都在下载队列里,默认为真
+  // 检查当前页面所有应用是否都在下载队列里的状态开关,默认为真
   bool is_apps_all_upgrading = true;
 
-  // 判断页面是否加载完全的开关
+  // 判断页面是否加载完全的状态开关
   // 在这里页面加载只用于判断所有应用信息是否加载完成,而不涉及应用更新
   // 判断应用更新情况是否加载完成需要额外的开关
   bool is_page_loaded = false;
@@ -82,6 +85,20 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       is_page_loaded = true;
     });
     return;
+  }
+
+  // 设置页面正在获取本地应用的状态改变方法
+  Future <void> setInstalledAppsLoading () async {
+    if (mounted) setState(() {
+      is_installed_apps_loading = true;
+    });
+  }
+
+  // 设置页面完成获取本地应用的状态改变方法
+  Future <void> setInstalledAppsLoaded () async {
+    if (mounted) setState(() {
+      is_installed_apps_loading = false;
+    });
   }
 
   // 设置页面正在获取应用图标的方法
@@ -133,23 +150,6 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   Future <void> updateInstalledAppsIcon () async {
     // 用于存储了带了AppIcon链接的Icon列表
     List <LinyapsPackageInfo> newAppsList = await LinyapsStoreApiService.updateAppIcon(globalAppState.installedAppsList.cast<LinyapsPackageInfo>());
-    // 用于调试新商店接口用
-    // await LinyapsStoreApiService().get_app_details('com.tencent.wechat');
-    /*
-    for (LinyapsPackageInfo i in globalAppState.installedAppsList) {
-      String cur_app_icon = await LinyapsAppManagerApi().updateAppIcon();
-      newAppsList.add(
-        LinyapsPackageInfo(
-          id: i.id, 
-          name: i.name, 
-          version: i.version, 
-          description: i.description, 
-          arch: i.arch,
-          Icon: cur_app_icon,
-        )
-      );
-    }
-    */
     if (mounted) setState(() {
       globalAppState.updateInstalledAppsList(newAppsList);
     });
@@ -230,8 +230,12 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     checkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
       // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
       if (mounted && (WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive || WidgetsBinding.instance.lifecycleState == null)) {
-        bool is_installed_apps_updated = await refreshInstalledApps();
-        if (is_installed_apps_updated) await refreshAppIcons();
+        if (!is_installed_apps_loading) {
+          await setInstalledAppsLoading();
+          bool is_installed_apps_updated = await refreshInstalledApps();
+          await setInstalledAppsLoaded();
+          if (is_installed_apps_updated) await refreshAppIcons();
+        }
       }
     });
     
