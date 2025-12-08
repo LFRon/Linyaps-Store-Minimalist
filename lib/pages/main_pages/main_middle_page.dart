@@ -31,6 +31,8 @@ class _MainMiddlePageState extends State<MainMiddlePage> {
           Expanded(
             child: PageView(
               controller: pageController,
+              // 禁用pageView自带的左右滑动切换手势效果
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 RecommendAppPage(),
                 LeaderboardPage(),
