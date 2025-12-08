@@ -89,7 +89,7 @@ class DownloadingAppListItem extends StatelessWidget {
             ),
             
             Expanded(
-              flex: 1,
+              flex: 2,
               child: cur_app_info.downloadState == DownloadState.downloading
                 ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
