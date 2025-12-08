@@ -130,6 +130,7 @@ class ApplicationState extends GetxController {
           currentApp.id, 
           currentApp.name,
           currentApp.version, 
+          currentApp.newVersion
         ) == 0
       ) {
         // 安装成功
