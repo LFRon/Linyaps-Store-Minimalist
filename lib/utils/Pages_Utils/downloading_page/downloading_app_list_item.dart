@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button_static.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';
 
 class DownloadingAppListItem extends StatelessWidget {
 
@@ -18,13 +18,42 @@ class DownloadingAppListItem extends StatelessWidget {
   // 获取到全局应用实例
   ApplicationState globalAppState = Get.find<ApplicationState>();
 
+  // 初始化取消按钮对象
+  late MyButton_FatalWarning cancel_waiting_button;
+
   DownloadingAppListItem({
     super.key,
     required this.cur_app_info,
   });
 
+  // 用于当前对象正在等待时, 用户按下取消按钮其在下载队列的方法
+  Future <void> cancelCurAppWaiting () async {
+    // 设置当前传入的按钮引用对象的按下状态为已按下
+    cancel_waiting_button.is_pressed.value = true;
+    // 将其从列表中移除
+    globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>().removeWhere(
+      (app) => app.id == cur_app_info.id && app.version == cur_app_info.version
+    );
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
+    // 初始化取消等待按钮对象
+    cancel_waiting_button = MyButton_FatalWarning(
+      text: Text(
+        '取消',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),
+      ),
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 20, 
+      onPressed: () async {
+        await cancelCurAppWaiting();
+      },
+    );
     return Container(
       height: 85,
       margin: EdgeInsets.symmetric(vertical: 6.0),    // 设置ListView.builder子控件间的间距
@@ -127,20 +156,7 @@ class DownloadingAppListItem extends StatelessWidget {
                           SizedBox(
                             width: 100,
                             height: 40,
-                            child: MyStaticButton_FatalWarning(
-                              onPressed: () {
-                                globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>().removeWhere(
-                                  (app) => app.id == cur_app_info.id && app.version == cur_app_info.version
-                                );
-                              }, 
-                              text: Text(
-                                '取消',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                            child: cancel_waiting_button,
                           )
                         ],
                       )
