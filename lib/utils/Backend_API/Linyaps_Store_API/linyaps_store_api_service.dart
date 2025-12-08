@@ -387,7 +387,7 @@ class LinyapsStoreApiService {
 
     // 初始化待返回应用抽象类列表, 以及遍历其的指针
     List <LinyapsPackageInfo> upgradable_apps = [];
-    int point=0;
+    int point=-1;
 
     // 遍历已安装的应用
     for (dynamic i  in app_info_get) {
@@ -419,8 +419,8 @@ class LinyapsStoreApiService {
       upgradable_apps.add(LinyapsPackageInfo(
         id: i['appId'], 
         name: i['name'], 
-        version: app_from_local_info==null ? '' : app_from_local_info.version, 
-        newVersion: i['version'],
+        version: i['version'],
+        curOldVersion: app_from_local_info==null ? '' : app_from_local_info.version, 
         description: i['description'], 
         arch: i['arch'],
         Icon: i['icon']
@@ -433,9 +433,7 @@ class LinyapsStoreApiService {
         (app) => app.id == i['appId'] && app.version == i['version'] && (app.downloadState == DownloadState.downloading || app.downloadState == DownloadState.waiting),
       );
       // 如果发现真的在下载队列中则更新其下载状态
-      if (
-        app_find_in_downloading_queue != null
-      ) {
+      if (app_find_in_downloading_queue != null) {
         upgradable_apps[point].downloadState = app_find_in_downloading_queue.downloadState;
       }
     }
@@ -505,8 +503,8 @@ class LinyapsStoreApiService {
           returned_upgradable_apps.add(LinyapsPackageInfo(
             id: i['appId'], 
             name: i['name'], 
-            version: app_local_info.version, 
-            newVersion: i['version'],
+            curOldVersion: app_local_info.version, 
+            version: i['version'],
             description: i['description'], 
             arch: i['arch']
           ));

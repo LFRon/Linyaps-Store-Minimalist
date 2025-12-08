@@ -30,10 +30,11 @@ class DownloadingAppListItem extends StatelessWidget {
   Future <void> cancelCurAppWaiting () async {
     // 设置当前传入的按钮引用对象的按下状态为已按下
     cancel_waiting_button.is_pressed.value = true;
-    // 将其从列表中移除
-    globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>().removeWhere(
+    // 将其从列表中移除, 并触发UI重构
+    globalAppState.downloadingAppsQueue.removeWhere(
       (app) => app.id == cur_app_info.id && app.version == cur_app_info.version
     );
+    globalAppState.update();
     return;
   }
 

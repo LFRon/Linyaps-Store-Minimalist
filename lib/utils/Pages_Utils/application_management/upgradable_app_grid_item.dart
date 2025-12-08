@@ -124,7 +124,7 @@ class UpgradableAppListItems {
                     ),
                     SizedBox(width: 20,),
                     Text(
-                      '版本升级信息: ${cur_upgradable_app_info.version} -> ${cur_upgradable_app_info.newVersion ?? "未知的新版本"}',
+                      '版本升级信息: ${cur_upgradable_app_info.curOldVersion ?? "未知的旧版本"} -> ${cur_upgradable_app_info.version}',
                       style: TextStyle(
                         fontSize: 20,
                       ),

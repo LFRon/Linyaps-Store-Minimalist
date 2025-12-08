@@ -23,6 +23,7 @@ class _DownloadingPageState extends State<DownloadingPage> with AutomaticKeepAli
   
   @override
   Widget build(BuildContext context) {
+    
     super.build(context);
 
     // 全局监听下载列表

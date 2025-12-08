@@ -20,7 +20,7 @@ class LinyapsPackageInfo {
   String arch;  // 应用架构
   // 应用版本信息
   String version;    // 必须返回当前版本
-  String? newVersion;  // 应用有无新版本, 如果有就加在这里
+  String? curOldVersion;  // 应用有无新版本, 如果有就把当前安装的旧版本放在这里
 
   // 下载状态
   DownloadState? downloadState;
@@ -71,8 +71,7 @@ class LinyapsPackageInfo {
     this.install_time,
     this.permissions,
     this.extensions,
-    // this.oldVersion,
-    this.newVersion,
+    this.curOldVersion,
     this.zhName,
     this.categoryName,
     this.createTime,
