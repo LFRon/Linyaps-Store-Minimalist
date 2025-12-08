@@ -24,6 +24,7 @@ class MyButton_RefreshUpgradableApps extends StatelessWidget {
     return MaterialButton(
       onPressed: onPressed,
       color: Colors.lightBlue.shade600,
+      elevation: 0,   // 设置不显示边缘阴影
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
