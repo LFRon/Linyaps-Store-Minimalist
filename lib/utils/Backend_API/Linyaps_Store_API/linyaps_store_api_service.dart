@@ -415,7 +415,7 @@ class LinyapsStoreApiService {
         (app) => app.id == i['appId'],
       );
 
-      // 2. 将待升级应用信息加入至待升级的应用列表中
+      // 2. 将待升级应用信息加入至待升级的应用列表中, 并后移指针
       upgradable_apps.add(LinyapsPackageInfo(
         id: i['appId'], 
         name: i['name'], 
