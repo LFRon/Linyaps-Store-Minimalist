@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: "HarmonyOS Sans SC",
+        fontFamily: 'HarmonyOS Sans SC',
         fontFamilyFallback: [
           'Noto Color Emoji',
         ],
