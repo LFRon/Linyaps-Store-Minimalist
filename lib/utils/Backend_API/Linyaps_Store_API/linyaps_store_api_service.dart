@@ -363,7 +363,7 @@ class LinyapsStoreApiService {
   // 返回应用可更新列表
   static Future <List<LinyapsPackageInfo>> get_upgradable_apps () async {
     // 指定具体响应API地址
-    String serverUrl = '$serverHost_Store/visit/getAppDetails';
+    String serverUrl = '$serverHost_Store/app/appCheckUpdate';
     ApplicationState globalAppState = Get.find<ApplicationState>();
     List <LinyapsPackageInfo> installed_apps = globalAppState.installedAppsList.cast<LinyapsPackageInfo>();
     List <LinyapsPackageInfo> downloading_apps = globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>();
@@ -372,9 +372,8 @@ class LinyapsStoreApiService {
     for (LinyapsPackageInfo i in installed_apps) {
       upload_installed_apps.add({
         'appId': i.id,
-        'channel': 'main',
-        'module': 'binary',
-        'arch': repo_arch
+        'arch': repo_arch,
+        'version': i.version
       });
     }
     // 创建Dio请求对象
@@ -386,63 +385,58 @@ class LinyapsStoreApiService {
     );  
     List <dynamic> app_info_get = response.data['data'];
 
-    // 初始化待返回应用抽象类列表
+    // 初始化待返回应用抽象类列表, 以及遍历其的指针
     List <LinyapsPackageInfo> upgradable_apps = [];
+    int point=0;
 
     // 遍历已安装的应用
-    for (LinyapsPackageInfo i in installed_apps) {
+    for (dynamic i  in app_info_get) {
       // 先尝试从商店获取当前应用信息,若没有则直接返回空对象
-      Map<String, dynamic>? app_info_from_store = app_info_get.firstWhereOrNull(
-        (app) => app['appId'] == i.id
-      );
       // 1. 如果找不到对应应用,或者发现是base/runtime则直接跳过
-      if (app_info_from_store != null && app_info_from_store['version'] != null) {
+      if (i != null && i['version'] != null) {
         if (
-          app_info_from_store['appId'] == 'org.deepin.base' || 
-          app_info_from_store['appId'] == 'org.deepin.foundation' ||
-          app_info_from_store['appId'] == 'org.deepin.Runtime' ||
-          app_info_from_store['appId'] == 'org.deepin.runtime.dtk' || 
-          app_info_from_store['appId'] == 'org.deepin.runtime.gtk4' ||
-          app_info_from_store['appId'] == 'org.deepin.base.flatpak.freedesktop' ||
-          app_info_from_store['appId'] == 'org.deepin.base.flatpak.kde' ||
-          app_info_from_store['appId'] == 'org.deepin.base.flatpak.gnome' ||
-          app_info_from_store['appId'] == 'org.deepin.base.wine' ||
-          app_info_from_store['appId'] == 'org.deepin.runtime.wine' ||
-          app_info_from_store['appId'] == 'org.deepin.runtime.qt5' ||
-          app_info_from_store['appId'] == 'org.deepin.runtime.webengine'
+          i['appId'] == 'org.deepin.base' || 
+          i['appId'] == 'org.deepin.foundation' ||
+          i['appId'] == 'org.deepin.Runtime' ||
+          i['appId'] == 'org.deepin.runtime.dtk' || 
+          i['appId'] == 'org.deepin.runtime.gtk4' ||
+          i['appId'] == 'org.deepin.base.flatpak.freedesktop' ||
+          i['appId'] == 'org.deepin.base.flatpak.kde' ||
+          i['appId'] == 'org.deepin.base.flatpak.gnome' ||
+          i['appId'] == 'org.deepin.base.wine' ||
+          i['appId'] == 'org.deepin.runtime.wine' ||
+          i['appId'] == 'org.deepin.runtime.qt5' ||
+          i['appId'] == 'org.deepin.runtime.webengine'
         ) continue;
       } else continue;
+
+      // 1. 先获取本地应用信息
+      LinyapsPackageInfo? app_from_local_info = installed_apps.firstWhereOrNull(
+        (app) => app.id == i['appId'],
+      );
+
+      // 2. 将待升级应用信息加入至待升级的应用列表中
+      upgradable_apps.add(LinyapsPackageInfo(
+        id: i['appId'], 
+        name: i['name'], 
+        version: app_from_local_info==null ? '' : app_from_local_info.version, 
+        newVersion: i['version'],
+        description: i['description'], 
+        arch: i['arch'],
+        Icon: i['icon']
+      ));
+      point++;
       
-      // 2. 如果发现待升级应用正好在下载队列中则设置其下载状态
+      // 3. 如果发现待升级应用正好在下载队列中则设置其下载状态
       // 先在下载队列里进行查询
       LinyapsPackageInfo? app_find_in_downloading_queue =  downloading_apps.cast<LinyapsPackageInfo>().firstWhereOrNull(
-        (app) => app.id == i.id && app.version == i.version && (app.downloadState == DownloadState.downloading || app.downloadState == DownloadState.waiting),
+        (app) => app.id == i['appId'] && app.version == i['version'] && (app.downloadState == DownloadState.downloading || app.downloadState == DownloadState.waiting),
       );
       // 如果发现真的在下载队列中则更新其下载状态
       if (
         app_find_in_downloading_queue != null
       ) {
-        i.downloadState = app_find_in_downloading_queue.downloadState;
-      }
-      // 如果发现有更高版本
-      if (
-        VersionCompare.isFirstGreaterThanSec(
-          app_info_from_store['version'],
-          i.version
-        )
-      ) {
-        // 存储最新版本应用的信息
-        upgradable_apps.add(
-          LinyapsPackageInfo(
-            id: i.id, 
-            name: i.name, 
-            version: i.version,
-            newVersion: app_info_from_store['version'],
-            description: i.description, 
-            arch: i.arch,
-            Icon: app_info_from_store['icon'],
-          ),
-        );
+        upgradable_apps[point].downloadState = app_find_in_downloading_queue.downloadState;
       }
     }
     return upgradable_apps;
