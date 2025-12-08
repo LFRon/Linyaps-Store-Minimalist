@@ -12,7 +12,6 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:single_touch_gesture/single_touch_gesture.dart';
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -75,23 +74,21 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return SingleTouchGestureWidget(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "HarmonyOS Sans SC",
-          fontFamilyFallback: [
-            'Noto Color Emoji',
-          ],
-          colorScheme: ColorScheme.light(
-            surface: Colors.grey.shade200,
-            primary: Colors.black,
-            onPrimary: Colors.grey.shade300,
-            secondary: Colors.white,
-          ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "HarmonyOS Sans SC",
+        fontFamilyFallback: [
+          'Noto Color Emoji',
+        ],
+        colorScheme: ColorScheme.light(
+          surface: Colors.grey.shade200,
+          primary: Colors.black,
+          onPrimary: Colors.grey.shade300,
+          secondary: Colors.white,
         ),
-        home: MainMiddlePage(),
       ),
+      home: MainMiddlePage(),
     );
   }
   
