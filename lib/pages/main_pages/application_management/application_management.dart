@@ -291,6 +291,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     WidgetsBinding.instance.removeObserver(this); 
     // 销毁定时器
     checkTimer?.cancel();
+    checkTimer = null;
     super.dispose();
   }
 
