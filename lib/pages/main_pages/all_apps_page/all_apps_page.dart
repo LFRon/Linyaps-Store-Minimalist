@@ -36,6 +36,9 @@ class _AllAppsPageState extends State<AllAppsPage> {
   // 用于确认是否有更多的应用在加载,初始化为否
   bool is_app_info_loading = false;
 
+  // 用于检查当前网络连接状态, 初始化为假
+  bool is_connection_good = false;
+
   // 声明滚动监听器,用于监听用户是否滚到了最底部
   late ScrollController _scrollController;
 
@@ -47,9 +50,6 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
   // 声明搜索栏的文本控制器
   final TextEditingController _controller_searchtext = TextEditingController();
-
-  // 用于检查当前网络连接状态,默认为不好x
-  bool is_connection_good = false;
 
   // 刷新网络连接状态的函数
   Future <void> update_connection_status () async {
@@ -161,9 +161,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
     // 先更新网络连接状态
     await update_connection_status();
     // 如果网络正常就更新应用列表
-    if (is_connection_good) {
-      await updateAppList();   
-    }
+    if (is_connection_good) await updateAppList();  
     return;
   }
 
@@ -320,45 +318,55 @@ class _AllAppsPageState extends State<AllAppsPage> {
             ),
             SizedBox(height: 20,),
             Flexible(
-              child: is_page_loaded
-                ? GridView.builder(
-                  controller: _scrollController,    // 增加监听滚动状态的指示器
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: gridViewCrossAxisCount,  // 根据窗口像素大小调整
-                    childAspectRatio: 1.0,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                  ),
-                  itemCount: cur_app_list.length,
-                  itemBuilder:(context, index) {
-                    return AppGridItem(
-                      cur_app: cur_app_list[index], 
-                      context: context, 
-                    ).items();
-                  },
-                )
-                : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: RepaintBoundary(
-                          child: CircularProgressIndicator(
-                            color: Colors.grey.shade500,
-                            strokeWidth: 5,
+              child: is_connection_good
+                ? is_page_loaded
+                  ? GridView.builder(
+                    controller: _scrollController,    // 增加监听滚动状态的指示器
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: gridViewCrossAxisCount,  // 根据窗口像素大小调整
+                      childAspectRatio: 1.0,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                    ),
+                    itemCount: cur_app_list.length,
+                    itemBuilder:(context, index) {
+                      return AppGridItem(
+                        cur_app: cur_app_list[index], 
+                        context: context, 
+                      ).items();
+                    },
+                  )
+                  : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: RepaintBoundary(
+                            child: CircularProgressIndicator(
+                              color: Colors.grey.shade500,
+                              strokeWidth: 5,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 30,),
-                      Text(
-                        "稍等一下,信息正在加载中哦 ~",
-                        style: TextStyle(
-                          fontSize: 22,
+                        SizedBox(height: 30,),
+                        Text(
+                          "稍等一下,信息正在加载中哦 ~",
+                          style: TextStyle(
+                            fontSize: 22,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  )
+                : Center(
+                  child: Text(
+                    '糟糕,网络连接好像丢掉了呢 :(',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                 ),
             ),
