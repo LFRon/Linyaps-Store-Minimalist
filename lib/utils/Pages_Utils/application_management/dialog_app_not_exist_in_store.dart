@@ -14,7 +14,7 @@ class MyDialog_AppNotExistInStore extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
      backgroundColor: Colors.grey.shade300,
-      titlePadding: EdgeInsets.only(top:20,bottom: 20),
+      titlePadding: EdgeInsets.only(top: 20, bottom: 20),
       title: Center(
         child: Text(
           "应用未找到",
