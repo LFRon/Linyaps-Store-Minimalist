@@ -318,8 +318,8 @@ class _AllAppsPageState extends State<AllAppsPage> {
             ),
             SizedBox(height: 20,),
             Flexible(
-              child: is_connection_good
-                ? is_page_loaded
+              child: is_page_loaded
+                ? is_connection_good
                   ? GridView.builder(
                     controller: _scrollController,    // 增加监听滚动状态的指示器
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -337,36 +337,36 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     },
                   )
                   : Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: RepaintBoundary(
-                            child: CircularProgressIndicator(
-                              color: Colors.grey.shade500,
-                              strokeWidth: 5,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30,),
-                        Text(
-                          "稍等一下,信息正在加载中哦 ~",
-                          style: TextStyle(
-                            fontSize: 22,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      '糟糕,网络连接好像丢掉了呢 :(',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
                   )
                 : Center(
-                  child: Text(
-                    '糟糕,网络连接好像丢掉了呢 :(',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey.shade600,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: RepaintBoundary(
+                          child: CircularProgressIndicator(
+                            color: Colors.grey.shade500,
+                            strokeWidth: 5,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30,),
+                      Text(
+                        "稍等一下,信息正在加载中哦 ~",
+                        style: TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ),
