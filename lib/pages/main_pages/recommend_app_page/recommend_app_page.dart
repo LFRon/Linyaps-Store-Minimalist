@@ -178,21 +178,25 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
               children: [
                 Stack(
                   children: [
-                    CarouselSlider(
-                      carouselController: carousel_controller,
-                      items: RecommendAppSliderItems(
-                        context: context,
-                        RecommendAppsList: RecommendAppsList, 
-                        height: height, 
-                        width: width,
-                      ).Items(), 
-                      // 设定连播图详情
-                      options: CarouselOptions(
-                        height: height*0.3,   // 设置高度
-                        autoPlay: true,
-                        autoPlayInterval: Duration(seconds: 7),
-                        autoPlayAnimationDuration: Duration(seconds: 3),
-                        enableInfiniteScroll: true,
+                    SizedBox(
+                      width: width*0.8,
+                      height: height*0.3,
+                      child: CarouselSlider(
+                        carouselController: carousel_controller,
+                        items: RecommendAppSliderItems(
+                          context: context,
+                          RecommendAppsList: RecommendAppsList, 
+                          height: height, 
+                          width: width,
+                        ).Items(), 
+                        // 设定连播图详情
+                        options: CarouselOptions(
+                          height: height*0.3,   // 设置高度
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 7),
+                          autoPlayAnimationDuration: Duration(seconds: 3),
+                          enableInfiniteScroll: true,
+                        ),
                       ),
                     ),
                 
