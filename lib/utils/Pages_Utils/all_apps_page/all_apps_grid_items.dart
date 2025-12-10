@@ -28,9 +28,6 @@ class AppGridItem {
       closedElevation: 0,
       closedColor: Theme.of(context).colorScheme.onPrimary,
       openColor: Theme.of(context).colorScheme.surface,
-      openShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
       openBuilder:(context, action) {
         return AppInfoPage(appId: cur_app.id);
       },

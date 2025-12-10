@@ -33,15 +33,12 @@ class MostDownloadAppGridItems {
               closedElevation: 0,
               closedColor: Theme.of(context).colorScheme.onPrimary,
               openColor: Theme.of(context).colorScheme.surface,
-              openShape: RoundedRectangleBorder(
+              closedShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               openBuilder: (context, action) {
                 return AppInfoPage(appId: appinfo.id);
               },
-              closedShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
               closedBuilder: (context, action) {
                 return Container(
                   height: 150,

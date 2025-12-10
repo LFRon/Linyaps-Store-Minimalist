@@ -42,17 +42,14 @@ class InstalledAppsGridItems {
       return OpenContainer(
         openElevation: 0,
         closedElevation: 0,
-        closedColor: Theme.of(context).colorScheme.onPrimary,
         openColor: Theme.of(context).colorScheme.surface,
-        openShape: RoundedRectangleBorder(
+        closedColor: Theme.of(context).colorScheme.onPrimary,
+        closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         openBuilder: (context, action) {
           return AppInfoPage(appId: installed_app_info[index].id);
         },
-        closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
         closedBuilder: (context, action) {
           return Container(
             height: 120,

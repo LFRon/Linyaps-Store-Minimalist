@@ -41,9 +41,6 @@ class RecommendAppSliderItems {
             openColor: Theme.of(context).colorScheme.surface,
             openElevation: 0,
             closedElevation: 0,
-            openShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
             openBuilder: (context, action) {
               return AppInfoPage(appId: app_info.id);
             },
