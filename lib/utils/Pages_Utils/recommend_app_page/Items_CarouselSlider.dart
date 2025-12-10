@@ -36,11 +36,13 @@ class RecommendAppSliderItems {
         SizedBox(
           width: width*0.5,
           height: height*0.3,
-          child: OpenContainer(
-            closedColor: Theme.of(context).colorScheme.surface,
-            openColor: Theme.of(context).colorScheme.surface,
+          child: OpenContainer(  
             openElevation: 0,
-            closedElevation: 0,
+            closedElevation: 0, 
+            openColor: Theme.of(context).colorScheme.surface,
+            closedColor: Theme.of(context).colorScheme.surface,
+            transitionDuration: Duration(milliseconds: 320),
+            transitionType: ContainerTransitionType.fadeThrough,
             openBuilder: (context, action) {
               return AppInfoPage(appId: app_info.id);
             },

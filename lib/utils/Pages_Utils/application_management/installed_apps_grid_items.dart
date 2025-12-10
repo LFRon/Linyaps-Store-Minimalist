@@ -44,6 +44,8 @@ class InstalledAppsGridItems {
         closedElevation: 0,
         openColor: Theme.of(context).colorScheme.surface,
         closedColor: Theme.of(context).colorScheme.onPrimary,
+        transitionDuration: Duration(milliseconds: 320),
+        transitionType: ContainerTransitionType.fadeThrough,
         closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

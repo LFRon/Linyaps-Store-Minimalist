@@ -28,6 +28,8 @@ class AppGridItem {
       closedElevation: 0,
       closedColor: Theme.of(context).colorScheme.onPrimary,
       openColor: Theme.of(context).colorScheme.surface,
+      transitionDuration: Duration(milliseconds: 320),
+      transitionType: ContainerTransitionType.fadeThrough,
       openBuilder:(context, action) {
         return AppInfoPage(appId: cur_app.id);
       },

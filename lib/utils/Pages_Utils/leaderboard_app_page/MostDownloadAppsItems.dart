@@ -31,8 +31,10 @@ class MostDownloadAppGridItems {
             child: OpenContainer(
               openElevation: 0,
               closedElevation: 0,
-              closedColor: Theme.of(context).colorScheme.onPrimary,
               openColor: Theme.of(context).colorScheme.surface,
+              closedColor: Theme.of(context).colorScheme.onPrimary,
+              transitionDuration: Duration(milliseconds: 320),
+              transitionType: ContainerTransitionType.fadeThrough,
               closedShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
