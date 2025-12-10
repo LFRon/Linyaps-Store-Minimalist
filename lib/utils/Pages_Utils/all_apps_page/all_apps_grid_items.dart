@@ -21,7 +21,7 @@ class AppGridItem {
     required this.context,
   });
 
-  Widget items () {
+  Widget item () {
     return Container(
       height: 150,
       width: 150,
