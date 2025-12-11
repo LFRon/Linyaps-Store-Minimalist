@@ -331,10 +331,13 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     ),
                     itemCount: cur_app_list.length,
                     itemBuilder:(context, index) {
-                      return AppGridItem(
-                        cur_app: cur_app_list[index], 
-                        context: context, 
-                      ).item();
+                      return Padding(
+                        padding: EdgeInsets.only(right: 13),
+                        child: AppGridItem(
+                          cur_app: cur_app_list[index], 
+                          context: context, 
+                        ).item(),
+                      );
                     },
                   )
                   : Center(
