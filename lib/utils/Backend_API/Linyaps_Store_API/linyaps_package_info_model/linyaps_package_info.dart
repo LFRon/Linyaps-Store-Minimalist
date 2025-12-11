@@ -18,9 +18,11 @@ class LinyapsPackageInfo {
   String name;  // 应用名称
   String description;    // 应用介绍信息
   String arch;  // 应用架构
-  // 应用版本信息
-  String version;    // 必须返回当前版本
+  String version;    // 应用版本信息
   String? curOldVersion;  // 应用有无新版本, 如果有就把当前安装的旧版本放在这里
+
+  // 当前应用对象是否仅在本地
+  bool? is_app_local_only;
 
   // 下载状态
   DownloadState? downloadState;
@@ -58,6 +60,7 @@ class LinyapsPackageInfo {
     required this.description,
     required this.arch,
     this.Icon,
+    this.is_app_local_only,
     // this.IconUpdated,
     this.repoName,
     this.downloadState,

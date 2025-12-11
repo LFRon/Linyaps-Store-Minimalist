@@ -133,4 +133,17 @@ class LinyapsAppManagerApi {
     return returnItems;
   }
 
+  // 获取当前应用安装信息的函数
+  // 若当前没有安装则返回空 (NULL)
+  static Future <LinyapsPackageInfo?> get_cur_installed_app_info (String appId) async {
+    // 先调用该静态类方法
+    List <dynamic> installed_apps_info_get = await get_installed_apps([]);
+    // 然后拿取其第0位获取安装信息
+    List <LinyapsPackageInfo> installed_apps_info = installed_apps_info_get[0];
+    LinyapsPackageInfo? cur_app_info_local = installed_apps_info.firstWhereOrNull(
+      (app) => app.id == appId,
+    );
+    return cur_app_info_local;
+  }
+
 }

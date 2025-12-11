@@ -160,35 +160,83 @@ class AppInfoViewState extends State<AppInfoView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "版本号: ${app_info.version}",
-                style: TextStyle(
-                  fontSize: 15,
+
+              Expanded(
+                flex: 1,
+                child: Text(
+                  "版本号: ${app_info.version}",
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
                 ),
               ),
-              Text("分发模式: ${app_info.channel}"),
-              Text("下载量: ${app_info.installCount==null?'未知':app_info.installCount}"),
-              widget.is_cur_version_installed
-                ? SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: button_uninstall,
-                )
-                : SizedBox(
-                  height: 30,
-                  width: 80,
+
+              Expanded(
+                flex: 1,
+                child: widget.app_info.is_app_local_only != null
+                ? widget.app_info.is_app_local_only! == true
+                  ? Text(
+                    "分发模式: 用户本地安装",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  )
+                  : Text(
+                    "分发模式: 未知",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  )
+                : Row(
+                  children: [
+                    Text(
+                      "分发模式: ${app_info.channel}",
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(width: 15,),
+                    Text(
+                      "下载量: ${app_info.installCount==null?'未知':app_info.installCount}",
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
                 ),
-              widget.is_cur_version_installed
-                ? SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: button_launchapp,
-                )
-                : SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: button_install,
-                ),
+              ),
+             
+              // 如果应用安装了,则显示卸载与启动按钮
+              Expanded(
+                flex: 1,
+                child: widget.is_cur_version_installed
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        width: 80,
+                        child: button_uninstall,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 80,
+                        child: button_launchapp,
+                      )
+                    ],
+                  )
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        width: 80,
+                        child: button_install,
+                      ),
+                    ],
+                  ),
+              ),
+
             ],
           ),
         ),
