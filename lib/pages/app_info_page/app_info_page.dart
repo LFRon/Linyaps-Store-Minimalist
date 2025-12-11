@@ -222,6 +222,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);  
     // 再移除定时器
     checkTimer?.cancel();
+    checkTimer = null;
   }
 
   @override
