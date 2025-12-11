@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:linglong_store_flutter/pages/app_info_page/AppListView/app_list_view.dart';
+import 'package:linglong_store_flutter/pages/app_info_page/AppListView/app_info_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_App_Management_API/linyaps_app_manager.dart';
@@ -423,7 +423,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                           itemBuilder: (context,index) {
                                             return Padding(
                                               padding: EdgeInsets.only(top:5.0,bottom: 5.0),
-                                              child: AppInfoView(
+                                              child: AppInfoListView(
                                                 app_info: cur_app_info_list![index],
                                                 downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
                                                 is_cur_version_installed: (cur_installed_version == null) ? false : (cur_app_info_list![index].version == cur_installed_version!) ? true : false,

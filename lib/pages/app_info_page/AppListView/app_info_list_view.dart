@@ -11,7 +11,7 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/install_butt
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/launch_app_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';
 
-class AppInfoView extends StatefulWidget {
+class AppInfoListView extends StatefulWidget {
 
   // 声明需要当前应用信息
   LinyapsPackageInfo app_info;
@@ -29,7 +29,7 @@ class AppInfoView extends StatefulWidget {
   // 声明需要安装应用的回调函数
   Future <void> Function(String appId,MyButton_FatalWarning button_uninstall) uninstall_app;
 
-  AppInfoView({
+  AppInfoListView({
     super.key,
     required this.install_app,
     required this.uninstall_app,
@@ -39,10 +39,10 @@ class AppInfoView extends StatefulWidget {
   });
 
   @override
-  State<AppInfoView> createState() => AppInfoViewState();
+  State<AppInfoListView> createState() => AppInfoListViewState();
 }
 
-class AppInfoViewState extends State<AppInfoView> {
+class AppInfoListViewState extends State<AppInfoListView> {
 
   // 声明卸载按钮对象
   late MyButton_FatalWarning button_uninstall;
