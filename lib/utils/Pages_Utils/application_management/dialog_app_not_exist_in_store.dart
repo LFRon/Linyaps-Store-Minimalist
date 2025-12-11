@@ -32,7 +32,7 @@ class MyDialog_AppNotExistInStore extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                "哎呀,你装的这个应用貌似没有上架到商店哦 ~",
+                "哎呀, 您安装的这个应用貌似没有上架到商店哦 ~",
                 style: TextStyle(
                   fontSize: 20,
                 ),
