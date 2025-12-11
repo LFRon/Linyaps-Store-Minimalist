@@ -183,7 +183,7 @@ class LinyapsStoreApiService {
    // 获取从startPage页开始,一页数量为pageSize里的应用信息,之所以要加入app_list是因为每次获取到的应用信息都是叠加的
    // 举个例子,startPage = 2,pageSize = 100就是说明显示从第101个到第200个应用
    ///
-  static Future <List <LinyapsPackageInfo>> get_app_list (int startPage,int pageSize) async {
+  static Future <List <LinyapsPackageInfo>> get_all_app_list (int startPage,int pageSize) async {
     String serverUrl = "$serverHost_Store/visit/getSearchAppList";
     Dio dio = Dio();    // 新建Dio请求对象
     Map <String,dynamic> upload_data = {    // 准备请求数据
