@@ -27,6 +27,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
   // 声明并初始化应该加载的页数
   int curPageStart = 1;
+  
   // 声明每次加载多少的对象
   int curPageSize = 100;
 
