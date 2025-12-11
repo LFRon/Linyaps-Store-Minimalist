@@ -39,11 +39,14 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   // 启用页面监视定时器
   Timer? checkTimer;
 
-  // 声明网络连接的状态对象,默认为假
+  // 声明网络连接的状态对象,默认状态为假
   bool is_connection_good = false;
 
   // 声明页面加载状态,默认为没加载完
   bool is_page_loaded = false;
+
+  // 声明本地应用信息加载状态,默认状态为假
+  bool is_app_local_info_loading = false;
 
   // 声明存储当前应用在商店的信息列表
   late List <LinyapsPackageInfo>? cur_app_info_list;
@@ -60,6 +63,22 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 更新页面具体变量信息
     if (mounted) setState(() {
       is_connection_good = is_connection_good_get;
+    });
+    return;
+  }
+
+  // 设置本地应用信息正在更新的开关方法
+  Future <void> setAppLocalInfoLoading () async {
+    if (mounted) setState(() {
+      is_app_local_info_loading = true;
+    });
+    return;
+  }
+
+  // 设置本地应用信息没有更新/更新完成的开关方法
+  Future <void> setAppLocalInfoLoaded () async {
+    if (mounted) setState(() {
+      is_app_local_info_loading = false;
     });
     return;
   }
@@ -182,10 +201,12 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
       // 先检连接状态
       await get_connection_status();
       if (is_connection_good) {
-        // 先更新应用具体信息
+        // 网络状态良好则更新应用具体信息,并更新对应的状态开关
         if (await getAppDetails(widget.appId)){
+          await setAppLocalInfoLoading();
           // 如果商店中有这个应用再更新应用具体安装情况
           await update_app_installed_info(widget.appId);
+          await setAppLocalInfoLoaded();
           // 发送全局广播页面加载完成
           await set_page_loaded();
         }
@@ -199,7 +220,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 开启定时器定时检查
     checkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
       if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused || WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive) {
-        if (is_page_loaded) {
+        if (is_page_loaded && !is_app_local_info_loading) {
           // 进行刷新本地安装的应用信息
           await appState.updateInstalledAppsList_Online();
           await update_app_installed_info(widget.appId);
