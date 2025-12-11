@@ -158,7 +158,6 @@ class AppInfoListViewState extends State<AppInfoListView> {
         child: Padding(
           padding: const EdgeInsets.only(top:8.0,bottom: 8.0,left: 8.0,right: 15.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
 
               Expanded(
@@ -206,6 +205,10 @@ class AppInfoListViewState extends State<AppInfoListView> {
                 ),
               ),
              
+              FittedBox(
+                child: SizedBox(width: 40,),
+              ),
+
               // 如果应用安装了,则显示卸载与启动按钮
               Expanded(
                 flex: 1,
