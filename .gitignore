@@ -33,6 +33,9 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Flutter Pub Cache
+pubspec.lock
+
 # Symbolication related
 app.*.symbols
 
