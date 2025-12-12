@@ -4,7 +4,7 @@ import 'package:linglong_store_flutter/pages/main_pages/about_page/about_page.da
 import 'package:linglong_store_flutter/pages/main_pages/all_apps_page/all_apps_page.dart';
 import 'package:linglong_store_flutter/pages/main_pages/application_management/application_management.dart';
 import 'package:linglong_store_flutter/pages/main_pages/leaderboard_app_page/leaderboard_page.dart';
-import 'package:linglong_store_flutter/pages/main_pages/my_side_menu/my_side_menu.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/my_side_menu/my_side_menu.dart';
 import 'package:linglong_store_flutter/pages/main_pages/recommend_app_page/recommend_app_page.dart';
 
 class MainMiddlePage extends StatefulWidget {
