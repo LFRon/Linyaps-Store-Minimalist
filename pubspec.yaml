@@ -89,9 +89,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: "HarmonyOS Sans SC"
+     - family: "VIVO Sans SC"
        fonts:
-         - asset: assets/fonts/HarmonyOS_Sans_SC_Regular.ttf
+         - asset: assets/fonts/VIVO_Sans_SC.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
