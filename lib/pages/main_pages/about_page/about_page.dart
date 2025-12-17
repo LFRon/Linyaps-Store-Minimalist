@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/main.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/launch_url_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/launch_url_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {

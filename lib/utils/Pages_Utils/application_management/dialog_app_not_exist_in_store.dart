@@ -4,7 +4,7 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/confirm_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
 
 class MyDialog_AppNotExistInStore extends StatelessWidget {
 

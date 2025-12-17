@@ -4,7 +4,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/confirm_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InstallLinyapsPage extends StatefulWidget {

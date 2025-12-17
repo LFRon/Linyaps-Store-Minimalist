@@ -4,7 +4,7 @@
 // ignore_for_file: camel_case_types, file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/confirm_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyDialog_AppHaveUpdate extends StatelessWidget {

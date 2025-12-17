@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:linglong_store_flutter/pages/app_info_page/AppListView/app_info_list_view.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/AppListView/app_info_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_App_Management_API/linyaps_app_manager.dart';
@@ -15,9 +15,10 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/back_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/install_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/fatal_warning_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_color/my_color.dart';
 
 class AppInfoPage extends StatefulWidget {

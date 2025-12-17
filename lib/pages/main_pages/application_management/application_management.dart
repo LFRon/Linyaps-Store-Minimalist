@@ -15,9 +15,9 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/installed_apps_grid_items.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/upgradable_app_grid_item.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/refresh_upgradable_apps_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_all_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/my_buttons/upgrade_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/refresh_upgradable_apps_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/upgrade_all_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/upgrade_button.dart';
 
 class AppsManagementPage extends StatefulWidget {
 
