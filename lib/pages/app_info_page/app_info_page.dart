@@ -14,12 +14,14 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_App_Management_
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/sendwish_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/my_color/my_color.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppInfoPage extends StatefulWidget {
 
@@ -57,6 +59,12 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   // 声明存储当前应用安装的第几个版本,默认为字符串为空代表没有安装
   String? cur_installed_version;
+
+  // 访问deepin论坛玲珑专版跳转链接
+  Future <void> visitLinyapsBBS () async {
+    Uri linyaps_bbs_uri = Uri.parse('https://bbs.deepin.org.cn/module/detail/230');
+    await launchUrl(linyaps_bbs_uri);
+  }
 
   // 获取当前网络具体状况函数
   Future <void> get_connection_status () async {
@@ -413,6 +421,30 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                           style: TextStyle(
                                             color: Colors.grey.shade800,
                                             fontSize: 21,
+                                          ),
+                                        ),
+                                        SizedBox(height: height*0.04,),
+                                        Text(
+                                          "版本旧了或者有别的应用需求?",
+                                          style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 21,
+                                          ),
+                                        ),
+                                        SizedBox(height: 7,),
+                                        SizedBox(
+                                          height: 50,
+                                          width: 230,
+                                          child: MyButton_SendWish(
+                                            onPressed: () async {
+                                              await visitLinyapsBBS();
+                                            }, 
+                                            text: Text(
+                                              '前往论坛发送你的心愿',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
