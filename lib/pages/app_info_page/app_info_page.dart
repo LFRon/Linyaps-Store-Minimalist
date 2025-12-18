@@ -528,23 +528,14 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                                 is_cur_version_installed:
                                                     (cur_installed_version == null)
                                                     ? false
-                                                    : (cur_app_info_list![index].version == cur_installed_version!)
-                                                      ? true
-                                                      : false,
-                                                install_app:
-                                                    (
-                                                      appInfo,
-                                                      button_install,
-                                                    ) async {
-                                                      await install_app(
-                                                        appInfo,
-                                                        button_install,
-                                                      );
-                                                    },
-                                                uninstall_app: (
-                                                  appId,
-                                                  button_uninstall,
-                                                ) async {
+                                                    : (cur_app_info_list![index].version == cur_installed_version!) ? true : false,
+                                                install_app: (appInfo,button_install,) async {
+                                                  await install_app(
+                                                    appInfo,
+                                                    button_install,
+                                                  );
+                                                },
+                                                uninstall_app: (appId, button_uninstall) async {
                                                   await uninstall_app(
                                                     appId,
                                                     button_uninstall,
