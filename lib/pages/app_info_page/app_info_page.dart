@@ -526,9 +526,9 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                                 app_info: cur_app_info_list![index],
                                                 downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
                                                 is_cur_version_installed:
-                                                    (cur_installed_version == null)
-                                                    ? false
-                                                    : (cur_app_info_list![index].version == cur_installed_version!) ? true : false,
+                                                  (cur_installed_version == null)
+                                                  ? false
+                                                  : (cur_app_info_list![index].version == cur_installed_version!) ? true : false,
                                                 install_app: (appInfo,button_install,) async {
                                                   await install_app(
                                                     appInfo,
