@@ -23,13 +23,13 @@ class LinyapsAppManagerApi {
   // 第0项为列表本体, 第1项为列表是否被更新
   // 需要加入already_get_list是让重新扫描已安装应用时先获取当前已经安装的应用信息
   // 然后没有的再往里加
-  static  Future <List<dynamic>> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
+  static  Future <List<dynamic>?> get_installed_apps (List <LinyapsPackageInfo> already_get_list) async {
     
     // 先异步获取玲珑本地信息
     dynamic linyapsLocalInfo = await LinyapsCliHelper.get_linyaps_all_local_info();
     
     // 遇到没有安装玲珑或者没安装应用等情况,直接返回空列表
-    if (linyapsLocalInfo == null) return [];
+    if (linyapsLocalInfo == null) return Future.value(null);
     
     // 初始化待返回已安装应用的临时对象
     List<LinyapsPackageInfo> installedItems = [];
@@ -137,7 +137,9 @@ class LinyapsAppManagerApi {
   // 若当前没有安装则返回空 (NULL)
   static Future <LinyapsPackageInfo?> get_cur_installed_app_info (String appId) async {
     // 先调用该静态类方法
-    List <dynamic> installed_apps_info_get = await get_installed_apps([]);
+    List <dynamic>? installed_apps_info_get = await get_installed_apps([]);
+    // 加入空检查
+    if (installed_apps_info_get == null) return null;
     // 然后拿取其第0位获取安装信息
     List <LinyapsPackageInfo> installed_apps_info = installed_apps_info_get[0];
     LinyapsPackageInfo? cur_app_info_local = installed_apps_info.firstWhereOrNull(

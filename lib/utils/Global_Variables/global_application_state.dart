@@ -69,7 +69,9 @@ class ApplicationState extends GetxController {
   // 走后端应用管理API, 进行全局实例变量的更新
   // 返回值是否更新, true为更新了, false为没有
   Future <bool> updateInstalledAppsList_Online () async {
-    List <dynamic> get_installed_info = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
+    List <dynamic>? get_installed_info = await LinyapsAppManagerApi.get_installed_apps(installedAppsList.cast<LinyapsPackageInfo>());
+    // 加入空检查, 如果用户并未初始化玲珑环境则直接false
+    if (get_installed_info == null) return false;
     List <LinyapsPackageInfo> get_installed_apps = get_installed_info[0];
     // 更新对应变量并触发页面重构
     if (get_installed_info[1]) {

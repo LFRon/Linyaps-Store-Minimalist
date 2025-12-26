@@ -367,6 +367,10 @@ class LinyapsStoreApiService {
     ApplicationState globalAppState = Get.find<ApplicationState>();
     List <LinyapsPackageInfo> installed_apps = globalAppState.installedAppsList.cast<LinyapsPackageInfo>();
     List <LinyapsPackageInfo> downloading_apps = globalAppState.downloadingAppsQueue.cast<LinyapsPackageInfo>();
+    
+    // 加入空检查, 如果安装的应用为空则直接返回空列表
+    if (installed_apps.isEmpty) return [];
+
     // 初始化待提交应用
     List <Map<String, String>> upload_installed_apps = [];
     for (LinyapsPackageInfo i in installed_apps) {
@@ -383,6 +387,7 @@ class LinyapsStoreApiService {
       serverUrl,
       data: jsonEncode(upload_installed_apps),
     );  
+
     List <dynamic> app_info_get = response.data['data'];
 
     // 初始化待返回应用抽象类列表, 以及遍历其的指针
@@ -390,7 +395,7 @@ class LinyapsStoreApiService {
     int point=-1;
 
     // 遍历已安装的应用
-    for (dynamic i  in app_info_get) {
+    for (dynamic i in app_info_get) {
       // 先尝试从商店获取当前应用信息,若没有则直接返回空对象
       // 1. 如果找不到对应应用,或者发现是base/runtime则直接跳过
       if (i != null && i['version'] != null) {

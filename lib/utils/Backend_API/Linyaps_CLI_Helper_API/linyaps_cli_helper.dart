@@ -44,7 +44,7 @@ class LinyapsCliHelper {
     // 先获取玲珑读取的信息
     Map<String, dynamic>? linyaps_info = await get_linyaps_all_local_info();
     // 如果用户未安装玲珑则直接跟没有安装一样返回
-    if (linyaps_info == null) return null;
+    if (linyaps_info == null) return Future.value(null);
     LinyapsPackageInfo installed_app;
     int i=0;  // 用于下方循环查找应用
     for (i=0;i<linyaps_info['layers'].length;i++) {

@@ -503,6 +503,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                               ),
                             ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
                                 "已安装的应用:",
@@ -512,24 +513,39 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: height*0.02,right: width*0.01),
-                            child: GridView(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: gridViewCrossAxisCount,
-                                mainAxisSpacing: height * 0.02,
-                                crossAxisSpacing: width * 0.02,
-                              ), 
-                              children: InstalledAppsGridItems(
-                                installed_app_info: appState.installedAppsList.cast<LinyapsPackageInfo>(), 
-                                context: context, 
-                                height: height, 
-                                width: width,
-                              ).items(),
+                          appState.installedAppsList.isNotEmpty
+                            ? Padding(
+                              padding: EdgeInsets.only(top: height*0.02,right: width*0.01),
+                              child: GridView(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: gridViewCrossAxisCount,
+                                  mainAxisSpacing: height * 0.02,
+                                  crossAxisSpacing: width * 0.02,
+                                ), 
+                                children: InstalledAppsGridItems(
+                                  installed_app_info: appState.installedAppsList.cast<LinyapsPackageInfo>(), 
+                                  context: context, 
+                                  height: height, 
+                                  width: width,
+                                ).items(),
+                              )
+                            )
+                            : Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '哎呀, 看上去你还没有安装任何应用呢 ~',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey.shade600
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
                         ],
                       ),
                     ],
