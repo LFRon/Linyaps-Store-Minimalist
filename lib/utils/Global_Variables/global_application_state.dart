@@ -16,6 +16,9 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linya
 
 class ApplicationState extends GetxController {
 
+  // 是否开启西装主题的状态开关
+  RxBool isSuitThemeEnabled = false.obs;
+
   // 初始化系统架构和商店返回的架构信息
   RxString os_arch = ''.obs;
   RxString repo_arch = ''.obs;

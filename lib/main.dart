@@ -4,6 +4,7 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
 import 'dart:io';
+import 'package:args/args.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_single_instance/flutter_single_instance.dart';
@@ -15,9 +16,10 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
 
-void main() async {
+void main(List<String> args) async {
 
   WidgetsFlutterBinding.ensureInitialized();   // 确保程序主窗口已加载
+
   if (!kIsWasm && !kIsWeb) {
 
     // 设置窗口参数
@@ -36,9 +38,21 @@ void main() async {
   Get.put(ApplicationState());
   ApplicationState appGlobalInfo = Get.find<ApplicationState>();
 
-  // 启动时更新系统架构信息
+  // 显示UI前先更新系统架构信息
   await appGlobalInfo.getUnameArch();
   await appGlobalInfo.getLinyapsStoreApiArch();
+
+  // 解析命令行参数
+  ArgParser parser = ArgParser();
+  parser.addFlag('suit',defaultsTo: false, help: '是否开启首页西装主题');
+  ArgResults results = parser.parse(args);
+
+  // 如果有debug参数则开启调试模式
+  if (results['suit'] == true) {
+    appGlobalInfo.isSuitThemeEnabled.value = true;
+  } else {
+    appGlobalInfo.isSuitThemeEnabled.value = false;
+  }
 
   // 启动应用及控制器
   runApp(
