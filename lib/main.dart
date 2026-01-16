@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'VIVO Sans SC',
+        fontFamily: 'Noto Sans SC',
         fontFamilyFallback: [
           'Noto Color Emoji',
         ],
