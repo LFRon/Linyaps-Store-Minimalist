@@ -51,6 +51,7 @@ class LinyapsCliHelper {
       // 如果找到了应用,且显示未被删除则确认这是唯一安装的应用
       if (linyaps_info['layers'][i]['info']['id']==appId && linyaps_info['layers'][i]['deleted']==null) {
         installed_app = LinyapsPackageInfo(
+          kind: linyaps_info['layers'][i]['info']['kind'],
           id: linyaps_info['layers'][i]['info']['id'], 
           name: linyaps_info['layers'][i]['info']['name'], 
           repoName: linyaps_info['layers'][i]['repo'],

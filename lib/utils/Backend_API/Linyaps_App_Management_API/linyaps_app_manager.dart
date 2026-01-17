@@ -61,6 +61,7 @@ class LinyapsAppManagerApi {
       if (already_get_list.isEmpty) {
         installedItems.add(
           LinyapsPackageInfo(
+            kind: i['info']['kind'],
             id: i['info']['id'], 
             name: i['info']['name'], 
             version: i['info']['version'], 
@@ -80,6 +81,7 @@ class LinyapsAppManagerApi {
         if (existingApp == null) {
           installedItems.add(
             LinyapsPackageInfo(
+              kind: i['info']['kind'],
               id: i['info']['id'], 
               name: i['info']['name'], 
               version: i['info']['version'], 
@@ -95,6 +97,7 @@ class LinyapsAppManagerApi {
           if (existingApp.version != i['info']['version']) {
             installedItems.add(
               LinyapsPackageInfo(
+                kind: i['info']['kind'],
                 id: i['info']['id'], 
                 name: i['info']['name'], 
                 version: i['info']['version'], 
@@ -107,6 +110,7 @@ class LinyapsAppManagerApi {
           } else {
             installedItems.add(
               LinyapsPackageInfo(
+                kind: i['info']['kind'],
                 id: i['info']['id'], 
                 name: i['info']['name'], 
                 version: existingApp.version, 

@@ -44,6 +44,7 @@ class LinyapsStoreApiService {
     for (int i=0;i<response.data['data'].length;i++) {
       WelcomeCarouseApps.add(
         LinyapsPackageInfo(
+          kind: response.data['data'][i]['kind'] ?? 'app',
           id: response.data['data'][i]['appId'], 
           repoName: response.data['data'][i]['repoName'],
           name: response.data['data'][i]['zhName'], 
@@ -81,6 +82,7 @@ class LinyapsStoreApiService {
     for (dynamic i in response.data['data']['records']) {
       welcome_app_list.add(
         LinyapsPackageInfo(
+          kind: i['kind'] ?? 'app',
           id: i['appId'], 
           repoName: i['repoName'],
           name: i['zhName'], 
@@ -120,6 +122,7 @@ class LinyapsStoreApiService {
     for (int i=0;i<response.data['data']['records'].length;i++) {
       newest_app_list.add(
         LinyapsPackageInfo(
+          kind: response.data['data']['records'][i]['kind'] ?? 'app',
           id: response.data['data']['records'][i]['appId'], 
           repoName: response.data['data']['records'][i]['repoName'],
           name: response.data['data']['records'][i]['zhName'], 
@@ -160,6 +163,7 @@ class LinyapsStoreApiService {
     for (i in response.data['data']['records']) {
       most_downloaded_app_list.add(
         LinyapsPackageInfo(
+          kind: i['kind'] ?? 'app',
           id: i['appId'], 
           repoName: i['repoName'],
           name: i['zhName'], 
@@ -207,6 +211,7 @@ class LinyapsStoreApiService {
     for (dynamic i in response.data['data']['records']) {
       app_list.add(
         LinyapsPackageInfo(
+          kind: i['kind'] ?? 'app',
           id: i['appId'], 
           repoName: i['repoName'],
           name: i['zhName'], 
@@ -249,6 +254,7 @@ class LinyapsStoreApiService {
     for (dynamic i in search_info_get) {
       returnItems.add(
         LinyapsPackageInfo(
+          kind: i['kind'] ?? 'app',
           id: i['id']==null ? i['appId'] : i['id'], 
           name: i['name'], 
           version: i['version'], 
@@ -294,6 +300,7 @@ class LinyapsStoreApiService {
     
     // 进行解析并返回应用详情
     return LinyapsPackageInfo(
+      kind: app_info_get['kind'] ?? 'app',
       id: app_info_get['appId'], 
       name: app_info_get['name'], 
       arch: repo_arch,
@@ -337,6 +344,7 @@ class LinyapsStoreApiService {
       LinyapsPackageInfo app_local_info = installed_apps.firstWhere(
         (app) => app.id == i['appId'],
         orElse: () => LinyapsPackageInfo(
+          kind: '',
           id: '', 
           name: '', 
           version: '', 
@@ -347,6 +355,7 @@ class LinyapsStoreApiService {
       // 依次加入元素
       returnItems.add(
         LinyapsPackageInfo(
+          kind: i['kind'] ?? 'app',
           id: i['appId'], 
           name: app_local_info.name, 
           version: app_local_info.version, 
@@ -422,6 +431,7 @@ class LinyapsStoreApiService {
 
       // 2. 将待升级应用信息加入至待升级的应用列表中, 并后移指针
       upgradable_apps.add(LinyapsPackageInfo(
+        kind: i['kind'],
         id: i['appId'], 
         name: i['name'], 
         version: i['version'],
@@ -479,6 +489,7 @@ class LinyapsStoreApiService {
       LinyapsPackageInfo app_local_info = installed_apps.firstWhere(
         (app) => app.id == i['appId'],
         orElse: () => LinyapsPackageInfo(
+          kind: '',
           id: '', 
           name: '', 
           version: '', 
@@ -490,6 +501,7 @@ class LinyapsStoreApiService {
       // 先依次加入元素至本地应用列表
       returned_installed_apps.add(
         LinyapsPackageInfo(
+          kind: i['kind'],
           id: i['appId'], 
           name: app_local_info.name, 
           version: app_local_info.version, 
@@ -505,14 +517,17 @@ class LinyapsStoreApiService {
           i['version'], 
           app_local_info.version
         )) {
-          returned_upgradable_apps.add(LinyapsPackageInfo(
-            id: i['appId'], 
-            name: i['name'], 
-            curOldVersion: app_local_info.version, 
-            version: i['version'],
-            description: i['description'], 
-            arch: i['arch']
-          ));
+          returned_upgradable_apps.add(
+            LinyapsPackageInfo(
+              kind: i['kind'],
+              id: i['appId'], 
+              name: i['name'], 
+              curOldVersion: app_local_info.version, 
+              version: i['version'],
+              description: i['description'], 
+              arch: i['arch']
+            )
+          );
         }
       }
     }
@@ -553,6 +568,7 @@ class LinyapsStoreApiService {
     for (dynamic i in app_info_get) {
       cur_app_info.add(
         LinyapsPackageInfo(
+          kind: i['kind'] ?? 'app',
           id: i['appId'] ?? '', 
           devName: i['devName'],
           name: i['name'], 

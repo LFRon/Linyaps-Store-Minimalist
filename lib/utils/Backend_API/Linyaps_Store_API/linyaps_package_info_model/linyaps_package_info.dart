@@ -14,6 +14,7 @@ enum DownloadState {
 class LinyapsPackageInfo {
 
   // 声明玲珑应用必须有的信息
+  String kind;    // 应用的分类 (是app,base还是runtime,extension等)
   String id;   // 应用包名
   String name;  // 应用名称
   String description;    // 应用介绍信息
@@ -31,7 +32,6 @@ class LinyapsPackageInfo {
   // int? IconUpdated;     // 应用图标是否更新
   String? repoName;    // 应用所在源名称
   String? channel;   // 应用所在渠道
-  String? kind;    // 应用所在分类
   String? module;    // 所用的玲珑模块
   String? size;    // 安装包文件大小
   String? base;   // 应用base依赖信息
@@ -54,6 +54,7 @@ class LinyapsPackageInfo {
   String? user;     // 用户名(未知用途)
   String? devName;    // 维护者名称
   LinyapsPackageInfo ({
+    required this.kind,
     required this.id,
     required this.name,
     required this.version,
@@ -65,7 +66,6 @@ class LinyapsPackageInfo {
     this.repoName,
     this.downloadState,
     this.channel,
-    this.kind,
     this.module,
     this.size,
     this.base,
