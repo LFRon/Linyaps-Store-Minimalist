@@ -10,8 +10,8 @@
 
 当前使用的技术栈:
 
-Flutter版本: 3.38.5
+Flutter版本: 3.38.7
 
-Dart版本: 3.10.4
+Dart版本: 3.10.7
 
 宿主Linux发行版: Fedora GNU/Linux 43 x86-64
