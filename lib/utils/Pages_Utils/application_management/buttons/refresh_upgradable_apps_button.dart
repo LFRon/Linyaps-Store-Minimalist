@@ -1,4 +1,4 @@
-// 返回按钮设计
+// 刷新待升级应用的按钮设计
 
 // 关闭VSCode非必要报错
 // ignore_for_file: camel_case_types, must_be_immutable
