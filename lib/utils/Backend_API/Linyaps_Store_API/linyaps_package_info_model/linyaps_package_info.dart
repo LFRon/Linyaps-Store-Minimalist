@@ -28,6 +28,9 @@ class LinyapsPackageInfo {
   // 当前应用对象是否仅在本地
   bool? is_app_local_only;
 
+  // 应用截图信息
+  List <String>? screenshots;
+
   // 下载状态
   DownloadState? downloadState;
 
@@ -66,6 +69,7 @@ class LinyapsPackageInfo {
     this.Icon,
     this.is_app_local_only,
     this.descInfo,
+    this.screenshots,
     // this.IconUpdated,
     this.repoName,
     this.downloadState,

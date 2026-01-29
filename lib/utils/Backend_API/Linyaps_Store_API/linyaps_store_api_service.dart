@@ -584,6 +584,8 @@ class LinyapsStoreApiService {
           descInfo: i['descInfo'],
           arch: i['arch'],
           Icon: i['icon'],  
+          // 这里强制将接收到的List<dynamic>转换成List<String>规范截图链接存储
+          screenshots: i['appScreenshotList'].cast<String>(),  
         ),
       );
     }
