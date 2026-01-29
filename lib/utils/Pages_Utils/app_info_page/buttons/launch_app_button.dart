@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:yaru/widgets.dart';
 
 class MyButton_LaunchApp extends StatefulWidget {
 
@@ -48,7 +49,7 @@ class _MyButton_LaunchAppState extends State<MyButton_LaunchApp> {
             child: SizedBox(
               height: widget.indicator_width,
               width: widget.indicator_width,
-              child: CircularProgressIndicator(
+              child: YaruCircularProgressIndicator(
                 color: Colors.white,
                 strokeWidth:2.5,     // 设置加载条宽度
               ),

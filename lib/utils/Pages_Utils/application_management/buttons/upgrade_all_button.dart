@@ -5,6 +5,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:yaru/widgets.dart';
 
 class MyButton_UpgradeAll extends StatefulWidget {
 
@@ -49,7 +50,7 @@ class _MyButton_UpgradeAllState extends State<MyButton_UpgradeAll> {
             child: SizedBox(
               height: widget.indicator_width,
               width: widget.indicator_width,
-              child: CircularProgressIndicator(
+              child: YaruCircularProgressIndicator(
                 color: Colors.white,
                 strokeWidth:2.5,     // 设置加载条宽度
               ),
