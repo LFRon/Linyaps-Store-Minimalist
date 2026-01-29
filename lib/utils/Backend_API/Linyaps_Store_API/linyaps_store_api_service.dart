@@ -566,6 +566,17 @@ class LinyapsStoreApiService {
 
     // 提前初始化i变量
     for (dynamic i in app_info_get) {
+
+      // 若应用截图非空则加入应用截图
+      List <String>? screenshot_link_list;
+      if (i['appScreenshotList'] != null) {
+        if (i['appScreenshotList'].isNotEmpty) {
+          screenshot_link_list = [];
+          for (dynamic j in i['appScreenshotList']) {
+            screenshot_link_list.add(j['screenshotKey']);
+          }
+        }
+      }
       cur_app_info.add(
         LinyapsPackageInfo(
           kind: i['kind'] ?? 'app',
@@ -585,7 +596,7 @@ class LinyapsStoreApiService {
           arch: i['arch'],
           Icon: i['icon'],  
           // 这里强制将接收到的List<dynamic>转换成List<String>规范截图链接存储
-          screenshots: i['appScreenshotList'].cast<String>(),  
+          screenshots: screenshot_link_list,  
         ),
       );
     }

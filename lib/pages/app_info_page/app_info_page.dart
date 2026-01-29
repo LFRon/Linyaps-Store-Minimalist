@@ -7,13 +7,14 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/AppListView/app_info_list_view.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/app_info_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/screenshot_list.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
@@ -40,6 +41,7 @@ class AppInfoPage extends StatefulWidget {
 }
 
 class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
+
   // 启用页面监视定时器
   Timer? checkTimer;
 
@@ -62,7 +64,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   String? cur_installed_version;
 
   // 访问deepin论坛玲珑专版跳转链接
-  Future<void> visitLinyapsBBS() async {
+  Future <void> visitLinyapsBBS() async {
     Uri linyaps_bbs_uri = Uri.parse(
       'https://bbs.deepin.org.cn/module/detail/230',
     );
@@ -70,7 +72,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 获取当前网络具体状况函数
-  Future<void> get_connection_status() async {
+  Future <void> get_connection_status() async {
     bool is_connection_good_get =
         await CheckInternetConnectionStatus.staus_is_good();
     // 更新页面具体变量信息
@@ -82,7 +84,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 设置本地应用信息正在更新的开关方法
-  Future<void> setAppLocalInfoLoading() async {
+  Future <void> setAppLocalInfoLoading() async {
     if (mounted) setState(() {
       is_app_local_info_loading = true;
     });
@@ -90,7 +92,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 设置本地应用信息没有更新/更新完成的开关方法
-  Future<void> setAppLocalInfoLoaded() async {
+  Future <void> setAppLocalInfoLoaded() async {
     if (mounted) setState(() {
       is_app_local_info_loading = false;
     });
@@ -98,9 +100,9 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 获取应用具体信息函数,返回的值为"是否在商店中找到这个应用"
-  Future<bool> getAppDetails(String appId) async {
+  Future <bool> getAppDetails(String appId) async {
     // 从玲珑后端API中获得玲珑应用数据
-    List<LinyapsPackageInfo>? get_app_info = await LinyapsStoreApiService.get_app_details_list(appId);
+    List <LinyapsPackageInfo>? get_app_info = await LinyapsStoreApiService.get_app_details_list(appId);
 
     // 检查应用是否存在,不存在直接调商店没有此应用的对话框
     if (get_app_info == null) {
@@ -128,7 +130,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 获取应用具体安装信息的函数
-  Future<void> update_app_installed_info(String appId) async {
+  Future <void> update_app_installed_info(String appId) async {
     // 如果应用存在,则通过应用管理拿到本地应用安装对象信息
     LinyapsPackageInfo? app_local_info =
         await LinyapsAppManagerApi.get_cur_installed_app_info(appId);
@@ -157,7 +159,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 设置页面响应已完成的函数
-  Future<void> set_page_loaded() async {
+  Future <void> set_page_loaded() async {
     if (mounted) setState(() {
       is_page_loaded = true;
     });
@@ -165,7 +167,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   // 设置安装函数实现,用于被ListView.builder里的控件当回调函数调用
   // 该页面安装应用的方法,version代表当前安装的目标版本,cur_app_version代表如果有的本地安装版本
-  Future<void> install_app(
+  Future <void> install_app(
     LinyapsPackageInfo appInfo,
     MyButton_Install button_install,
   ) async {
@@ -179,7 +181,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   }
 
   // 设置卸载函数实现,用于被ListView.builder里的控件当回调函数用
-  Future<void> uninstall_app(
+  Future <void> uninstall_app(
     String appId,
     MyButton_FatalWarning button_uninstall,
   ) async {
@@ -259,16 +261,19 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    super.dispose();
     // 在析构函数里移除观察者
     WidgetsBinding.instance.removeObserver(this);
     // 再移除定时器
     checkTimer?.cancel();
     checkTimer = null;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    // 传入UI构建用的应用信息, 强制非空用于UI构建
+    List <LinyapsPackageInfo> curAppInfo_build = cur_app_info_list ?? [];
 
     // 获取窗口的相对长宽像素
     double height = MediaQuery.of(context).size.height;
@@ -305,6 +310,10 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                   child: is_connection_good
                     ? ListView(
                       shrinkWrap: true,
+                      // 这里检查用户是否把鼠标放到了截图列表上
+                      // 截图列表需要借助鼠标滚轮横向滚动
+                      // 此时列表不能滚动
+                      physics: const ClampingScrollPhysics(),
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
@@ -324,7 +333,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                   CachedNetworkImage(
                                     height: 130,
                                     width: 130,
-                                    imageUrl: cur_app_info_list![cur_app_info_list!.length - 1].Icon ?? '',
+                                    imageUrl: curAppInfo_build[curAppInfo_build.length - 1].Icon ?? '',
                                     placeholder: (context, url) => Center(
                                       child: YaruCircularProgressIndicator(
                                         strokeWidth:2.5, // 设置加载条宽度
@@ -351,7 +360,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       children: [
                                         Text(
                                           // 显示应用名字用控件
-                                          cur_app_info_list![0].name,
+                                          curAppInfo_build[0].name,
                                           style: TextStyle(
                                             fontSize: 40,
                                           ),
@@ -364,7 +373,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  cur_app_info_list![0].devName ?? '未知',
+                                                  curAppInfo_build[0].devName ?? '未知',
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                   ),
@@ -387,7 +396,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  cur_app_info_list![0].version,
+                                                  curAppInfo_build[0].version,
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                   ),
@@ -410,7 +419,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  cur_app_info_list![0].base ?? '未知',
+                                                  curAppInfo_build[0].base ?? '未知',
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                   ),
@@ -433,10 +442,10 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  cur_app_info_list![0].runtime != null
-                                                  ? cur_app_info_list![0].runtime!.isEmpty
+                                                  curAppInfo_build[0].runtime != null
+                                                  ? curAppInfo_build[0].runtime!.isEmpty
                                                     ? '无'
-                                                    : cur_app_info_list![0].runtime!
+                                                    : curAppInfo_build[0].runtime!
                                                   : '未知',
                                                   style: TextStyle(
                                                     fontSize: 18,
@@ -473,12 +482,44 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                               ),
                               const SizedBox(height: 25,),
                               Text(
-                                cur_app_info_list![0].description,
+                                curAppInfo_build[0].descInfo ?? '暂无',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                 ),
                               ),
                               const SizedBox(height: 40,),
+                              // 检查应用是否有应用截图
+                              // 如果有才显示控件
+                              curAppInfo_build[0].screenshots != null
+                                ? curAppInfo_build[0].screenshots!.isNotEmpty
+                                  ? Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '应用截图',
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 25,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          YaruCarousel(
+                                            height: 450,
+                                            width: 750,
+                                            navigationControls: true,
+                                            children: AppInfo_SCapList(
+                                              SCapList: curAppInfo_build[0].screenshots!,
+                                            ).widgets(),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 40,),
+                                    ],
+                                  )
+                                  : SizedBox.shrink()
+                              : SizedBox.shrink(),
                               Text(
                                 '应用版本',
                                 style: TextStyle(
@@ -489,7 +530,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: cur_app_info_list!.length,
+                                itemCount: curAppInfo_build.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -497,12 +538,12 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       bottom: 5.0,
                                     ),
                                     child: AppInfoListView(
-                                      app_info: cur_app_info_list![index],
+                                      app_info: curAppInfo_build[index],
                                       downloadingAppsQueue: appState.downloadingAppsQueue.cast<LinyapsPackageInfo>(),
                                       is_cur_version_installed:
                                         (cur_installed_version == null)
                                         ? false
-                                        : (cur_app_info_list![index].version == cur_installed_version!) ? true : false,
+                                        : (curAppInfo_build[index].version == cur_installed_version!) ? true : false,
                                       install_app: (appInfo,button_install,) async {
                                         await install_app(
                                           appInfo,
