@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 
 class MyButton_Confirm extends StatelessWidget {
 
@@ -23,7 +24,9 @@ class MyButton_Confirm extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
-      color: Colors.grey.shade400,
+      color: Syscolor.isBlack(context)
+             ? Colors.grey.shade500
+             : Colors.grey.shade300,
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

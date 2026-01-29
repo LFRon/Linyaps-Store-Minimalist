@@ -4,7 +4,9 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
+import 'package:yaru/theme.dart';
 
 class MyDialog_AppNotExistInStore extends StatelessWidget {
 
@@ -13,7 +15,9 @@ class MyDialog_AppNotExistInStore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-     backgroundColor: Colors.grey.shade300,
+      backgroundColor: Syscolor.isBlack(context)
+                       ? YaruColors.coolGrey
+                       : Colors.grey.shade100,
       titlePadding: EdgeInsets.only(top: 20, bottom: 20),
       title: Center(
         child: Text(
