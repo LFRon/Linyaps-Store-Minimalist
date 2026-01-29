@@ -205,7 +205,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
   Widget build(BuildContext context) {
 
     // 获取当前窗口的相对长宽
-    double height = MediaQuery.of(context).size.height;
+    // double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     // 初始化搜索动态按钮对象
@@ -218,7 +218,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
         ),
       ), 
       is_pressed: ValueNotifier<bool>(false),
-      indicator_width: height*0.022, 
+      indicator_width: 2, 
       onPressed: () async {
         await reloadPage_searchResult();
       },
