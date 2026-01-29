@@ -22,6 +22,9 @@ class LinyapsPackageInfo {
   String version;    // 应用版本信息
   String? curOldVersion;  // 应用有无新版本, 如果有就把当前安装的旧版本放在这里
 
+  // 当前应用详细信息
+  String? descInfo;
+  
   // 当前应用对象是否仅在本地
   bool? is_app_local_only;
 
@@ -62,6 +65,7 @@ class LinyapsPackageInfo {
     required this.arch,
     this.Icon,
     this.is_app_local_only,
+    this.descInfo,
     // this.IconUpdated,
     this.repoName,
     this.downloadState,

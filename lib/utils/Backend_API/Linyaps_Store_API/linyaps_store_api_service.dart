@@ -581,6 +581,7 @@ class LinyapsStoreApiService {
           module: i['module'],
           version: i['version'], 
           description: i['description'], 
+          descInfo: i['descInfo'],
           arch: i['arch'],
           Icon: i['icon'],  
         ),
