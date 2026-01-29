@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:yaru/widgets.dart';
 
 class InstalledAppsGridItems {
 
@@ -42,8 +44,6 @@ class InstalledAppsGridItems {
       return OpenContainer(
         openElevation: 0,
         closedElevation: 0,
-        openColor: Theme.of(context).colorScheme.surface,
-        closedColor: Theme.of(context).colorScheme.onPrimary,
         transitionDuration: Duration(milliseconds: 320),
         transitionType: ContainerTransitionType.fadeThrough,
         closedShape: RoundedRectangleBorder(
@@ -57,7 +57,9 @@ class InstalledAppsGridItems {
             height: 120,
             width: 100,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Syscolor.isBlack(context)
+                     ? Colors.grey.shade800
+                     : Colors.grey.shade200,
             ),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -77,21 +79,16 @@ class InstalledAppsGridItems {
                           child: SizedBox(
                             height: 80,
                             width: 80,
-                            child: CircularProgressIndicator(
-                              color: Colors.grey,
+                            child: YaruCircularProgressIndicator(
                               strokeWidth: 3.0,
                             ),  // 加载时显示进度条
                           ),
                         );
                       },
                       errorWidget: (context, error, stackTrace) => Center(
-                        child: SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: Image(
-                            image: AssetImage(
-                              'assets/images/linyaps-generic-app.png',
-                            ),
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/linyaps-generic-app.png',
                           ),
                         ),
                       ),
@@ -112,7 +109,6 @@ class InstalledAppsGridItems {
                     Text(
                       "版本号: ${installed_app_info[index].version}",
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: 18,
                       ),
                       maxLines: 1,

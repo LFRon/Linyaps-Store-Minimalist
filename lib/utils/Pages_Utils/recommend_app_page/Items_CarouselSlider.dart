@@ -89,7 +89,6 @@ class RecommendAppSliderItems {
                     Text(
                       app_info.name,
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: height*0.024,
                         fontWeight: FontWeight.bold,
                       ),

@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/upgrade_button.dart';
+import 'package:yaru/widgets.dart';
 
 class UpgradableAppListItems {
 
@@ -60,7 +62,9 @@ class UpgradableAppListItems {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Syscolor.isBlack(context)
+                 ? Colors.grey.shade800
+                 : Colors.grey.shade200,
         ),
         child: Padding(
           padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 25.0,right: 22.0),
@@ -79,20 +83,14 @@ class UpgradableAppListItems {
                         child: SizedBox(
                           height: 80,
                           width: 80,
-                          child: SizedBox(
-                            height: 16,width: 16,
-                            child: CircularProgressIndicator(
-                              color: Colors.grey.shade300,
-                              strokeWidth:2.5,     // 设置加载条宽度
-                            ),
+                          child: YaruCircularProgressIndicator(
+                            strokeWidth:2.5,     // 设置加载条宽度
                           ),  // 加载时显示进度条
                         ),
                       ),
                       // 如果图片无法加载就使用默认玲珑图标
                       errorWidget: (context, error, stackTrace) => Center(
                         child: Image(
-                          height: 70,
-                          width: 70,
                           image: AssetImage(
                             'assets/images/linyaps-generic-app.png',
                           ),
@@ -123,13 +121,15 @@ class UpgradableAppListItems {
                       Icons.cloud_upload_outlined,
                     ),
                     SizedBox(width: 20,),
-                    Text(
-                      '版本升级信息: ${cur_upgradable_app_info.curOldVersion ?? "未知的旧版本"} -> ${cur_upgradable_app_info.version}',
-                      style: TextStyle(
-                        fontSize: 20,
+                    SizedBox(
+                      child: Text(
+                        '版本升级信息: ${cur_upgradable_app_info.curOldVersion ?? "未知的旧版本"} -> ${cur_upgradable_app_info.version}',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

@@ -11,6 +11,7 @@ import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_App_Management_API/linyaps_app_manager.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/installed_apps_grid_items.dart';
@@ -18,6 +19,7 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/refresh_upgradable_apps_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/upgrade_all_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/upgrade_button.dart';
+import 'package:yaru/widgets.dart';
 
 class AppsManagementPage extends StatefulWidget {
 
@@ -424,7 +426,9 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                       children: [
                                         Icon(
                                           size: 50,
-                                          color: Colors.black.withValues(alpha: 0.5),
+                                          color: Syscolor.isBlack(context)
+                                                 ? Colors.white.withValues(alpha: 0.5)
+                                                 : Colors.black.withValues(alpha: 0.5),
                                           Icons.update,
                                         ),
                                         SizedBox(width: 30,),
@@ -539,8 +543,8 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                   Text(
                                     '哎呀, 看上去你还没有安装任何应用呢 ~',
                                     style: TextStyle(
+                                      color: Colors.grey.shade600,
                                       fontSize: 18,
-                                      color: Colors.grey.shade600
                                     ),
                                   ),
                                 ],
@@ -560,8 +564,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                   SizedBox(
                     height: 50,
                     width: 50,
-                    child: CircularProgressIndicator(
-                      color: Colors.grey.shade500,
+                    child: YaruCircularProgressIndicator(
                       strokeWidth: 5,
                     ),
                   ),

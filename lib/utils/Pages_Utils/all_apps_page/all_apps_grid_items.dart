@@ -8,6 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:yaru/widgets.dart';
 
 class AppGridItem {
 
@@ -26,8 +28,6 @@ class AppGridItem {
     return OpenContainer(
       openElevation: 0,
       closedElevation: 0,
-      closedColor: Theme.of(context).colorScheme.onPrimary,
-      openColor: Theme.of(context).colorScheme.surface,
       transitionDuration: Duration(milliseconds: 320),
       transitionType: ContainerTransitionType.fadeThrough,
       openBuilder:(context, action) {
@@ -41,7 +41,9 @@ class AppGridItem {
           height: 150,
           width: 150,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Syscolor.isBlack(context)
+                   ? Colors.grey.shade800
+                   : Colors.grey.shade200,
           ),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
@@ -60,8 +62,8 @@ class AppGridItem {
                         child: SizedBox(
                           height: 80,
                           width: 80,
-                          child: CircularProgressIndicator(
-                            color: Colors.grey.shade300,
+                          child: YaruCircularProgressIndicator(
+                            strokeWidth: 2.5,
                           ),  // 加载时显示进度条
                         ),
                       ),
@@ -97,7 +99,6 @@ class AppGridItem {
                   Text(
                     "版本号: ${cur_app.version}",
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 18,
                     ),
                     maxLines: 1,

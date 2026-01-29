@@ -17,6 +17,8 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/Dialog_AppHaveUpdate.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/Items_CarouselSlider.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/recommend_app_page/Items_WelcomeApps.dart';
+import 'package:yaru/theme.dart';
+import 'package:yaru/widgets.dart';
 
 class RecommendAppPage extends StatefulWidget {
 
@@ -229,7 +231,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                           child: Center(
                             child: FloatingActionButton(
                               heroTag: "RecommendAppPage_FloatingActionButton_Left",
-                              backgroundColor: Colors.grey.withValues(alpha: 0.1),
+                              backgroundColor: YaruColors.warmGrey.withValues(alpha: 0.01),
                               child: Icon(Icons.keyboard_double_arrow_left),
                               onPressed: () => carousel_controller.previousPage(),
                             ),
@@ -241,7 +243,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                           child: Center(
                             child: FloatingActionButton(
                               heroTag: "RecommendAppPage_FloatingActionButton_Right",
-                              backgroundColor: Colors.grey.withValues(alpha: 0.1),
+                              backgroundColor: YaruColors.warmGrey.withValues(alpha: 0.01),
                               child: Icon(Icons.keyboard_double_arrow_right),
                               onPressed: () => carousel_controller.nextPage(),
                             ),
@@ -253,7 +255,6 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                     Text(
                       "玲珑小编推荐 ~",
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: height*0.03,
                       ),
                     ),
@@ -291,10 +292,9 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: CircularProgressIndicator(
-                      color: Colors.grey.shade500,
+                    height: 55,
+                    width: 55,
+                    child: YaruCircularProgressIndicator(
                       strokeWidth: 5,
                     ),
                   ),

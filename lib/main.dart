@@ -15,6 +15,7 @@ import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:yaru/settings.dart';
 
 void main(List<String> args) async {
 
@@ -89,20 +90,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Noto Sans SC',
-        fontFamilyFallback: [
-          'Noto Color Emoji',
-        ],
-        colorScheme: ColorScheme.light(
-          surface: Colors.grey.shade200,
-          primary: Colors.black,
-          onPrimary: Colors.grey.shade300,
-          secondary: Colors.white,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
+      home: YaruTheme(
+        data: YaruThemeData(
+          themeMode: ThemeMode.system,
         ),
+        child: MainMiddlePage(),
       ),
-      home: MainMiddlePage(),
     );
   }
   

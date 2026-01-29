@@ -7,8 +7,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
+import 'package:yaru/widgets.dart';
 
 class DownloadingAppListItem extends StatelessWidget {
 
@@ -60,7 +62,9 @@ class DownloadingAppListItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 6.0),    // 设置ListView.builder子控件间的间距
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Syscolor.isBlack(context)
+               ? Colors.grey.shade800
+               : Colors.grey.shade200,
       ),
       child: Padding(
         padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 30.0,right: 35.0),
@@ -73,20 +77,13 @@ class DownloadingAppListItem extends StatelessWidget {
                   CachedNetworkImage(
                     imageUrl: cur_app_info.Icon ?? '',
                     placeholder: (context, url) => Center(
-                      child: SizedBox(
-                        height: 70,
-                        width: 70,
-                        child: CircularProgressIndicator(
-                          color: Colors.grey.shade300,
-                          strokeWidth:2.5,     // 设置加载条宽度
-                        ),  // 加载时显示进度条
+                      child: YaruCircularProgressIndicator(
+                        strokeWidth:2.5,     // 设置加载条宽度
                       ),
                     ),
                     // 如果图片无法加载就使用默认玲珑图标
                     errorWidget: (context, error, stackTrace) => Center(
                       child: Image(
-                        height: 70,
-                        width: 70,
                         image: AssetImage(
                           'assets/images/linyaps-generic-app.png',
                         ),
@@ -127,9 +124,8 @@ class DownloadingAppListItem extends StatelessWidget {
                     SizedBox(
                       height: 30,
                       width: 30,
-                      child: CircularProgressIndicator(
+                      child: YaruCircularProgressIndicator(
                         strokeWidth: 3.5,
-                        color: Colors.grey.shade600,
                       ),
                     ),
                     SizedBox(width: 20,),

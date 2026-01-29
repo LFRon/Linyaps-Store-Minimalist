@@ -8,6 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:yaru/widgets.dart';
 
 class MostDownloadAppGridItems {
   List<LinyapsPackageInfo> NewestAppsList;
@@ -31,8 +33,6 @@ class MostDownloadAppGridItems {
             child: OpenContainer(
               openElevation: 0,
               closedElevation: 0,
-              openColor: Theme.of(context).colorScheme.surface,
-              closedColor: Theme.of(context).colorScheme.onPrimary,
               transitionDuration: Duration(milliseconds: 320),
               transitionType: ContainerTransitionType.fadeThrough,
               closedShape: RoundedRectangleBorder(
@@ -46,7 +46,9 @@ class MostDownloadAppGridItems {
                   height: 150,
                   width: 150,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Syscolor.isBlack(context)
+                           ? Colors.grey.shade800
+                           : Colors.grey.shade200,
                   ),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
@@ -61,8 +63,8 @@ class MostDownloadAppGridItems {
                               child: CachedNetworkImage(
                                 imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
                                 placeholder: (context, url) => Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.grey.shade300,
+                                  child: YaruCircularProgressIndicator(
+                                    strokeWidth: 2.5,
                                   ),
                                 ),
                                 // 无法显示图片时显示错误
@@ -87,7 +89,6 @@ class MostDownloadAppGridItems {
                               appinfo.name,
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 1,
@@ -99,7 +100,6 @@ class MostDownloadAppGridItems {
                               ? "下载量: 未知"
                               : "下载量: ${appinfo.installCount} 次",
                               style: TextStyle(
-                                color: Colors.black,
                                 fontSize: 18,
                               ),
                               maxLines: 1,

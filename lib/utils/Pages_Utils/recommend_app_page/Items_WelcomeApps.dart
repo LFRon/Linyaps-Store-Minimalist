@@ -7,6 +7,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:yaru/yaru.dart';
 
 class WelcomeAppGridItems {
   List<LinyapsPackageInfo> WelcomeAppsList;
@@ -30,7 +32,9 @@ class WelcomeAppGridItems {
       returnItem.add(
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Syscolor.isBlack(context)
+                   ? Colors.grey.shade800
+                   : Colors.grey.shade200,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -67,7 +71,6 @@ class WelcomeAppGridItems {
                             height: height*0.06,
                             width: height*0.06,
                             child: CircularProgressIndicator(
-                              color: Colors.grey.shade300,
                               strokeWidth: 4.8,
                             ),  // 加载时显示进度条
                           ),
@@ -80,7 +83,7 @@ class WelcomeAppGridItems {
                                 width: width*0.05,
                                 child: Icon(
                                   Icons.error_rounded,
-                                  color: Colors.redAccent,
+                                  color: YaruColors.adwaitaRed,
                                 ),
                               ),
                             ],
@@ -95,8 +98,10 @@ class WelcomeAppGridItems {
                     Text(
                       appinfo.name,
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: height*0.02,
+                        color: Theme.of(context).brightness == Brightness.dark 
+                               ? Colors.white 
+                               : Colors.black,
+                        fontSize: height*0.025,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

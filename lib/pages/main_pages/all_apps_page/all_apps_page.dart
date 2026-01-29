@@ -11,6 +11,8 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/all_apps_page/all_apps_
 import 'package:linglong_store_flutter/utils/Pages_Utils/all_apps_page/bottom_loading_widget.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/all_apps_page/buttons/search_button.dart';
+import 'package:yaru/theme.dart';
+import 'package:yaru/widgets.dart';
 
 class AllAppsPage extends StatefulWidget {
 
@@ -201,6 +203,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
   @override
   Widget build(BuildContext context) {
+
     // 获取当前窗口的相对长宽
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -210,6 +213,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
       text: Text(
         "搜索",
         style: TextStyle(
+          color: Colors.white,
           fontSize: 18,
         ),
       ), 
@@ -241,10 +245,10 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
     // 声明GridView网格视图中当前应该显示多少列对象(跟随屏幕像素改变而改变)
     late int gridViewCrossAxisCount;
-    if (width > 1800)         gridViewCrossAxisCount = 6;
+    if (width > 1800)      gridViewCrossAxisCount = 6;
     else if (width > 1450) gridViewCrossAxisCount = 5;
     else if (width > 1100) gridViewCrossAxisCount = 4;
-    else                              gridViewCrossAxisCount = 3;
+    else                   gridViewCrossAxisCount = 3;
 
     return Scaffold(
       body: Padding(
@@ -282,11 +286,22 @@ class _AllAppsPageState extends State<AllAppsPage> {
                           contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), 
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: YaruColors.warmGrey,
+                              width: 2,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: YaruColors.warmGrey,
+                              width: 2,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(    // 设置其被选中时变为蓝色
                             borderRadius: BorderRadius.circular(16),
                             borderSide: BorderSide(
-                              color: Colors.grey.shade700,
+                              color: YaruColors.coolGrey,
                               width: 2,
                             )
                           ),
@@ -294,7 +309,6 @@ class _AllAppsPageState extends State<AllAppsPage> {
                           hintText: "在这里输入您想搜索的应用 ~",
                           hintStyle: TextStyle(
                             fontSize: 15,
-                            color: Colors.grey.shade700,
                           ),
                         ),
                       ),
@@ -354,11 +368,10 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         child: RepaintBoundary(
-                          child: CircularProgressIndicator(
-                            color: Colors.grey.shade500,
+                          child: YaruCircularProgressIndicator(
                             strokeWidth: 5,
                           ),
                         ),

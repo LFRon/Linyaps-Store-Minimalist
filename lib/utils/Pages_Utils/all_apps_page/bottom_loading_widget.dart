@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:yaru/widgets.dart';
 
 class BottomLoading_AllApps {
 
@@ -39,9 +40,8 @@ class BottomLoading_AllApps {
                     SizedBox(
                       height: height*0.04,
                       width: height*0.04,
-                      child: CircularProgressIndicator(
+                      child: YaruCircularProgressIndicator(
                         strokeWidth: height*0.004,
-                        color: Colors.grey.shade700,
                       ),
                     ),
                     SizedBox(height: height*0.02,),
@@ -49,7 +49,6 @@ class BottomLoading_AllApps {
                       "更多app正在加载中 ~",
                       style: TextStyle(
                         fontSize: height*0.025,
-                        color: Colors.grey.shade700,
                       ),
                     ),
                   ],

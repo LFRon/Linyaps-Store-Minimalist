@@ -63,7 +63,6 @@ class _AboutPageState extends State<AboutPage> {
                       '玲珑应用商店极速版',
                       style: TextStyle(
                         fontSize: 40,
-                        color: Colors.grey.shade800
                       ),
                     ),
                     SizedBox(height: 10,),
@@ -71,7 +70,6 @@ class _AboutPageState extends State<AboutPage> {
                       '极致简洁,快速可靠',
                       style: TextStyle(
                         fontSize: 25,
-                        color: Colors.grey.shade800
                       ),
                     ),
                   ],

@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:yaru/widgets.dart';
 
 class MyButton_SearchItem extends StatefulWidget {
 
@@ -32,7 +33,7 @@ class _MyButton_SearchItemState extends State<MyButton_SearchItem> {
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: Colors.grey.shade400,
+          color: Colors.grey.shade500,
           elevation: 0,   // 设置不显示边缘阴影
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),
@@ -49,9 +50,9 @@ class _MyButton_SearchItemState extends State<MyButton_SearchItem> {
               height: widget.indicator_width,
               width: widget.indicator_width,
               child: RepaintBoundary(
-                child: CircularProgressIndicator(
+                child: YaruCircularProgressIndicator(
                   color: Colors.white,
-                  strokeWidth:2.5,     // 设置加载条宽度
+                  strokeWidth: 2.5,     // 设置加载条宽度
                 ),
               ),
             ),

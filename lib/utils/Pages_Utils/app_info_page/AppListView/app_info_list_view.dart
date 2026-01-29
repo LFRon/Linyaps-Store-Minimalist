@@ -151,12 +151,12 @@ class AppInfoListViewState extends State<AppInfoListView> {
       padding: const EdgeInsets.only(right: 11.0),     // 微操避开右侧滚轮
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [],
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top:8.0,bottom: 8.0,left: 8.0,right: 15.0),
+          padding: const EdgeInsets.only(top:8.0,bottom: 8.0,left: 0.0,right: 0.0),
           child: Row(
             children: [
 
@@ -214,13 +214,14 @@ class AppInfoListViewState extends State<AppInfoListView> {
                 flex: 1,
                 child: widget.is_cur_version_installed
                   ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
                         height: 30,
                         width: 80,
                         child: button_uninstall,
                       ),
+                      const SizedBox(width: 30,),
                       SizedBox(
                         height: 30,
                         width: 80,

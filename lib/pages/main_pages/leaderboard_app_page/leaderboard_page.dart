@@ -10,6 +10,7 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linya
 import 'package:linglong_store_flutter/utils/Pages_Utils/leaderboard_app_page/MostDownloadAppsItems.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/leaderboard_app_page/NewestAppsItems.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/leaderboard_app_page/my_ratios/my_ratio.dart';
+import 'package:yaru/widgets.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
@@ -176,18 +177,17 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         child: RepaintBoundary(
-                          child: CircularProgressIndicator(
-                            color: Colors.grey.shade500,
+                          child: YaruCircularProgressIndicator(
                             strokeWidth: 5,
                           ),
                         ),
                       ),
                       SizedBox(height: 30,),
                       Text(
-                        "稍等一下,信息正在加载中哦 ~",
+                        "稍等一下, 信息正在加载中哦 ~",
                         style: TextStyle(
                           fontSize: 22,
                         ),

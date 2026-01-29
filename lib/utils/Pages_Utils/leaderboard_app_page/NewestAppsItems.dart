@@ -8,6 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:yaru/widgets.dart';
 
 class NewestAppGridItems {
   List<LinyapsPackageInfo> NewestAppsList;
@@ -31,8 +33,6 @@ class NewestAppGridItems {
             child: OpenContainer(
               openElevation: 0,
               closedElevation: 0, 
-              openColor: Theme.of(context).colorScheme.surface,
-              closedColor: Theme.of(context).colorScheme.onPrimary,
               transitionDuration: Duration(milliseconds: 320),
               transitionType: ContainerTransitionType.fadeThrough,
               closedShape: RoundedRectangleBorder(
@@ -46,7 +46,9 @@ class NewestAppGridItems {
                   height: 150,
                   width: 150,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Syscolor.isBlack(context)
+                           ? Colors.grey.shade800
+                           : Colors.grey.shade200,
                   ),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
@@ -64,8 +66,8 @@ class NewestAppGridItems {
                                   child: SizedBox(
                                     height: 80,
                                     width: 80,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.grey.shade300,
+                                    child: YaruCircularProgressIndicator(
+                                      strokeWidth: 2.5,
                                     ),  // 加载时显示进度条
                                   ),
                                 ),
@@ -101,7 +103,6 @@ class NewestAppGridItems {
                             Text(
                               "更新时间: ${appinfo.createTime==null?"未知":appinfo.createTime?.substring(0,10)}",
                               style: TextStyle(
-                                color: Colors.black,
                                 fontSize: 18,
                               ),
                             ),
