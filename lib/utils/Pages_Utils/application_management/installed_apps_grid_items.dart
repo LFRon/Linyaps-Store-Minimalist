@@ -50,7 +50,12 @@ class InstalledAppsGridItems {
           borderRadius: BorderRadius.circular(12),
         ),
         openBuilder: (context, action) {
-          return AppInfoPage(appId: installed_app_info[index].id);
+          // 先获取当前页面主题
+          ThemeData curThemeData = Theme.of(this.context);
+          return AppInfoPage(
+            appId: installed_app_info[index].id,
+            curThemeData: curThemeData,
+          );
         },
         closedBuilder: (context, action) {
           return Container(

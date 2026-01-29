@@ -31,7 +31,12 @@ class AppGridItem {
       transitionDuration: Duration(milliseconds: 320),
       transitionType: ContainerTransitionType.fadeThrough,
       openBuilder:(context, action) {
-        return AppInfoPage(appId: cur_app.id);
+        // 先获取当前页面主题
+        ThemeData curThemeData = Theme.of(this.context);
+        return AppInfoPage(
+          appId: cur_app.id,
+          curThemeData: curThemeData,
+        );
       },
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

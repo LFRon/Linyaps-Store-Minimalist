@@ -39,7 +39,12 @@ class NewestAppGridItems {
                 borderRadius: BorderRadius.circular(12),
               ),
               openBuilder: (context, action) {
-                return AppInfoPage(appId: appinfo.id);
+                // 先获取当前页面主题
+                ThemeData curThemeData = Theme.of(this.context);
+                return AppInfoPage(
+                  appId: appinfo.id,
+                  curThemeData: curThemeData,
+                );
               },
               closedBuilder:(context, action) {
                 return Container(

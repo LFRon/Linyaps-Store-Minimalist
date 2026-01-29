@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:yaru/widgets.dart';
 
 class MyButton_SearchItem extends StatefulWidget {
@@ -33,7 +34,10 @@ class _MyButton_SearchItemState extends State<MyButton_SearchItem> {
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: Colors.grey.shade500,
+          // 根据亮/暗色主题设置按钮颜色
+          color: Syscolor.isBlack(context)
+                 ? Colors.grey.shade500
+                 : Colors.grey.shade400,   
           elevation: 0,   // 设置不显示边缘阴影
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),
