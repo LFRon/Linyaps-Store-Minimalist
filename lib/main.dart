@@ -16,6 +16,7 @@ import 'package:linglong_store_flutter/utils/Global_Variables/global_application
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:yaru/settings.dart';
+import 'package:yaru/yaru.dart';
 
 void main(List<String> args) async {
 
@@ -90,8 +91,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: yaruLight,
+      darkTheme: yaruDark,
       themeMode: ThemeMode.system,
       home: YaruTheme(
         data: YaruThemeData(
