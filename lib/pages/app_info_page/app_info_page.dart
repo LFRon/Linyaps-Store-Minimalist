@@ -467,50 +467,11 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                               height: 50,
                                               child: VerticalDivider(),
                                             ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  curAppInfo_build[0].base ?? '未知',
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5,),
-                                                Text(
-                                                  '应用基础环境',
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: 40,
-                                              height: 50,
-                                              child: VerticalDivider(),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  curAppInfo_build[0].runtime != null
-                                                  ? curAppInfo_build[0].runtime!.isEmpty
-                                                    ? '无'
-                                                    : curAppInfo_build[0].runtime!
-                                                  : '未知',
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5,),
-                                                Text(
-                                                  '应用运行环境',
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
-                                              ],
+                                            Text(
+                                              curAppInfo_build[0].description,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -531,22 +492,30 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                               ),
                               const SizedBox(height: 40),
                               // 下面的列式布局用于放置应用具体介绍
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '应用介绍',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 25,),
                               Text(
-                                curAppInfo_build[0].descInfo ?? '暂无',
+                                '应用详情',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 30,
+                                ),
+                              ),
+                              const SizedBox(height: 20,),
+                              Text(
+                                '详细介绍: ${curAppInfo_build[0].descInfo ?? "暂无"}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              const SizedBox(height: 15,),
+                              Text(
+                                '基础环境: ${curAppInfo_build[0].base}',
+                                style: TextStyle(
+                                  fontSize: 19,
+                                ),
+                              ),
+                              Text(
+                                '运行依赖库: ${curAppInfo_build[0].runtime ?? "无"}',
+                                style: TextStyle(
+                                  fontSize: 19,
                                 ),
                               ),
                               const SizedBox(height: 40,),
