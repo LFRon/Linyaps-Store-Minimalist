@@ -24,8 +24,12 @@ class MyButton_Confirm extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
+      elevation: 0,
+      highlightElevation: 0,
+      focusElevation: 0,
+      hoverElevation: 0,
       color: Syscolor.isBlack(context)
-             ? Colors.grey.shade500
+             ? Colors.grey.shade600
              : Colors.grey.shade300,
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(

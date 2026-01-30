@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/confirm_button.dart';
+import 'package:yaru/settings.dart';
 import 'package:yaru/theme.dart';
 
 class MyDialog_AppNotExistInStore extends StatelessWidget {
@@ -14,50 +15,55 @@ class MyDialog_AppNotExistInStore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Syscolor.isBlack(context)
-                       ? YaruColors.coolGrey
-                       : Colors.grey.shade100,
-      titlePadding: EdgeInsets.only(top: 20, bottom: 20),
-      title: Center(
-        child: Text(
-          "应用未找到",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return YaruTheme(
+      data: YaruThemeData(
+        themeMode: ThemeMode.system
+      ),
+      child: AlertDialog(
+        backgroundColor: Syscolor.isBlack(context)
+                         ? YaruColors.coolGrey
+                         : Colors.grey.shade100,
+        titlePadding: EdgeInsets.only(top: 20, bottom: 20),
+        title: Center(
+          child: Text(
+            "应用未找到",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      content: SizedBox(
-        height: 120,
-        width: 450,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Center(
-              child: Text(
-                "哎呀, 您安装的这个应用貌似没有上架到商店哦 ~",
-                style: TextStyle(
-                  fontSize: 20,
+        content: SizedBox(
+          height: 120,
+          width: 450,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Center(
+                child: Text(
+                  "哎呀, 您安装的这个应用貌似没有上架到商店哦 ~",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 45,
-              width: 200,
-              child: MyButton_Confirm(
-                text: Text(
-                  "好吧 :(",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ), 
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              SizedBox(
+                height: 45,
+                width: 200,
+                child: MyButton_Confirm(
+                  text: Text(
+                    "好吧 :(",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ), 
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
