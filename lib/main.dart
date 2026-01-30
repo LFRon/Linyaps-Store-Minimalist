@@ -15,7 +15,6 @@ import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:toastification/toastification.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:yaru/settings.dart';
 import 'package:yaru/yaru.dart';
 
 void main(List<String> args) async {
