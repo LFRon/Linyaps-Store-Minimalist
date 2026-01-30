@@ -6,15 +6,16 @@
 import 'package:flutter/material.dart';
 import 'package:yaru/theme.dart';
 import 'package:yaru/widgets.dart';
+import 'package:yaru/yaru.dart';
 
-class MyButton_LaunchApp extends StatefulWidget {
+class MyButton_AppInfoPage_LaunchApp extends StatefulWidget {
 
   Text text;     // 声明显示的文本
   double indicator_width;      // 声明加载动画图标大小
   ValueNotifier <bool> is_pressed;   // is_press开关用于调整按钮是否被按下
   VoidCallback onPressed;
 
-  MyButton_LaunchApp({
+  MyButton_AppInfoPage_LaunchApp({
     super.key,
     required this.text,
     required this.is_pressed,
@@ -23,10 +24,10 @@ class MyButton_LaunchApp extends StatefulWidget {
   });
 
   @override
-  State<MyButton_LaunchApp> createState() => _MyButton_LaunchAppState();
+  State<MyButton_AppInfoPage_LaunchApp> createState() => _MyButton_AppInfoPage_LaunchAppState();
 }
 
-class _MyButton_LaunchAppState extends State<MyButton_LaunchApp> {
+class _MyButton_AppInfoPage_LaunchAppState extends State<MyButton_AppInfoPage_LaunchApp> {
   @override
   Widget build(BuildContext context) {
     // 返回变量监听层
@@ -52,11 +53,23 @@ class _MyButton_LaunchAppState extends State<MyButton_LaunchApp> {
               width: widget.indicator_width,
               child: YaruCircularProgressIndicator(
                 color: Colors.white,
-                strokeWidth:2.5,     // 设置加载条宽度
+                strokeWidth: 3.5,     // 设置加载条宽度
               ),
             ),
           )
-          :widget.text,
+          : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.launch,
+                size: 25,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10,),
+              widget.text,
+            ],
+          ),
         );
       }
     );

@@ -4,17 +4,16 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:yaru/theme.dart';
-import 'package:yaru/widgets.dart';
+import 'package:yaru/yaru.dart';
 
-class MyButton_AppInfoPage_Install extends StatefulWidget {
+class MyButton_AppInfoPage_Uninstall extends StatefulWidget {
 
   Text text;     // 声明显示的文本
   double indicator_width;      // 声明加载动画图标大小
   ValueNotifier <bool> is_pressed;   // is_press开关用于调整按钮是否被按下
   VoidCallback onPressed;
 
-  MyButton_AppInfoPage_Install({
+  MyButton_AppInfoPage_Uninstall({
     super.key,
     required this.text,
     required this.is_pressed,
@@ -23,10 +22,10 @@ class MyButton_AppInfoPage_Install extends StatefulWidget {
   });
 
   @override
-  State<MyButton_AppInfoPage_Install> createState() => _MyButton_AppInfoPage_InstallState();
+  State<MyButton_AppInfoPage_Uninstall> createState() => _MyButton_AppInfoPage_UninstallState();
 }
 
-class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Install> {
+class _MyButton_AppInfoPage_UninstallState extends State<MyButton_AppInfoPage_Uninstall> {
   @override
   Widget build(BuildContext context) {
     // 返回变量监听层
@@ -34,10 +33,10 @@ class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Inst
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: YaruColors.adwaitaBlue,
+          color: YaruColors.adwaitaRed,
           elevation: 0,   // 设置不显示边缘阴影
           shape: RoundedRectangleBorder(  // 设置圆角
-              borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12),
           ),
           onPressed: () async {    // 设置按下之后触发的函数(方法)   
             // 防止用户多次同时按下按钮,所以只允许按钮在is_pressed为假时才可以触发执行函数
@@ -56,7 +55,19 @@ class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Inst
               ),
             ),
           )
-          :widget.text,
+          : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.delete_outline_rounded,
+                size: 25,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10,),
+              widget.text,
+            ],
+          ),
         );
       }
     );

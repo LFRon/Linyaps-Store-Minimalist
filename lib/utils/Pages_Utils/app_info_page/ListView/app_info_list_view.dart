@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/launch_app_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/app_listview/install_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/app_listview/launch_app_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
 
 class AppInfoListView extends StatefulWidget {

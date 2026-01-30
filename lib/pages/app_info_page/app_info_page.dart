@@ -15,10 +15,12 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/screenshot_list.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/launch_app_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/uninstall_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/app_listview/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yaru/widgets.dart';
@@ -44,13 +46,13 @@ class AppInfoPage extends StatefulWidget {
 class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   // 声明当前页面的安装按钮
-  late MyButton_Install install_button;
+  late MyButton_AppInfoPage_Install install_button;
 
   // 声明当前页面卸载按钮
-  late MyButton_FatalWarning uninstall_button;
+  late MyButton_AppInfoPage_Uninstall uninstall_button;
 
   // 声明当前页面启动按钮
-  late MyButton_LaunchApp launch_app_button;
+  late MyButton_AppInfoPage_LaunchApp launch_app_button;
 
   // 启用页面监视定时器
   Timer? checkTimer;
@@ -164,6 +166,9 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
       if (mounted) setState(() {
         cur_installed_version = app_local_info.version;
       });
+    } else {
+      // 如果应用不存在则恢复Null值
+      cur_installed_version = null;
     }
     return;
   }
@@ -179,42 +184,93 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   // 该页面安装应用的方法,version代表当前安装的目标版本,cur_app_version代表如果有的本地安装版本
   Future <void> install_app(
     LinyapsPackageInfo appInfo,
-    MyButton_Install button_install,
+    MyButton_Install? button_install,   // 这个是应用列表中的安装按钮(如果传入)
+    MyButton_AppInfoPage_Install? button_install_this,  // 这个是本页面中的安装按钮(如果传入)
   ) async {
     // 设置按钮被按下
     // 设置安装按钮被按下
-    button_install.is_pressed.value = true;
+    if (button_install != null) {
+      button_install.is_pressed.value = true;
+    }
+    if (button_install_this != null) {
+      button_install_this.is_pressed.value = true;
+    }
     await LinyapsAppManagerApi.install_app(appInfo);
-    // 设置安装按钮被释放
-    button_install.is_pressed.value = true;
     if (mounted) setState(() {});
+    return;
   }
 
   // 设置卸载函数实现,用于被ListView.builder里的控件当回调函数用
   Future <void> uninstall_app(
     String appId,
-    MyButton_FatalWarning button_uninstall,
+    MyButton_FatalWarning? button_uninstall,  // 这个是应用列表中的卸载按钮(如果传入)
+    MyButton_AppInfoPage_Uninstall? button_uninstall_this,  // 这个是本页面中的卸载按钮(如果传入)
   ) async {
-    // 设置按钮被按下
     // 设置卸载按钮被按下
-    button_uninstall.is_pressed.value = true;
-    int excute_result = await LinyapsCliHelper.uninstall_app(appId);
-    // 设置安装按钮被释放
-    button_uninstall.is_pressed.value = false;
-    // 如果启动失败设置启动按钮文字为"失败"提醒用户
-    if (excute_result != 0) {
-      button_uninstall.text = Text(
-        "失败",
-        style: TextStyle(fontSize: 15, color: Colors.white),
-      );
+    int excute_result = 0;
+
+    // 如果是子ListView应用列表页面按下卸载按钮
+    if (button_uninstall != null) {
+      button_uninstall.is_pressed.value = true;
+      excute_result = await LinyapsCliHelper.uninstall_app(appId);
+      // 设置安装按钮被释放
+      button_uninstall.is_pressed.value = false;
+      // 如果启动失败设置启动按钮文字为"失败"提醒用户
+      if (excute_result != 0) {
+        button_uninstall.text = Text(
+          "失败",
+          style: TextStyle(
+            fontSize: 18, 
+            color: Colors.white
+          ),
+        );
+      // 如果成功则触发重构
+      } else {
+        print('Uninstalled version from $cur_installed_version');
+        if (mounted) setState(() {
+          cur_installed_version = null;
+        });
+      }
     }
-    // 如果成功则触发重构
-    else {
-      print('Uninstalled version from $cur_installed_version');
-      if (mounted) setState(() {
-        cur_installed_version = null;
-      });
+    
+    // 如果是当前应用页面按下卸载按钮
+    else if (button_uninstall_this != null) {
+      button_uninstall_this.is_pressed.value = true;
+      excute_result = await LinyapsCliHelper.uninstall_app(appId);
+      // 设置安装按钮被释放
+      button_uninstall_this.is_pressed.value = false;
+      // 如果启动失败设置启动按钮文字为"失败"提醒用户
+      if (excute_result != 0) {
+        button_uninstall_this.text = Text(
+          "失败",
+          style: TextStyle(
+            fontSize: 18, 
+            color: Colors.white
+          ),
+        );
+      // 如果成功则触发重构
+      } else {
+        print('Uninstalled version from $cur_installed_version');
+        if (mounted) setState(() {
+          cur_installed_version = null;
+        });
+      }
     }
+
+    return;
+    
+  }
+
+  // 当前页面启动应用的函数
+  // 该页面启动应用的方法
+  Future <void> launch_app (String appId, MyButton_AppInfoPage_LaunchApp button_launchapp) async {
+    // 设置按钮被按下
+    button_launchapp.is_pressed.value = true;
+    LinyapsCliHelper.launch_installed_app(appId);
+    // 设置一定延迟后才允许用户继续按下, 以防用户突然一次按太多下打开过多实例
+    await Future.delayed(Duration(milliseconds: 550));
+    // 启动后设置按钮被释放
+    button_launchapp.is_pressed.value = false;
   }
 
   @override
@@ -226,6 +282,59 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     cur_app_info_list = null;
     // 初始化appState
     appState = Get.find<ApplicationState>();
+
+    // 初始化当前页面的安装按钮
+    install_button = MyButton_AppInfoPage_Install(
+      text: Text(
+        '安装应用',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ), 
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 30, 
+      onPressed: () async {
+        await install_app(cur_app_info_list![0], null, install_button);
+      }
+    );
+
+    // 初始化当前页面的卸载按钮
+    uninstall_button = MyButton_AppInfoPage_Uninstall(
+      text: Text(
+        '卸载应用',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ), 
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 30, 
+      onPressed: () async {
+        await uninstall_app(
+          cur_app_info_list![0].id, 
+          null, 
+          uninstall_button,
+        );
+      }
+    );
+
+    // 初始化当前页面的启动应用按钮
+    launch_app_button = MyButton_AppInfoPage_LaunchApp(
+      text: Text(
+        '启动应用',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ), 
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 30, 
+      onPressed: () async {
+        await launch_app(cur_app_info_list![0].id, launch_app_button);
+      }
+    );
+
     // 暴力异步获取应用信息
     Future.delayed(Duration.zero).then((_) async {
       // 先检连接状态
@@ -251,8 +360,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 开启定时器定时检查
     checkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
       if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused ||
-          WidgetsBinding.instance.lifecycleState !=
-              AppLifecycleState.inactive) {
+          WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive) {
         if (is_page_loaded && !is_app_local_info_loading) {
           // 进行刷新本地安装的应用信息
           await appState.updateInstalledAppsList_Online();
@@ -281,48 +389,6 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-
-    // 初始化当前页面的安装按钮
-    install_button = MyButton_Install(
-      text: Text(
-        '安装应用',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-        ),
-      ), 
-      is_pressed: ValueNotifier<bool>(false), 
-      indicator_width: 2.5, 
-      onPressed: () async {
-        await install_app(cur_app_info_list![0], install_button);
-      }
-    );
-
-    // 初始化当前页面的卸载按钮
-    uninstall_button = MyButton_FatalWarning(
-      text: Text(
-        '卸载应用',
-        style: TextStyle(
-          fontSize: 10,
-        ),
-      ), 
-      is_pressed: ValueNotifier<bool>(false), 
-      indicator_width: 2.5, 
-      onPressed: () {}
-    );
-
-    // 初始化当前页面的启动应用按钮
-    launch_app_button = MyButton_LaunchApp(
-      text: Text(
-        '启动应用',
-        style: TextStyle(
-          fontSize: 10,
-        ),
-      ), 
-      is_pressed: ValueNotifier<bool>(false), 
-      indicator_width: 2.5, 
-      onPressed: () {}
-    );
 
     // 传入UI构建用的应用信息, 强制非空用于UI构建
     List <LinyapsPackageInfo> curAppInfo_build = cur_app_info_list ?? [];
@@ -467,10 +533,15 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                               height: 50,
                                               child: VerticalDivider(),
                                             ),
-                                            Text(
-                                              curAppInfo_build[0].description,
-                                              style: TextStyle(
-                                                fontSize: 20,
+                                            SizedBox(
+                                              width: 450,
+                                              child: Text(
+                                                curAppInfo_build[0].description,
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
                                           ],
@@ -478,14 +549,26 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       ],
                                     ),
                                   ),
-                                  Column(
+                                  cur_installed_version == null
+                                  ? SizedBox(
+                                    height: 50,
+                                    width: 160,
+                                    child: install_button,
+                                  )
+                                  : Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
                                         height: 50,
                                         width: 160,
-                                        child: install_button,
+                                        child: launch_app_button,
                                       ),
+                                      const SizedBox(height: 15,),
+                                      SizedBox(
+                                        height: 50,
+                                        width: 160,
+                                        child: uninstall_button,
+                                      )
                                     ],
                                   ),
                                 ],
@@ -513,7 +596,11 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                 ),
                               ),
                               Text(
-                                '运行依赖库: ${curAppInfo_build[0].runtime ?? "无"}',
+                                '运行依赖库: ${curAppInfo_build[0].runtime == null
+                                               ? "无"
+                                               : curAppInfo_build[0].runtime!.isEmpty
+                                                 ? "无"
+                                                 : curAppInfo_build[0].runtime!}',
                                 style: TextStyle(
                                   fontSize: 19,
                                 ),
@@ -579,12 +666,14 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         await install_app(
                                           appInfo,
                                           button_install,
+                                          null,
                                         );
                                       },
                                       uninstall_app: (appId, button_uninstall) async {
                                         await uninstall_app(
                                           appId,
                                           button_uninstall,
+                                          null,
                                         );
                                       },
                                     ),

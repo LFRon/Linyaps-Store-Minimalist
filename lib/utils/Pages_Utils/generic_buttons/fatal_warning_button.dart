@@ -49,7 +49,7 @@ class _MyButton_FatalWarningState extends State<MyButton_FatalWarning> {
             child: SizedBox(
               height: widget.indicator_width,
               width: widget.indicator_width,
-              child: CircularProgressIndicator(
+              child: YaruCircularProgressIndicator(
                 color: Colors.white,
                 strokeWidth:2.5,     // 设置加载条宽度
               ),

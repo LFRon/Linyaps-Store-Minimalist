@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:yaru/theme.dart';
 import 'package:yaru/widgets.dart';
 
-class MyButton_AppInfoPage_Install extends StatefulWidget {
+class MyButton_Install extends StatefulWidget {
 
   Text text;     // 声明显示的文本
   double indicator_width;      // 声明加载动画图标大小
   ValueNotifier <bool> is_pressed;   // is_press开关用于调整按钮是否被按下
   VoidCallback onPressed;
 
-  MyButton_AppInfoPage_Install({
+  MyButton_Install({
     super.key,
     required this.text,
     required this.is_pressed,
@@ -23,10 +23,10 @@ class MyButton_AppInfoPage_Install extends StatefulWidget {
   });
 
   @override
-  State<MyButton_AppInfoPage_Install> createState() => _MyButton_AppInfoPage_InstallState();
+  State<MyButton_Install> createState() => _MyButton_InstallState();
 }
 
-class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Install> {
+class _MyButton_InstallState extends State<MyButton_Install> {
   @override
   Widget build(BuildContext context) {
     // 返回变量监听层
@@ -52,7 +52,7 @@ class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Inst
               width: widget.indicator_width,
               child: YaruCircularProgressIndicator(
                 color: Colors.white,
-                strokeWidth: 3.5,     // 设置加载条宽度
+                strokeWidth: 2.5,     // 设置加载条宽度
               ),
             ),
           )
