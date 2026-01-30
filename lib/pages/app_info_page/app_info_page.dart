@@ -583,7 +583,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                               ),
                               const SizedBox(height: 20,),
                               Text(
-                                '详细介绍: ${curAppInfo_build[0].descInfo ?? "暂无"}',
+                                curAppInfo_build[0].descInfo ?? '暂无',
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
