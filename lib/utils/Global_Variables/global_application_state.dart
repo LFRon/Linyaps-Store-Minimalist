@@ -95,7 +95,6 @@ class ApplicationState extends GetxController {
     installedAppsList.assignAll(newList);
     update();
   }
-  ////
 
   //// 对下载列表的更改
   // 更新正在下载的应用列表
