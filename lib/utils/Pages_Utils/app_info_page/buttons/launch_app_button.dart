@@ -35,8 +35,9 @@ class _MyButton_AppInfoPage_LaunchAppState extends State<MyButton_AppInfoPage_La
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: YaruColors.ubuntuMateGreen,
+          color: YaruColors.adwaitaGreen,
           elevation: 0,   // 设置不显示边缘阴影
+          padding: EdgeInsets.all(0),
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),
           ),

@@ -286,7 +286,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 初始化当前页面的安装按钮
     install_button = MyButton_AppInfoPage_Install(
       text: Text(
-        '安装应用',
+        '安装',
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,
@@ -302,7 +302,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 初始化当前页面的卸载按钮
     uninstall_button = MyButton_AppInfoPage_Uninstall(
       text: Text(
-        '卸载应用',
+        '卸载',
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,
@@ -322,7 +322,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 初始化当前页面的启动应用按钮
     launch_app_button = MyButton_AppInfoPage_LaunchApp(
       text: Text(
-        '启动应用',
+        '启动',
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,
@@ -551,22 +551,22 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                   ),
                                   cur_installed_version == null
                                   ? SizedBox(
-                                    height: 50,
-                                    width: 160,
+                                    height: 45,
+                                    width: 120,
                                     child: install_button,
                                   )
                                   : Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        height: 50,
-                                        width: 160,
+                                        height: 45,
+                                        width: 120,
                                         child: launch_app_button,
                                       ),
                                       const SizedBox(height: 15,),
                                       SizedBox(
-                                        height: 50,
-                                        width: 160,
+                                        height: 45,
+                                        width: 120,
                                         child: uninstall_button,
                                       )
                                     ],

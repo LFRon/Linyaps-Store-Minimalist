@@ -35,6 +35,7 @@ class _MyButton_AppInfoPage_UninstallState extends State<MyButton_AppInfoPage_Un
         return MaterialButton(
           color: YaruColors.adwaitaRed,
           elevation: 0,   // 设置不显示边缘阴影
+          padding: EdgeInsets.all(0),
           shape: RoundedRectangleBorder(  // 设置圆角
             borderRadius: BorderRadius.circular(12),
           ),

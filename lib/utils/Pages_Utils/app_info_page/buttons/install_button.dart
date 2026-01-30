@@ -36,6 +36,7 @@ class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Inst
         return MaterialButton(
           color: YaruColors.adwaitaBlue,
           elevation: 0,   // 设置不显示边缘阴影
+          padding: EdgeInsets.all(0),
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),
           ),
@@ -56,7 +57,19 @@ class _MyButton_AppInfoPage_InstallState extends State<MyButton_AppInfoPage_Inst
               ),
             ),
           )
-          :widget.text,
+          : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                size: 25,
+                Icons.install_desktop,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10,),
+              widget.text,
+            ],
+          ),
         );
       }
     );
