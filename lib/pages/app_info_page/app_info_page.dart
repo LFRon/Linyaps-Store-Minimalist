@@ -23,12 +23,10 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/b
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/app_listview/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/fatal_warning_button.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yaru/settings.dart';
 import 'package:yaru/widgets.dart';
 
 class AppInfoPage extends StatefulWidget {
-
-  // 声明必须获取的当前主题
-  ThemeData curThemeData;
 
   // 声明必须获取的应用ID
   String appId;
@@ -36,7 +34,6 @@ class AppInfoPage extends StatefulWidget {
   AppInfoPage({
     super.key, 
     required this.appId,
-    required this.curThemeData,
   });
 
   @override
@@ -397,8 +394,8 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
 
-    return Theme(
-      data: widget.curThemeData,
+    return YaruTheme(
+      data: YaruThemeData(),
       child: Scaffold(
         body: is_page_loaded
           ? Padding(

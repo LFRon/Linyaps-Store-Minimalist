@@ -46,11 +46,8 @@ class WelcomeAppGridItems {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        // 先获取当前页面主题
-                        ThemeData curThemeData = Theme.of(this.context);
                         return AppInfoPage(
                           appId: appinfo.id,
-                          curThemeData: curThemeData,
                         );
                       },
                     ),

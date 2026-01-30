@@ -66,8 +66,6 @@ class UpgradableAppListItems {
         child: OpenContainer(
           openElevation: 0,
           closedElevation: 0,
-          transitionDuration: Duration(milliseconds: 320),
-          transitionType: ContainerTransitionType.fadeThrough,
           closedShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -78,11 +76,8 @@ class UpgradableAppListItems {
                        ? Colors.grey.shade800
                        : Colors.grey.shade200,
           openBuilder: (context, action) {
-            // 先获取当前页面主题
-            ThemeData curThemeData = Theme.of(this.context);
             return AppInfoPage(
               appId: cur_upgradable_app_info.id,
-              curThemeData: curThemeData,
             );
           },
           closedBuilder: (context, action) {

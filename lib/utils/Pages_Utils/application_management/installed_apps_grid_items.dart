@@ -44,17 +44,12 @@ class InstalledAppsGridItems {
       return OpenContainer(
         openElevation: 0,
         closedElevation: 0,
-        transitionDuration: Duration(milliseconds: 320),
-        transitionType: ContainerTransitionType.fadeThrough,
         closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         openBuilder: (context, action) {
-          // 先获取当前页面主题
-          ThemeData curThemeData = Theme.of(this.context);
           return AppInfoPage(
             appId: installed_app_info[index].id,
-            curThemeData: curThemeData,
           );
         },
         closedBuilder: (context, action) {
