@@ -29,9 +29,6 @@ class MyButton_LaunchUrl extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
         elevation: 0,
       ),
       child: Row(

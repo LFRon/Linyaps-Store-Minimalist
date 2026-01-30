@@ -43,7 +43,7 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: 20.0,top: 20,right: 20),
+        padding: const EdgeInsets.only(left: 20.0,top: 20,right: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +112,7 @@ class _AboutPageState extends State<AboutPage> {
             ),
             const SizedBox(height: 10,),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '玲珑官网: https://linglong.space',
@@ -128,7 +129,7 @@ class _AboutPageState extends State<AboutPage> {
                       await launchPageUrl(0);
                     }, 
                     icon: Icon(
-                      Icons.open_in_browser
+                      Icons.launch
                     ), 
                     text: Text(
                       '点击访问',
@@ -140,7 +141,9 @@ class _AboutPageState extends State<AboutPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 15,),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '玲珑网页商店官网: https://store.linyaps.org.cn',
@@ -157,7 +160,7 @@ class _AboutPageState extends State<AboutPage> {
                       await launchPageUrl(1);
                     }, 
                     icon: Icon(
-                      Icons.open_in_browser
+                      Icons.launch
                     ), 
                     text: Text(
                       '点击访问',
@@ -187,6 +190,7 @@ class _AboutPageState extends State<AboutPage> {
             ),
             const SizedBox(height: 10,),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Gitee 链接: https://gitee.com/LFRon/Linyaps-Store-Minimalist',
@@ -203,7 +207,7 @@ class _AboutPageState extends State<AboutPage> {
                       await launchPageUrl(2);
                     }, 
                     icon: Icon(
-                      Icons.open_in_browser
+                      Icons.launch
                     ), 
                     text: Text(
                       '点击访问',
@@ -215,7 +219,9 @@ class _AboutPageState extends State<AboutPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 15,),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Github 链接: https://github.com/LFRon/Linyaps-Store-Minimalist',
@@ -232,7 +238,7 @@ class _AboutPageState extends State<AboutPage> {
                       await launchPageUrl(3);
                     }, 
                     icon: Icon(
-                      Icons.open_in_browser
+                      Icons.launch
                     ), 
                     text: Text(
                       '点击访问',
