@@ -30,8 +30,6 @@ void main(List<String> args) async {
     await WindowManager.instance.setIcon(
       'assets/images/linyaps-generic-app.png'
     );
-    // 设置窗口最小大小
-    await WindowManager.instance.setMinimumSize(const Size(1200,600));
     await windowManager.ensureInitialized();
 
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
