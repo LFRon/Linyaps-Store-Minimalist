@@ -15,6 +15,7 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/screenshot_list.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/launch_app_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
@@ -41,6 +42,15 @@ class AppInfoPage extends StatefulWidget {
 }
 
 class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
+
+  // 声明当前页面的安装按钮
+  late MyButton_Install install_button;
+
+  // 声明当前页面卸载按钮
+  late MyButton_FatalWarning uninstall_button;
+
+  // 声明当前页面启动按钮
+  late MyButton_LaunchApp launch_app_button;
 
   // 启用页面监视定时器
   Timer? checkTimer;
@@ -132,8 +142,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   // 获取应用具体安装信息的函数
   Future <void> update_app_installed_info(String appId) async {
     // 如果应用存在,则通过应用管理拿到本地应用安装对象信息
-    LinyapsPackageInfo? app_local_info =
-        await LinyapsAppManagerApi.get_cur_installed_app_info(appId);
+    LinyapsPackageInfo? app_local_info = await LinyapsAppManagerApi.get_cur_installed_app_info(appId);
     // 先判断其是否在本地
     // 如果在本地则再检查应用是否在商店返回信息中
     // 若不在,则认定为是用户本地安装的非商店版本
@@ -156,6 +165,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
         cur_installed_version = app_local_info.version;
       });
     }
+    return;
   }
 
   // 设置页面响应已完成的函数
@@ -272,6 +282,48 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
 
+    // 初始化当前页面的安装按钮
+    install_button = MyButton_Install(
+      text: Text(
+        '安装应用',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ), 
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 2.5, 
+      onPressed: () async {
+        await install_app(cur_app_info_list![0], install_button);
+      }
+    );
+
+    // 初始化当前页面的卸载按钮
+    uninstall_button = MyButton_FatalWarning(
+      text: Text(
+        '卸载应用',
+        style: TextStyle(
+          fontSize: 10,
+        ),
+      ), 
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 2.5, 
+      onPressed: () {}
+    );
+
+    // 初始化当前页面的启动应用按钮
+    launch_app_button = MyButton_LaunchApp(
+      text: Text(
+        '启动应用',
+        style: TextStyle(
+          fontSize: 10,
+        ),
+      ), 
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 2.5, 
+      onPressed: () {}
+    );
+
     // 传入UI构建用的应用信息, 强制非空用于UI构建
     List <LinyapsPackageInfo> curAppInfo_build = cur_app_info_list ?? [];
 
@@ -326,7 +378,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SizedBox(width: 10,),
                                   // 先显示图片
@@ -464,6 +516,16 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         ),
                                       ],
                                     ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 50,
+                                        width: 160,
+                                        child: install_button,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
