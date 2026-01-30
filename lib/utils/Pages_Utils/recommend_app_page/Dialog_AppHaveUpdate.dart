@@ -23,7 +23,7 @@ class MyDialog_AppHaveUpdate extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Syscolor.isBlack(context)
                        ? YaruColors.coolGrey
-                       : Colors.grey.shade100,
+                       : Colors.grey.shade200,
       titlePadding: EdgeInsets.only(top:20,bottom: 20),
       title: Center(
         child: Text(
