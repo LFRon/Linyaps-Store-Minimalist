@@ -64,6 +64,8 @@ class LinyapsAppManagerApi {
             kind: i['info']['kind'],
             id: i['info']['id'], 
             name: i['info']['name'], 
+            base: i['info']['base'],
+            runtime: i['info']['runtime'],
             version: i['info']['version'], 
             description: i['info']['description'], 
             arch: i['info']['arch'][0],
@@ -83,6 +85,8 @@ class LinyapsAppManagerApi {
             LinyapsPackageInfo(
               kind: i['info']['kind'],
               id: i['info']['id'], 
+              base: i['info']['base'],
+              runtime: i['info']['runtime'],
               name: i['info']['name'], 
               version: i['info']['version'], 
               description: i['info']['description'], 
@@ -100,6 +104,8 @@ class LinyapsAppManagerApi {
                 kind: i['info']['kind'],
                 id: i['info']['id'], 
                 name: i['info']['name'], 
+                base: i['info']['base'],
+                runtime: i['info']['runtime'],
                 version: i['info']['version'], 
                 description: i['info']['description'], 
                 arch: i['info']['arch'][0],
@@ -108,17 +114,7 @@ class LinyapsAppManagerApi {
             );
             is_installed_apps_updated = true;
           } else {
-            installedItems.add(
-              LinyapsPackageInfo(
-                kind: i['info']['kind'],
-                id: i['info']['id'], 
-                name: i['info']['name'], 
-                version: existingApp.version, 
-                description: i['info']['description'], 
-                arch: i['info']['arch'][0],
-                Icon: existingApp.Icon,   
-              ),
-            );
+            installedItems.add(existingApp);
           }
         }
       }
