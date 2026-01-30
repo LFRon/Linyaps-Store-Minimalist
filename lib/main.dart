@@ -24,8 +24,12 @@ void main(List<String> args) async {
 
   if (!kIsWasm && !kIsWeb) {
 
-    // 设置窗口参数
+    // 设置窗口名称
     await WindowManager.instance.setTitle("玲珑应用商店");
+    // 设置窗口图标
+    await WindowManager.instance.setIcon(
+      'assets/images/linyaps-generic-app.png'
+    );
     // 设置窗口最小大小
     await WindowManager.instance.setMinimumSize(const Size(1200,600));
     await windowManager.ensureInitialized();
