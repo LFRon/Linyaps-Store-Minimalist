@@ -6,6 +6,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/widgets.dart';
+import 'package:yaru/yaru.dart';
 
 class MyButton_UpgradeAll extends StatefulWidget {
 
@@ -34,7 +35,7 @@ class _MyButton_UpgradeAllState extends State<MyButton_UpgradeAll> {
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: CupertinoColors.activeGreen.withValues(alpha: 0.8),
+          color: YaruColors.adwaitaGreen,
           elevation: 0,   // 设置不显示边缘阴影
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),

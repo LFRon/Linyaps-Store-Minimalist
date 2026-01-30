@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:yaru/yaru.dart';
 
 class MyButton_RefreshUpgradableApps extends StatelessWidget {
 
@@ -23,7 +24,7 @@ class MyButton_RefreshUpgradableApps extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
-      color: Colors.lightBlue.shade600,
+      color: YaruColors.adwaitaBlue,
       elevation: 0,   // 设置不显示边缘阴影
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(

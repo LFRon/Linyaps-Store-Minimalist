@@ -4,6 +4,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:yaru/theme.dart';
 import 'package:yaru/widgets.dart';
 
 class MyButton_Upgrade extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MyButton_UpgradeState extends State<MyButton_Upgrade> {
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: Colors.green.withValues(alpha: 0.7),
+          color: YaruColors.adwaitaGreen,
           elevation: 0,   // 设置不显示边缘阴影
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),
