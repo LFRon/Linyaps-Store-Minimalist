@@ -395,7 +395,9 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // double width = MediaQuery.of(context).size.width;
 
     return YaruTheme(
-      data: YaruThemeData(),
+      data: YaruThemeData(
+        themeMode: ThemeMode.system,
+      ),
       child: Scaffold(
         body: is_page_loaded
           ? Padding(
