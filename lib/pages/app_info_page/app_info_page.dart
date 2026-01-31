@@ -85,10 +85,9 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     bool is_connection_good_get =
         await CheckInternetConnectionStatus.staus_is_good();
     // 更新页面具体变量信息
-    if (mounted)
-      setState(() {
-        is_connection_good = is_connection_good_get;
-      });
+    if (mounted) setState(() {
+      is_connection_good = is_connection_good_get;
+    });
     return;
   }
 
