@@ -17,7 +17,7 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linya
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/screenshot_list.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/launch_app_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/uninstall_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/uninstall_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/app_listview/install_button.dart';
