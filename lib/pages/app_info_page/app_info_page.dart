@@ -403,7 +403,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
             padding: EdgeInsets.only(
               left: 30,
               top: 20,
-              right: 30,
+              right: 20,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -435,7 +435,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                           padding: EdgeInsets.only(
                             top: 40,
                             left: 20,
-                            right: 20,
+                            right: 30,
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
