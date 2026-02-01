@@ -57,6 +57,10 @@ class LinyapsAppManagerApi {
         i['info']['id'] == 'org.deepin.runtime.qt5'   ||
         i['info']['id'] == 'org.deepin.runtime.webengine'
       ) continue;
+      // 检测到非启用应用也直接跳过
+      if (
+        i['deleted'] == true
+      ) continue;
       // 先检查已知的应用列表是否为空省去不必要的循环
       if (already_get_list.isEmpty) {
         installedItems.add(
