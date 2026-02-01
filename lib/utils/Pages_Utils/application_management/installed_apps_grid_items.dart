@@ -11,27 +11,32 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/uninstall_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/uninstall_button.dart';
 import 'package:yaru/widgets.dart';
 
-class InstalledAppsGridItems {
+class InstalledAppsGridItems extends StatefulWidget {
 
   // 获取窗口当前的像素宽高
   double height,width;
 
   // 获取当前安装的应用信息
-  List <LinyapsPackageInfo> installed_app_info;
+  LinyapsPackageInfo cur_app_info;
 
-  // 获取页面必须的上下文
-  BuildContext context;
-
-  // 获取必需变量信息
   InstalledAppsGridItems({
-    required this.installed_app_info,
-    required this.context,
+    super.key,
     required this.height,
     required this.width,
+    required this.cur_app_info,
   });
+
+  @override
+  State<InstalledAppsGridItems> createState() => _InstalledAppsGridItemsState();
+}
+
+class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
+
+  // 声明卸载按钮
+  late MyButton_AppManage_Uninstall button_uninstall;
 
   // 用于检查本地的应用是否在商店里
   Future <bool> isAppExistInStore (String appId) async {
@@ -42,118 +47,123 @@ class InstalledAppsGridItems {
   }
 
   // 用户按下卸载按钮, 卸载对应应用
-  Future <void> uninstallApp (String appId, MyButton_AppInfoPage_Uninstall button_uninstall) async {
+  Future <void> uninstallApp (String appId, MyButton_AppManage_Uninstall button_uninstall) async {
+    // 设置卸载按钮为按下状态
     button_uninstall.is_pressed.value = true;
     // 调用卸载函数
-    if (await LinyapsCliHelper.uninstall_app(appId) != 0) {
-      button_uninstall.text = Text(
-        '失败'
-      );
-    }
+    await LinyapsCliHelper.uninstall_app(appId);
+    // 重置卸载按钮为按下状态
+    button_uninstall.is_pressed.value = false;
   }
 
-  List <Widget> items () {
-    return List.generate(installed_app_info.length, (index) {
+  @override
+  void initState () {
+    super.initState();
+    // 初始化卸载按钮
+    button_uninstall = MyButton_AppManage_Uninstall(
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 22, 
+      onPressed: () async {
+        await uninstallApp(
+          widget.cur_app_info.id, 
+          button_uninstall,
+        );
+      }
+    );
+  }
 
-      // 初始化卸载按钮
-      MyButton_AppInfoPage_Uninstall button_uninstall = MyButton_AppInfoPage_Uninstall(
-        text: Text(
-          '卸载',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
+  @override
+  Widget build(BuildContext context) {
+
+    // 从父控件传入当前应用信息
+    LinyapsPackageInfo cur_app_info = widget.cur_app_info;
+
+    return OpenContainer(
+      openElevation: 0,
+      closedElevation: 0,
+      closedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      openBuilder: (context, action) {
+        return AppInfoPage(
+          appId: cur_app_info.id,
+        );
+      },
+      closedBuilder: (context, action) {
+        return Container(
+          height: 120,
+          width: 100,
+          decoration: BoxDecoration(
+            color: Syscolor.isBlack(context)
+                    ? Colors.grey.shade800
+                    : Colors.grey.shade200,
           ),
-        ),
-        is_pressed: ValueNotifier<bool>(false),
-        indicator_width: 20,
-        onPressed: () {},
-      );
-
-      return OpenContainer(
-        openElevation: 0,
-        closedElevation: 0,
-        closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        openBuilder: (context, action) {
-          return AppInfoPage(
-            appId: installed_app_info[index].id,
-          );
-        },
-        closedBuilder: (context, action) {
-          return Container(
-            height: 120,
-            width: 100,
-            decoration: BoxDecoration(
-              color: Syscolor.isBlack(context)
-                     ? Colors.grey.shade800
-                     : Colors.grey.shade200,
-            ),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Padding(
-                padding: EdgeInsets.only(top: 20,bottom: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // 先显示图片
-                    CachedNetworkImage(
-                      imageUrl: installed_app_info[index].Icon ?? '',
-                      key: ValueKey(installed_app_info[index].name),
-                      height: 80,width: 80,
-                      placeholder: (context, loadingProgress) {
-                        return Center(
-                          child: SizedBox(
-                            height: 80,
-                            width: 80,
-                            child: YaruCircularProgressIndicator(
-                              strokeWidth: 3.0,
-                            ),  // 加载时显示进度条
-                          ),
-                        );
-                      },
-                      errorWidget: (context, error, stackTrace) => Center(
-                        child: Image(
-                          image: AssetImage(
-                            'assets/images/linyaps-generic-app.png',
-                          ),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Padding(
+              padding: EdgeInsets.only(top: 15,bottom: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 先显示图片
+                  CachedNetworkImage(
+                    imageUrl: cur_app_info.Icon ?? '',
+                    key: ValueKey(cur_app_info.name),
+                    height: 80,width: 80,
+                    placeholder: (context, loadingProgress) {
+                      return Center(
+                        child: SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: YaruCircularProgressIndicator(
+                            strokeWidth: 3.0,
+                          ),  // 加载时显示进度条
+                        ),
+                      );
+                    },
+                    errorWidget: (context, error, stackTrace) => Center(
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/linyaps-generic-app.png',
                         ),
                       ),
                     ),
-                    // SizedBox(height:height*0.03,),    // 设置控件间间距
-                    // 再显示应用名
-                    Text(
-                      installed_app_info[index].name,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      // 设置最多只能显示1行
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  // SizedBox(height:height*0.03,),    // 设置控件间间距
+                  // 再显示应用名
+                  Text(
+                    cur_app_info.name,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    // SizedBox(height:height*0.025,),    // 设置控件间间距
-                    Text(
-                      "版本号: ${installed_app_info[index].version}",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    // 设置最多只能显示1行
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  // SizedBox(height:height*0.025,),    // 设置控件间间距
+                  Text(
+                    "版本号: ${cur_app_info.version}",
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                    SizedBox(
-                      height: 30,
-                      width: 80,
-                      child: button_uninstall,
-                    ),
-                  ],
-                ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: button_uninstall,
+                  ),
+                ],
               ),
             ),
-          );
-        } 
-      );
-    });
+          ),
+        );
+      } 
+    );
   }
 }
+
+

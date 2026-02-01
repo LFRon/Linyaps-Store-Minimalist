@@ -520,7 +520,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                           appState.installedAppsList.isNotEmpty
                             ? Padding(
                               padding: EdgeInsets.only(top: height*0.02,right: width*0.01),
-                              child: GridView(
+                              child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -528,12 +528,14 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                   mainAxisSpacing: height * 0.02,
                                   crossAxisSpacing: width * 0.02,
                                 ), 
-                                children: InstalledAppsGridItems(
-                                  installed_app_info: appState.installedAppsList.cast<LinyapsPackageInfo>(), 
-                                  context: context, 
-                                  height: height, 
-                                  width: width,
-                                ).items(),
+                                itemCount: appState.installedAppsList.length,
+                                itemBuilder: (context, index) {
+                                  return InstalledAppsGridItems(
+                                    cur_app_info: appState.installedAppsList[index],  
+                                    height: height, 
+                                    width: width,
+                                  );
+                                },
                               )
                             )
                             : Center(
