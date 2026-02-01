@@ -63,6 +63,9 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   // 声明本地应用信息加载状态,默认状态为未加载
   bool is_app_local_info_loading = false;
 
+  // 声明当前应用是否已在安装的状态管理, 默认为没有安装
+  ValueNotifier <bool> is_app_installing = ValueNotifier<bool>(false);
+
   // 声明存储当前应用在商店的信息列表
   late List<LinyapsPackageInfo>? cur_app_info_list;
 
@@ -137,7 +140,10 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     return true;
   }
 
-  // 获取应用具体安装信息的函数
+  // 获取并刷新应用具体安装信息的函数
+  // 需要刷新的信息为
+  // 1. 当前应用是否安装
+  // 2. 当前应用是否在下载列表里
   Future <void> update_app_installed_info(String appId) async {
     // 如果应用存在,则通过应用管理拿到本地应用安装对象信息
     LinyapsPackageInfo? app_local_info = await LinyapsAppManagerApi.get_cur_installed_app_info(appId);
@@ -148,8 +154,8 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     if (app_local_info != null) {
       LinyapsPackageInfo? is_app_local_info_in_store = cur_app_info_list!
                                                        .firstWhereOrNull(
-                                                        (app) => app.id == appId && 
-                                                        app.version == app_local_info.version,
+                                                          (app) => app.id == appId && 
+                                                          app.version == app_local_info.version,
                                                        );
       if (is_app_local_info_in_store == null) {
         app_local_info.is_app_local_only = true;
@@ -164,7 +170,30 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
       });
     } else {
       // 如果应用不存在则恢复Null值
-      cur_installed_version = null;
+      if (mounted) setState(() {
+        cur_installed_version = null;
+      });
+    }
+
+    // 再检查当前应用是否在下载列表中, 并刷新对应状态管理变量
+    // 先看看下载列表里有没有这个应用和对应版本
+    LinyapsPackageInfo? cur_downloading_app = null;
+    // 在这里列表非空才进行查找, 防止意外的报错
+    if (appState.downloadingAppsQueue.isNotEmpty) { 
+      // 进行检查
+      cur_downloading_app = appState.downloadingAppsQueue.firstWhereOrNull(
+        (app) => app.id == cur_app_info_list![0].id ,
+      );
+    } 
+    // 如果找到了对应应用实例
+    if (cur_downloading_app != null) {
+      if (mounted) setState(() {
+        is_app_installing.value = true;
+      });
+    } else {
+      if (mounted) setState(() {
+        is_app_installing.value = false;
+      });
     }
     return;
   }
@@ -183,14 +212,6 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     MyButton_Install? button_install,   // 这个是应用列表中的安装按钮(如果传入)
     MyButton_AppInfoPage_Install? button_install_this,  // 这个是本页面中的安装按钮(如果传入)
   ) async {
-    // 设置按钮被按下
-    // 设置安装按钮被按下
-    if (button_install != null) {
-      button_install.is_pressed.value = true;
-    }
-    if (button_install_this != null) {
-      button_install_this.is_pressed.value = true;
-    }
     await LinyapsAppManagerApi.install_app(appInfo);
     if (mounted) setState(() {});
     return;
@@ -288,7 +309,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
           fontSize: 18,
         ),
       ), 
-      is_pressed: ValueNotifier<bool>(false), 
+      is_pressed: is_app_installing, 
       indicator_width: 30, 
       onPressed: () async {
         await install_app(cur_app_info_list![0], null, install_button);
@@ -547,7 +568,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       ],
                                     ),
                                   ),
-                                  cur_installed_version == null
+                                  cur_installed_version == null || is_app_installing.value == true
                                   ? SizedBox(
                                     height: 45,
                                     width: 120,
