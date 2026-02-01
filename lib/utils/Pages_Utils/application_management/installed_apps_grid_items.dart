@@ -7,9 +7,11 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
+import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/uninstall_button.dart';
 import 'package:yaru/widgets.dart';
 
 class InstalledAppsGridItems {
@@ -39,8 +41,34 @@ class InstalledAppsGridItems {
     else return true;
   }
 
+  // 用户按下卸载按钮, 卸载对应应用
+  Future <void> uninstallApp (String appId, MyButton_AppInfoPage_Uninstall button_uninstall) async {
+    button_uninstall.is_pressed.value = true;
+    // 调用卸载函数
+    if (await LinyapsCliHelper.uninstall_app(appId) != 0) {
+      button_uninstall.text = Text(
+        '失败'
+      );
+    }
+  }
+
   List <Widget> items () {
     return List.generate(installed_app_info.length, (index) {
+
+      // 初始化卸载按钮
+      MyButton_AppInfoPage_Uninstall button_uninstall = MyButton_AppInfoPage_Uninstall(
+        text: Text(
+          '卸载',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+          ),
+        ),
+        is_pressed: ValueNotifier<bool>(false),
+        indicator_width: 20,
+        onPressed: () {},
+      );
+
       return OpenContainer(
         openElevation: 0,
         closedElevation: 0,
@@ -64,7 +92,7 @@ class InstalledAppsGridItems {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Padding(
-                padding: EdgeInsets.only(top: 30,bottom: 30),
+                padding: EdgeInsets.only(top: 20,bottom: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,6 +141,11 @@ class InstalledAppsGridItems {
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      height: 30,
+                      width: 80,
+                      child: button_uninstall,
                     ),
                   ],
                 ),
