@@ -24,10 +24,10 @@ class ApplicationState extends GetxController {
   RxString repo_arch = ''.obs;
 
   // 初始化私有可更新应用列表
-  RxList upgradableAppsList = RxList<LinyapsPackageInfo>();
+  RxList <LinyapsPackageInfo> upgradableAppsList = RxList<LinyapsPackageInfo>();
 
   // 初始化私有已安装应用列表
-  RxList installedAppsList = RxList<LinyapsPackageInfo>();
+  RxList <LinyapsPackageInfo> installedAppsList = RxList<LinyapsPackageInfo>();
 
   // 初始化正在下载的应用列表
   RxList downloadingAppsQueue = RxList<LinyapsPackageInfo>();
