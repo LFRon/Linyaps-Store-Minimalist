@@ -17,7 +17,7 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linya
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/screenshot_list.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/install_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/launch_app_button.dart';
-import 'package:linglong_store_flutter/utils/Pages_Utils/generic_buttons/uninstall_button.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/uninstall_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/dialog_app_not_exist_in_store.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/back_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/buttons/app_listview/install_button.dart';
@@ -46,7 +46,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   late MyButton_AppInfoPage_Install install_button;
 
   // 声明当前页面卸载按钮
-  late MyButton_Uninstall uninstall_button;
+  late MyButton_AppInfoPage_Uninstall uninstall_button;
 
   // 声明当前页面启动按钮
   late MyButton_AppInfoPage_LaunchApp launch_app_button;
@@ -221,7 +221,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   Future <void> uninstall_app(
     String appId,
     MyButton_FatalWarning? button_uninstall,  // 这个是应用列表中的卸载按钮(如果传入)
-    MyButton_Uninstall? button_uninstall_this,  // 这个是本页面中的卸载按钮(如果传入)
+    MyButton_AppInfoPage_Uninstall? button_uninstall_this,  // 这个是本页面中的卸载按钮(如果传入)
   ) async {
     // 设置卸载按钮被按下
     int excute_result = 0;
@@ -317,7 +317,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     );
 
     // 初始化当前页面的卸载按钮
-    uninstall_button = MyButton_Uninstall(
+    uninstall_button = MyButton_AppInfoPage_Uninstall(
       text: Text(
         '卸载',
         style: TextStyle(
