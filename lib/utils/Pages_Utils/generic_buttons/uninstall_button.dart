@@ -6,14 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
-class MyButton_AppInfoPage_Uninstall extends StatefulWidget {
+class MyButton_Uninstall extends StatefulWidget {
 
   Text text;     // 声明显示的文本
   double indicator_width;      // 声明加载动画图标大小
   ValueNotifier <bool> is_pressed;   // is_press开关用于调整按钮是否被按下
   VoidCallback onPressed;
 
-  MyButton_AppInfoPage_Uninstall({
+  MyButton_Uninstall({
     super.key,
     required this.text,
     required this.is_pressed,
@@ -22,10 +22,10 @@ class MyButton_AppInfoPage_Uninstall extends StatefulWidget {
   });
 
   @override
-  State<MyButton_AppInfoPage_Uninstall> createState() => _MyButton_AppInfoPage_UninstallState();
+  State<MyButton_Uninstall> createState() => _MyButton_UninstallState();
 }
 
-class _MyButton_AppInfoPage_UninstallState extends State<MyButton_AppInfoPage_Uninstall> {
+class _MyButton_UninstallState extends State<MyButton_Uninstall> {
   @override
   Widget build(BuildContext context) {
     // 返回变量监听层
