@@ -11,6 +11,7 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_store_api_service.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/launch_app_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/uninstall_button.dart';
 import 'package:yaru/widgets.dart';
 
@@ -35,6 +36,9 @@ class InstalledAppsGridItems extends StatefulWidget {
 
 class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
 
+  // 声明启动应用按钮
+  late MyButton_AppManage_LaunchApp button_launch_app;
+
   // 声明卸载按钮
   late MyButton_AppManage_Uninstall button_uninstall;
 
@@ -56,6 +60,18 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
     button_uninstall.is_pressed.value = false;
   }
 
+  // 用户按下启动按钮, 启动对应应用
+  Future <void> launchApp (String appId, MyButton_AppManage_LaunchApp button_launch) async {
+    // 设置按钮被按下
+    button_launch.is_pressed.value = true;
+    LinyapsCliHelper.launch_installed_app(appId);   // 以非await异步方式启动应用
+    // 设置一定延迟后才允许用户继续按下, 以防用户突然一次按太多下打开过多实例
+    await Future.delayed(Duration(milliseconds: 550));
+    // 启动后设置按钮被释放
+    button_launch.is_pressed.value = false;
+    return;
+  }
+
   @override
   void initState () {
     super.initState();
@@ -68,6 +84,14 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
           widget.cur_app_info.id, 
           button_uninstall,
         );
+      }
+    );
+    // 初始化启动按钮
+    button_launch_app = MyButton_AppManage_LaunchApp(
+      is_pressed: ValueNotifier<bool>(false), 
+      indicator_width: 22, 
+      onPressed: () async {
+        await launchApp(widget.cur_app_info.id, button_launch_app);
       }
     );
   }
@@ -151,10 +175,21 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: button_uninstall,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: button_launch_app,
+                      ),
+                      const SizedBox(width: 20,),
+                      SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: button_uninstall,
+                      ),
+                    ],
                   ),
                 ],
               ),

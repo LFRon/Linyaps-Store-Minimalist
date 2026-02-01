@@ -6,13 +6,13 @@
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
-class MyButton_AppManage_Uninstall extends StatefulWidget {
+class MyButton_AppManage_LaunchApp extends StatefulWidget {
 
   double indicator_width;      // 声明加载动画图标大小
   ValueNotifier <bool> is_pressed;   // is_press开关用于调整按钮是否被按下
   VoidCallback onPressed;
 
-  MyButton_AppManage_Uninstall({
+  MyButton_AppManage_LaunchApp({
     super.key,
     required this.is_pressed,
     required this.indicator_width,
@@ -20,10 +20,10 @@ class MyButton_AppManage_Uninstall extends StatefulWidget {
   });
 
   @override
-  State<MyButton_AppManage_Uninstall> createState() => _MyButton_AppManage_UninstallState();
+  State<MyButton_AppManage_LaunchApp> createState() => _MyButton_AppManage_LaunchAppState();
 }
 
-class _MyButton_AppManage_UninstallState extends State<MyButton_AppManage_Uninstall> {
+class _MyButton_AppManage_LaunchAppState extends State<MyButton_AppManage_LaunchApp> {
   @override
   Widget build(BuildContext context) {
     // 返回变量监听层
@@ -31,7 +31,7 @@ class _MyButton_AppManage_UninstallState extends State<MyButton_AppManage_Uninst
       valueListenable: widget.is_pressed,
       builder: (context,value,child) {
         return MaterialButton(
-          color: Colors.redAccent.withValues(alpha: 1),
+          color: YaruColors.adwaitaBlue,
           // 设置不显示边缘阴影
           focusElevation: 0,
           highlightElevation: 0,
@@ -39,7 +39,7 @@ class _MyButton_AppManage_UninstallState extends State<MyButton_AppManage_Uninst
           hoverElevation: 0,
           padding: EdgeInsets.all(0),
           shape: RoundedRectangleBorder(  // 设置圆角
-            borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12),
           ),
           onPressed: () async {    // 设置按下之后触发的函数(方法)   
             // 防止用户多次同时按下按钮,所以只允许按钮在is_pressed为假时才可以触发执行函数
@@ -60,7 +60,7 @@ class _MyButton_AppManage_UninstallState extends State<MyButton_AppManage_Uninst
           )
           : Center(
             child: Icon(
-              Icons.delete_outline_rounded,
+              Icons.launch,
               size: 25,
               color: Colors.white,
             ),
