@@ -54,13 +54,13 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   // 启用页面监视定时器
   Timer? checkTimer;
 
-  // 声明网络连接的状态对象,默认状态为假
+  // 声明网络连接的状态对象,默认状态为连接不好
   bool is_connection_good = false;
 
   // 声明页面加载状态,默认为没加载完
   bool is_page_loaded = false;
 
-  // 声明本地应用信息加载状态,默认状态为假
+  // 声明本地应用信息加载状态,默认状态为未加载
   bool is_app_local_info_loading = false;
 
   // 声明存储当前应用在商店的信息列表
