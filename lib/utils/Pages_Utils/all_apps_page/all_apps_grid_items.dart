@@ -24,7 +24,6 @@ class AppGridItem {
   });
 
   Widget item () {
-
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
