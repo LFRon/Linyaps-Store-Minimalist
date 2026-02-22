@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 
-class RecommendAppSliderItems extends StatefulWidget {
+class RecommendAppSliderItem extends StatefulWidget {
 
   // 传入当前应用信息
   LinyapsPackageInfo curAppInfo;
@@ -17,7 +17,7 @@ class RecommendAppSliderItems extends StatefulWidget {
   double height;
   double width;
 
-  RecommendAppSliderItems({
+  RecommendAppSliderItem({
     super.key,
     required this.curAppInfo,
     required this.height,
@@ -25,10 +25,10 @@ class RecommendAppSliderItems extends StatefulWidget {
   });
 
   @override
-  State<RecommendAppSliderItems> createState() => _RecommendAppSliderItemsState();
+  State<RecommendAppSliderItem> createState() => _RecommendAppSliderItemState();
 }
 
-class _RecommendAppSliderItemsState extends State<RecommendAppSliderItems> {
+class _RecommendAppSliderItemState extends State<RecommendAppSliderItem> {
   @override
   Widget build(BuildContext context) {
 

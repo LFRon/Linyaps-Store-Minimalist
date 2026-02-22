@@ -208,8 +208,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                             carouselController: carousel_controller,
                             items: List.generate(
                               RecommendAppsList.length, 
-                              // TODO: 重命名为RecommendAppSliderItem
-                              (index) => RecommendAppSliderItems(
+                              (index) => RecommendAppSliderItem(
                                 curAppInfo: RecommendAppsList[index],
                                 height: height,
                                 width: width,

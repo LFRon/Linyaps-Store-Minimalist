@@ -145,14 +145,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     crossAxisSpacing: 20,
                   ),
 
-                  // TODO: 改名为NewestAppGridItem和MostDownloadAppGridItem
                   itemCount: AppsRakingList.length,
                   itemBuilder: (context, index) {
                     return radio_choice == 1
-                    ? NewestAppGridItems(
+                    ? NewestAppGridItem(
                       curAppInfo:  AppsRakingList[index],
                     )
-                    : MostDownloadAppGridItems(
+                    : MostDownloadAppGridItem(
                       curAppInfo: AppsRakingList[index],
                     );
                   },

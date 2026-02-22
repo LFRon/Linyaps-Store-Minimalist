@@ -11,20 +11,20 @@ import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class NewestAppGridItems extends StatefulWidget {
+class NewestAppGridItem extends StatefulWidget {
 
   LinyapsPackageInfo curAppInfo;
 
-  NewestAppGridItems({
+  NewestAppGridItem({
     super.key,
     required this.curAppInfo,
   });
 
   @override
-  State<NewestAppGridItems> createState() => _NewestAppGridItemsState();
+  State<NewestAppGridItem> createState() => _NewestAppGridItemState();
 }
 
-class _NewestAppGridItemsState extends State<NewestAppGridItems> {
+class _NewestAppGridItemState extends State<NewestAppGridItem> {
   @override
   Widget build(BuildContext context) {
 

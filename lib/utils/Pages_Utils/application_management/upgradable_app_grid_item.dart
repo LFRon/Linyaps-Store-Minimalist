@@ -15,7 +15,7 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class UpgradableAppListItems extends StatefulWidget {
+class UpgradableAppListItem extends StatefulWidget {
 
   // 获取必要的当前应用信息
   LinyapsPackageInfo cur_upgradable_app_info;
@@ -23,17 +23,17 @@ class UpgradableAppListItems extends StatefulWidget {
   // 通过回调函数进行升级操作
   Future <void> Function(LinyapsPackageInfo cur_upgradable_app_info) upgrade_cur_app;
 
-  UpgradableAppListItems({
+  UpgradableAppListItem({
     super.key,
     required this.cur_upgradable_app_info,
     required this.upgrade_cur_app,
   });
 
   @override
-  State<UpgradableAppListItems> createState() => _UpgradableAppListItemsState();
+  State<UpgradableAppListItem> createState() => _UpgradableAppListItemState();
 }
 
-class _UpgradableAppListItemsState extends State<UpgradableAppListItems> {
+class _UpgradableAppListItemState extends State<UpgradableAppListItem> {
 
 
 

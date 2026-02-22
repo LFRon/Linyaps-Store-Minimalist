@@ -347,8 +347,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
                     itemBuilder:(context, index) {
                       return Padding(
                         padding: EdgeInsets.only(right: 13),
-                        //TODO: 将类名更改为AllAppsPage_AppGridItem
-                        child: AppGridItem(
+                        child: AllAppsPage_AppGridItem(
                           cur_app: cur_app_list[index], 
                         ),
                       );

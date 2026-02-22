@@ -11,20 +11,20 @@ import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class MostDownloadAppGridItems extends StatefulWidget {
+class MostDownloadAppGridItem extends StatefulWidget {
 
   LinyapsPackageInfo curAppInfo;
 
-  MostDownloadAppGridItems({
+  MostDownloadAppGridItem({
     super.key,
     required this.curAppInfo,
   });
 
   @override
-  State<MostDownloadAppGridItems> createState() => _MostDownloadAppGridItemsState();
+  State<MostDownloadAppGridItem> createState() => _MostDownloadAppGridItemState();
 }
 
-class _MostDownloadAppGridItemsState extends State<MostDownloadAppGridItems> {
+class _MostDownloadAppGridItemState extends State<MostDownloadAppGridItem> {
   @override
   Widget build(BuildContext context) {
 

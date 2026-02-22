@@ -11,21 +11,21 @@ import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class AppGridItem extends StatefulWidget {
+class AllAppsPage_AppGridItem extends StatefulWidget {
 
   // 获取当前应用信息
   LinyapsPackageInfo cur_app;
 
-  AppGridItem({
+  AllAppsPage_AppGridItem({
     super.key,
     required this.cur_app,
   });
 
   @override
-  State<AppGridItem> createState() => _AppGridItemState();
+  State<AllAppsPage_AppGridItem> createState() => _AllAppsPage_AppGridItemState();
 }
 
-class _AppGridItemState extends State<AppGridItem> {
+class _AllAppsPage_AppGridItemState extends State<AllAppsPage_AppGridItem> {
 
   @override
   Widget build(BuildContext context) {
