@@ -41,17 +41,17 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
   bool is_page_loaded = false;
 
   // 声明从API服务获取的顶栏应用列表信息对象
-  List<LinyapsPackageInfo> RecommendAppsList = [];
+  List <LinyapsPackageInfo> RecommendAppsList = [];
 
   // 声明从API服务获取的推荐应用列表信息对象
-  List<LinyapsPackageInfo> WelcomeAppsList = [];
+  List <LinyapsPackageInfo> WelcomeAppsList = [];
 
   // 声明GetX控制的全局变量对象
   late ApplicationState globalAppState;
 
   // 从API服务中获取顶栏展示应用列表信息
   Future <void> updateRecommendAppsList () async {
-    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService.get_welcome_carousel_list();
+    List <LinyapsPackageInfo>  await_get = await LinyapsStoreApiService.get_welcome_carousel_list();
     if (mounted) setState(() {
       RecommendAppsList = await_get;
     });
@@ -59,7 +59,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
   
   // 声明从API服务获取的推荐应用列表信息对象
   Future <void> updateWelcomeAppsList () async {
-    List<LinyapsPackageInfo>  await_get = await LinyapsStoreApiService.get_welcome_app_list();
+    List <LinyapsPackageInfo>  await_get = await LinyapsStoreApiService.get_welcome_app_list();
     if (mounted) setState(() {
       WelcomeAppsList = await_get;
     });
@@ -206,12 +206,15 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                           height: height*0.3,
                           child: CarouselSlider(
                             carouselController: carousel_controller,
-                            items: RecommendAppSliderItems(
-                              context: context,
-                              RecommendAppsList: RecommendAppsList, 
-                              height: height, 
-                              width: width,
-                            ).Items(), 
+                            items: List.generate(
+                              RecommendAppsList.length, 
+                              // TODO: 重命名为RecommendAppSliderItem
+                              (index) => RecommendAppSliderItems(
+                                curAppInfo: RecommendAppsList[index],
+                                height: height,
+                                width: width,
+                              ),
+                            ),
                             // 设定连播图详情
                             options: CarouselOptions(
                               height: height*0.3,   // 设置高度
@@ -259,19 +262,21 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                     ),
                     SizedBox(height: height*0.045,),   // 设置控件间间距
                     Flexible(
-                      child: GridView(
+                      child: GridView.builder(
                         // 先设置网格UI样式
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: gridViewCrossAxisCount,    // 设置水平网格个数
                           mainAxisSpacing: height*0.02,
                           crossAxisSpacing: width*0.02,
                         ), 
-                        children: WelcomeAppGridItems(
-                          WelcomeAppsList: WelcomeAppsList, 
-                          context: context,
-                          height: height*0.9, 
-                          width: height*0.8,
-                        ).Items(),
+                        itemCount: WelcomeAppsList.length,
+                        itemBuilder: (context, index) {
+                          return WelcomeAppGridItems(
+                            curAppInfo: WelcomeAppsList[index], 
+                            height: height*0.9, 
+                            width: height*0.8,
+                          );
+                        },
                       ),
                     ),
                   ],

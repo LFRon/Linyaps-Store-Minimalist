@@ -11,20 +11,28 @@ import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class AppGridItem {
+class AppGridItem extends StatefulWidget {
 
   // 获取当前应用信息
   LinyapsPackageInfo cur_app;
 
-  // 获取页面必须的上下文
-  BuildContext context;
-
   AppGridItem({
+    super.key,
     required this.cur_app,
-    required this.context,
   });
 
-  Widget item () {
+  @override
+  State<AppGridItem> createState() => _AppGridItemState();
+}
+
+class _AppGridItemState extends State<AppGridItem> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    // 从页面父类传入cur_app信息
+    LinyapsPackageInfo cur_app = widget.cur_app;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -45,6 +53,7 @@ class AppGridItem {
           height: 150,
           width: 150,
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
             color: Syscolor.isBlack(context)
                    ? Colors.grey.shade800
                    : Colors.grey.shade200,
@@ -111,6 +120,6 @@ class AppGridItem {
           ),
         ),
       ),
-    );    
+    ); 
   }
 }

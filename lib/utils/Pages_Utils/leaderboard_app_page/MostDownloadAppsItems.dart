@@ -1,7 +1,7 @@
 // 返回首页推荐应用卡片具体对象
 
 // 关闭VSCode非必要报错
-// ignore_for_file: file_names, non_constant_identifier_names, avoid_function_literals_in_foreach_calls
+// ignore_for_file: must_be_immutable, file_names, non_constant_identifier_names, avoid_function_literals_in_foreach_calls
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -11,113 +11,114 @@ import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class MostDownloadAppGridItems {
-  List<LinyapsPackageInfo> NewestAppsList;
+class MostDownloadAppGridItems extends StatefulWidget {
 
-  // 获取当前页面上下文对象
-  BuildContext context;
+  LinyapsPackageInfo curAppInfo;
 
   MostDownloadAppGridItems({
-    required this.NewestAppsList,
-    required this.context,
+    super.key,
+    required this.curAppInfo,
   });
-  List <Widget> Items ()
-    {
-      List <Widget> returnItem = [];    // returnItem为最终返回的控件
-      // 循环加入控件
-      NewestAppsList.forEach((appinfo) {
-        returnItem.add(
-          Padding(
-            // 用Padding是避开右侧的滚轮
-            padding: EdgeInsets.only(right: 13.0),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.fade,
-                      duration: const Duration(milliseconds: 100),
-                      reverseDuration: const Duration(milliseconds: 130),
-                      child: AppInfoPage(
-                        appId: appinfo.id,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Syscolor.isBlack(context)
-                           ? Colors.grey.shade800
-                           : Colors.grey.shade200,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          // 先显示图片
-                          Hero(
-                            tag: "NewestAppsGridItems_${appinfo.id}_${appinfo.version}",
-                            child: CachedNetworkImage(
-                              imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
-                              placeholder: (context, url) => Center(
-                                child: YaruCircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                ),
-                              ),
-                              // 无法显示图片时显示错误
-                              errorWidget: (context, error, stackTrace) => Center(
-                                child: SizedBox(
-                                  width: 80,
-                                  height: 80,
-                                  child: Image(
-                                    image: AssetImage(
-                                      'assets/images/linyaps-generic-app.png',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              height: 80,
-                              width: 80,
-                            ),
-                          ),
-                          SizedBox(height: 20,),    // 设置控件间间距
-                          // 再显示应用名
-                          Text(
-                            appinfo.name,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 20,),    // 设置控件间间距
-                          Text(
-                            appinfo.installCount==null
-                            ? "下载量: 未知"
-                            : "下载量: ${appinfo.installCount} 次",
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+
+  @override
+  State<MostDownloadAppGridItems> createState() => _MostDownloadAppGridItemsState();
+}
+
+class _MostDownloadAppGridItemsState extends State<MostDownloadAppGridItems> {
+  @override
+  Widget build(BuildContext context) {
+
+    // 从页面父类传入必需信息
+    LinyapsPackageInfo appinfo = widget.curAppInfo;
+
+    return Padding(
+      // 用Padding是避开右侧的滚轮
+      padding: EdgeInsets.only(right: 13.0),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 100),
+                reverseDuration: const Duration(milliseconds: 130),
+                child: AppInfoPage(
+                  appId: appinfo.id,
                 ),
               ),
+            );
+          },
+          child: Container(
+            height: 150,
+            width: 150,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Syscolor.isBlack(context)
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade200,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    // 先显示图片
+                    Hero(
+                      tag: "NewestAppsGridItems_${appinfo.id}_${appinfo.version}",
+                      child: CachedNetworkImage(
+                        imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
+                        placeholder: (context, url) => Center(
+                          child: YaruCircularProgressIndicator(
+                            strokeWidth: 2.5,
+                          ),
+                        ),
+                        // 无法显示图片时显示错误
+                        errorWidget: (context, error, stackTrace) => Center(
+                          child: SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: Image(
+                              image: AssetImage(
+                                'assets/images/linyaps-generic-app.png',
+                              ),
+                            ),
+                          ),
+                        ),
+                        height: 80,
+                        width: 80,
+                      ),
+                    ),
+                    SizedBox(height: 20,),    // 设置控件间间距
+                    // 再显示应用名
+                    Text(
+                      appinfo.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 20,),    // 设置控件间间距
+                    Text(
+                      appinfo.installCount==null
+                      ? "下载量: 未知"
+                      : "下载量: ${appinfo.installCount} 次",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        );
-      });
-      return returnItem;
-    }
+        ),
+      ),
+    );
+  }
 }

@@ -15,7 +15,7 @@ import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/
 import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
-class UpgradableAppListItems {
+class UpgradableAppListItems extends StatefulWidget {
 
   // 获取必要的当前应用信息
   LinyapsPackageInfo cur_upgradable_app_info;
@@ -23,19 +23,29 @@ class UpgradableAppListItems {
   // 通过回调函数进行升级操作
   Future <void> Function(LinyapsPackageInfo cur_upgradable_app_info) upgrade_cur_app;
 
-  // 获取必要的父页面构建上下文
-  BuildContext context;
-
   UpgradableAppListItems({
+    super.key,
     required this.cur_upgradable_app_info,
-    required this.context,
     required this.upgrade_cur_app,
   });
 
-  // 返回所有控件
-  Widget item () {
+  @override
+  State<UpgradableAppListItems> createState() => _UpgradableAppListItemsState();
+}
+
+class _UpgradableAppListItemsState extends State<UpgradableAppListItems> {
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    // 从页面父类传入必要信息
+    LinyapsPackageInfo cur_upgradable_app_info = widget.cur_upgradable_app_info;
+
     // 拿到我们当前的存储全局变量类的响应实例
     ApplicationState appState = Get.find<ApplicationState>();
+    
     // 先判断应用是否已经在下载,如果是,用downloading_app用于存储当前下载中的应用对象
     LinyapsPackageInfo? downloading_app = appState.downloadingAppsQueue.firstWhereOrNull(
       (app) => cur_upgradable_app_info.id == app.id && cur_upgradable_app_info.version == app.version,
@@ -55,7 +65,7 @@ class UpgradableAppListItems {
       indicator_width: 20, 
       onPressed: () async {
         // 将应用推入下载列表
-        await upgrade_cur_app(cur_upgradable_app_info);
+        await widget.upgrade_cur_app(cur_upgradable_app_info);
       },
     );
     
@@ -166,4 +176,3 @@ class UpgradableAppListItems {
     ); 
   }
 }
-

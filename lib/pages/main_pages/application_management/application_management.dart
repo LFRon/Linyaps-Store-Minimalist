@@ -460,13 +460,13 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                     physics: NeverScrollableScrollPhysics(),    // 禁止滚动
                                     itemCount: appState.upgradableAppsList.length,
                                     itemBuilder:(context, index) {
+                                      // TODO: 改为UpgradableAppListItem
                                       return UpgradableAppListItems(
                                         cur_upgradable_app_info: appState.upgradableAppsList[index], 
                                         upgrade_cur_app: (cur_upgradable_app_info) async {
                                           await upgradeApp(cur_upgradable_app_info);
-                                        },
-                                        context: context, 
-                                      ).item();
+                                        }, 
+                                      );
                                     }, 
                                   ),
                                 )

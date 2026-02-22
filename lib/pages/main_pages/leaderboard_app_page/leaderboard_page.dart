@@ -135,67 +135,70 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ),
             ),
             is_page_loaded     // 先检查页面是否完全加载
-              ? is_connection_good      // 再检查网络连接状态
-                ? Flexible(
-                  child: GridView(
-                    // 先设置网格UI样式
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: gridViewCrossAxisCount, // 设置水平网格个数
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                    ),
-                    children: radio_choice == 1
-                      ? NewestAppGridItems(
-                        NewestAppsList: AppsRakingList,
-                        context: context,
-                      ).Items()
-                      : MostDownloadAppGridItems(
-                        NewestAppsList: AppsRakingList,
-                        context: context,
-                      ).Items(),
+            ? is_connection_good      // 再检查网络连接状态
+              ? Flexible(
+                child: GridView.builder(
+                  // 先设置网格UI样式
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridViewCrossAxisCount, // 设置水平网格个数
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                   ),
-                )
-                : Flexible(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          '糟糕,网络连接好像丢掉了呢 :(',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
+
+                  // TODO: 改名为NewestAppGridItem和MostDownloadAppGridItem
+                  itemCount: AppsRakingList.length,
+                  itemBuilder: (context, index) {
+                    return radio_choice == 1
+                    ? NewestAppGridItems(
+                      curAppInfo:  AppsRakingList[index],
+                    )
+                    : MostDownloadAppGridItems(
+                      curAppInfo: AppsRakingList[index],
+                    );
+                  },
+                ),
+              )
               : Flexible(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 55,
-                        width: 55,
-                        child: RepaintBoundary(
-                          child: YaruCircularProgressIndicator(
-                            strokeWidth: 5,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30,),
-                      Text(
-                        "稍等一下, 信息正在加载中哦 ~",
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        '糟糕,网络连接好像丢掉了呢 :(',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
+                          color: Colors.grey.shade600,
                         ),
                       ),
-                    ],
-                  ),
+                    )
+                  ],
+                ),
+              )
+            : Flexible(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 55,
+                      width: 55,
+                      child: RepaintBoundary(
+                        child: YaruCircularProgressIndicator(
+                          strokeWidth: 5,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30,),
+                    Text(
+                      "稍等一下, 信息正在加载中哦 ~",
+                      style: TextStyle(
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            ),
           ],
         ),
       )
