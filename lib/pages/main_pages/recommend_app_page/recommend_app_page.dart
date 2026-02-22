@@ -6,7 +6,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
 import 'package:linglong_store_flutter/check_update.dart';
 import 'package:linglong_store_flutter/pages/install_linyaps_page/install_linyaps_page.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
