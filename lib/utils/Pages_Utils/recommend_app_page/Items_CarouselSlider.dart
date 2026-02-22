@@ -3,7 +3,6 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: non_constant_identifier_names, file_names, avoid_function_literals_in_foreach_calls
 
-import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
@@ -36,69 +35,63 @@ class RecommendAppSliderItems {
         SizedBox(
           width: width*0.5,
           height: height*0.3,
-          child: OpenContainer(  
-            openElevation: 0,
-            closedElevation: 0, 
-            openColor: Theme.of(context).colorScheme.surface,
-            closedColor: Theme.of(context).colorScheme.surface,
-            transitionDuration: Duration(milliseconds: 320),
-            transitionType: ContainerTransitionType.fadeThrough,
-            openBuilder: (context, action) {
-              return AppInfoPage(
-                appId: app_info.id,
-              );
-            },
-            closedShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            closedBuilder: (context, action) {
-              return MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Column(
-                  children: [
-                    // 先显示图片
-                    CachedNetworkImage(
-                      imageUrl: app_info.Icon ?? '',
-                      placeholder: (context, url) => Center(
-                        child: SizedBox(
-                          height: height*0.06,
-                          width: height*0.06,
-                          child: CircularProgressIndicator(
-                            color: Colors.grey.shade300,
-                            strokeWidth: 4.8,
-                          ),  // 加载时显示进度条
-                        ),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AppInfoPage(
+                      appId: app_info.id,
+                    ),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  // 先显示图片
+                  CachedNetworkImage(
+                    imageUrl: app_info.Icon ?? '',
+                    placeholder: (context, url) => Center(
+                      child: SizedBox(
+                        height: height*0.06,
+                        width: height*0.06,
+                        child: CircularProgressIndicator(
+                          color: Colors.grey.shade300,
+                          strokeWidth: 4.8,
+                        ),  // 加载时显示进度条
                       ),
-                      // 无法显示图片时显示错误
-                      errorWidget: (context, error, stackTrace) => Center(
-                        child:Column(
-                          children: [
-                            SizedBox(
-                              width: width*0.05,
-                              child: Icon(
-                                Icons.error_rounded,
-                                color: Colors.redAccent,
-                              ),
+                    ),
+                    // 无法显示图片时显示错误
+                    errorWidget: (context, error, stackTrace) => Center(
+                      child:Column(
+                        children: [
+                          SizedBox(
+                            width: width*0.05,
+                            child: Icon(
+                              Icons.error_rounded,
+                              color: Colors.redAccent,
                             ),
-                          ],
-                        ),
-                      ),
-                      height: height*0.15,
-                      width: height*0.15,
-                    ),
-                    SizedBox(height:height*0.04,),
-                    // 再显示应用名
-                    Text(
-                      app_info.name,
-                      style: TextStyle(
-                        fontSize: height*0.024,
-                        fontWeight: FontWeight.bold,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              );
-            },
+                    height: height*0.15,
+                    width: height*0.15,
+                  ),
+                  SizedBox(height:height*0.04,),
+                  // 再显示应用名
+                  Text(
+                    app_info.name,
+                    style: TextStyle(
+                      fontSize: height*0.024,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );

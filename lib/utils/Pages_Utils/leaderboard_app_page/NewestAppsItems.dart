@@ -3,7 +3,6 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: file_names, non_constant_identifier_names, avoid_function_literals_in_foreach_calls
 
-import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
@@ -30,25 +29,26 @@ class NewestAppGridItems {
         returnItem.add(
           Padding(     // 用Padding是避开右侧的滚轮
             padding: EdgeInsets.only(right: 13.0),
-            child: OpenContainer(
-              openElevation: 0,
-              closedElevation: 0, 
-              closedShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              openBuilder: (context, action) {
-                return AppInfoPage(
-                  appId: appinfo.id,
-                );
-              },
-              closedBuilder:(context, action) {
-                return Container(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppInfoPage(
+                        appId: appinfo.id,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
                   height: 150,
                   width: 150,
                   decoration: BoxDecoration(
                     color: Syscolor.isBlack(context)
-                           ? Colors.grey.shade800
-                           : Colors.grey.shade200,
+                            ? Colors.grey.shade800
+                            : Colors.grey.shade200,
                   ),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
@@ -111,8 +111,8 @@ class NewestAppGridItems {
                       ],
                     ),
                   ),
-                );
-              }
+                ),
+              ),
             ),
           ),
         );
