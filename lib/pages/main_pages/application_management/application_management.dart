@@ -454,7 +454,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
                                   ),
                                 )
                                 : Padding(    // 设置上下控件间距离
-                                  padding: EdgeInsets.only(top:12.0,bottom: 15.0,right: width*0.01),
+                                  padding: EdgeInsets.only(top: 8.0, bottom: 15.0, right: 15.0),
                                   child: ListView.builder(    // 不使用ListView.builder方便按下
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),    // 禁止滚动

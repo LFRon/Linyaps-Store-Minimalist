@@ -122,6 +122,7 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
           height: 120,
           width: 100,
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
             color: Syscolor.isBlack(context)
                     ? Colors.grey.shade800
                     : Colors.grey.shade200,

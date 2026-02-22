@@ -50,9 +50,10 @@ class MostDownloadAppGridItems {
                   height: 150,
                   width: 150,
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
                     color: Syscolor.isBlack(context)
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
+                           ? Colors.grey.shade800
+                           : Colors.grey.shade200,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
