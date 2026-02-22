@@ -197,5 +197,3 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
     );
   }
 }
-
-
