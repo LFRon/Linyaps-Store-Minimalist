@@ -101,27 +101,27 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
     // 从父控件传入当前应用信息
     LinyapsPackageInfo cur_app_info = widget.cur_app_info;
 
-    return Container(
-      height: 120,
-      width: 100,
-      decoration: BoxDecoration(
-        color: Syscolor.isBlack(context)
-                ? Colors.grey.shade800
-                : Colors.grey.shade200,
-      ),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AppInfoPage(
-                  appId: cur_app_info.id,
-                ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AppInfoPage(
+                appId: cur_app_info.id,
               ),
-            );
-          }, 
+            ),
+          );
+        }, 
+        child: Container(
+          height: 120,
+          width: 100,
+          decoration: BoxDecoration(
+            color: Syscolor.isBlack(context)
+                    ? Colors.grey.shade800
+                    : Colors.grey.shade200,
+          ),
           child: Padding(
             padding: EdgeInsets.only(top: 15,bottom: 8),
             child: Column(
