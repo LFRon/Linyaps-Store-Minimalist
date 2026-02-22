@@ -356,7 +356,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
           text: Text(
             '刷新待更新应用',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 19,
               color: Colors.white
             ),
           ),
