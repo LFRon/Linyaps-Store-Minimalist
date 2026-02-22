@@ -38,16 +38,16 @@ class AppGridItem {
         borderRadius: BorderRadius.circular(12),
       ),
       closedBuilder:(context, action) {
-        return Container(
-          height: 150,
-          width: 150,
-          decoration: BoxDecoration(
-            color: Syscolor.isBlack(context)
-                   ? Colors.grey.shade800
-                   : Colors.grey.shade200,
-          ),
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+            height: 150,
+            width: 150,
+            decoration: BoxDecoration(
+              color: Syscolor.isBlack(context)
+                     ? Colors.grey.shade800
+                     : Colors.grey.shade200,
+            ),
             child: Padding(
               padding: EdgeInsets.only(top: 30,bottom: 30),
               child: Column(
