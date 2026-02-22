@@ -67,6 +67,7 @@ class UpgradableAppListItems {
             PageTransition(
               type: PageTransitionType.fade,
               duration: const Duration(milliseconds: 100),
+              reverseDuration: const Duration(milliseconds: 130),
               child: AppInfoPage(
                 appId: cur_upgradable_app_info.id,
               ),

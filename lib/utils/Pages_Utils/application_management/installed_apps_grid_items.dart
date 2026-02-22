@@ -111,6 +111,7 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
             PageTransition(
               type: PageTransitionType.fade,
               duration: const Duration(milliseconds: 100),
+              reverseDuration: const Duration(milliseconds: 130),
               child: AppInfoPage(
                 appId: cur_app_info.id,
               ),

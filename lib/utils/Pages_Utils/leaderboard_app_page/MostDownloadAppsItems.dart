@@ -39,6 +39,7 @@ class MostDownloadAppGridItems {
                     PageTransition(
                       type: PageTransitionType.fade,
                       duration: const Duration(milliseconds: 100),
+                      reverseDuration: const Duration(milliseconds: 130),
                       child: AppInfoPage(
                         appId: appinfo.id,
                       ),
