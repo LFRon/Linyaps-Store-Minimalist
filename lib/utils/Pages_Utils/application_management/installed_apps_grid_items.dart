@@ -12,6 +12,7 @@ import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linya
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/launch_app_button.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/uninstall_button.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
 class InstalledAppsGridItems extends StatefulWidget {
@@ -107,8 +108,10 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AppInfoPage(
+            PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 100),
+              child: AppInfoPage(
                 appId: cur_app_info.id,
               ),
             ),

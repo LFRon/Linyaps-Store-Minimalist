@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
 class MostDownloadAppGridItems {
@@ -35,8 +36,10 @@ class MostDownloadAppGridItems {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => AppInfoPage(
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      duration: const Duration(milliseconds: 100),
+                      child: AppInfoPage(
                         appId: appinfo.id,
                       ),
                     ),

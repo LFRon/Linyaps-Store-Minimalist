@@ -11,6 +11,7 @@ import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/application_management/buttons/upgrade_button.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:yaru/widgets.dart';
 
 class UpgradableAppListItems {
@@ -63,8 +64,10 @@ class UpgradableAppListItems {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AppInfoPage(
+            PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 100),
+              child: AppInfoPage(
                 appId: cur_upgradable_app_info.id,
               ),
             ),
