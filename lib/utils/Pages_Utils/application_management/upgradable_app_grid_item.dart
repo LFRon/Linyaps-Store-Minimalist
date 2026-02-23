@@ -73,7 +73,12 @@ class _UpgradableAppListItemState extends State<UpgradableAppListItem> {
       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: GestureDetector(
+        child: InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          mouseCursor: SystemMouseCursors.click,
           onTap: () {
             Navigator.push(
               context,
