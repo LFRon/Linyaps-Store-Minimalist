@@ -111,95 +111,93 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
                 ? Colors.grey.shade800
                 : Colors.grey.shade200,
       ),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: InkWell(
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 100),
-                reverseDuration: const Duration(milliseconds: 130),
-                child: AppInfoPage(
-                  appId: cur_app_info.id,
+      child: InkWell(
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        mouseCursor: SystemMouseCursors.click,
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 100),
+              reverseDuration: const Duration(milliseconds: 130),
+              child: AppInfoPage(
+                appId: cur_app_info.id,
+              ),
+            ),
+          );
+        }, 
+        child: Padding(
+          padding: EdgeInsets.only(top: 15,bottom: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // 先显示图片
+              CachedNetworkImage(
+                imageUrl: cur_app_info.Icon ?? '',
+                key: ValueKey(cur_app_info.name),
+                height: 80,width: 80,
+                placeholder: (context, loadingProgress) {
+                  return Center(
+                    child: SizedBox(
+                      height: 80,
+                      width: 80,
+                      child: YaruCircularProgressIndicator(
+                        strokeWidth: 3.0,
+                      ),  // 加载时显示进度条
+                    ),
+                  );
+                },
+                errorWidget: (context, error, stackTrace) => Center(
+                  child: Image(
+                    image: AssetImage(
+                      'assets/images/linyaps-generic-app.png',
+                    ),
+                  ),
                 ),
               ),
-            );
-          }, 
-          child: Padding(
-            padding: EdgeInsets.only(top: 15,bottom: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // 先显示图片
-                CachedNetworkImage(
-                  imageUrl: cur_app_info.Icon ?? '',
-                  key: ValueKey(cur_app_info.name),
-                  height: 80,width: 80,
-                  placeholder: (context, loadingProgress) {
-                    return Center(
-                      child: SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: YaruCircularProgressIndicator(
-                          strokeWidth: 3.0,
-                        ),  // 加载时显示进度条
-                      ),
-                    );
-                  },
-                  errorWidget: (context, error, stackTrace) => Center(
-                    child: Image(
-                      image: AssetImage(
-                        'assets/images/linyaps-generic-app.png',
-                      ),
-                    ),
+              // SizedBox(height:height*0.03,),    // 设置控件间间距
+              // 再显示应用名
+              Text(
+                cur_app_info.name,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                // 设置最多只能显示1行
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              // SizedBox(height:height*0.025,),    // 设置控件间间距
+              Text(
+                "版本号: ${cur_app_info.version}",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: button_launch_app,
                   ),
-                ),
-                // SizedBox(height:height*0.03,),    // 设置控件间间距
-                // 再显示应用名
-                Text(
-                  cur_app_info.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  const SizedBox(width: 20,),
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: button_uninstall,
                   ),
-                  // 设置最多只能显示1行
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                // SizedBox(height:height*0.025,),    // 设置控件间间距
-                Text(
-                  "版本号: ${cur_app_info.version}",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: button_launch_app,
-                    ),
-                    const SizedBox(width: 20,),
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: button_uninstall,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
