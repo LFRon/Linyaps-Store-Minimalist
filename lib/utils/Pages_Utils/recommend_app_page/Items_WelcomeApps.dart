@@ -40,86 +40,83 @@ class _WelcomeAppGridItemsState extends State<WelcomeAppGridItems> {
     double width = widget.width;
 
     return Container(
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Syscolor.isBlack(context)
                ? Colors.grey.shade800
                : Colors.grey.shade200,
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return AppInfoPage(
-                      appId: appinfo.id,
-                    );
-                  },
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              // 关掉所有按钮特效
-              backgroundColor: Colors.transparent,
-              overlayColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              elevation: 0,
-              splashFactory: NoSplash.splashFactory,
-            ),
-            child: Column(
-              children: [
-                // 先显示图片
-                Hero(
-                  tag: "WelcomeAppGridItems_${appinfo.id}",
-                  child: CachedNetworkImage(
-                    imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
-                    placeholder: (context, url) => Center(
-                      child: SizedBox(
-                        height: height*0.06,
-                        width: height*0.06,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 4.8,
-                        ),  // 加载时显示进度条
-                      ),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AppInfoPage(
+                    appId: appinfo.id,
+                  );
+                },
+              ),
+            );
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // 先显示图片
+              Hero(
+                tag: "WelcomeAppGridItems_${appinfo.id}",
+                child: CachedNetworkImage(
+                  imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
+                  placeholder: (context, url) => Center(
+                    child: SizedBox(
+                      height: height*0.06,
+                      width: height*0.06,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 4.8,
+                      ),  // 加载时显示进度条
                     ),
-                    // 无法显示图片时显示错误
-                    errorWidget: (context, error, stackTrace) => Center(
-                      child:Column(
-                        children: [
-                          SizedBox(
-                            width: width*0.05,
-                            child: Icon(
-                              Icons.error_rounded,
-                              color: YaruColors.adwaitaRed,
-                            ),
+                  ),
+                  // 无法显示图片时显示错误
+                  errorWidget: (context, error, stackTrace) => Center(
+                    child:Column(
+                      children: [
+                        SizedBox(
+                          width: width*0.05,
+                          child: Icon(
+                            Icons.error_rounded,
+                            color: YaruColors.adwaitaRed,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    height: height*0.1,
-                    width: height*0.1,
                   ),
+                  height: height*0.1,
+                  width: height*0.1,
                 ),
-                SizedBox(height:height*0.025,),
-                // 再显示应用名
-                Text(
-                  appinfo.name,
-                  style: TextStyle(
-                    color: Theme.of(context).brightness == Brightness.dark 
-                            ? Colors.white 
-                            : Colors.black,
-                    fontSize: height*0.025,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              SizedBox(height:height*0.025,),
+              // 再显示应用名
+              Text(
+                appinfo.name,
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark 
+                          ? Colors.white 
+                          : Colors.black,
+                  fontSize: height*0.025,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

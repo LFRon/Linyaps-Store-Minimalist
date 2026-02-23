@@ -34,31 +34,35 @@ class _MostDownloadAppGridItemState extends State<MostDownloadAppGridItem> {
     return Padding(
       // 用Padding是避开右侧的滚轮
       padding: EdgeInsets.only(right: 13.0),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 100),
-                reverseDuration: const Duration(milliseconds: 130),
-                child: AppInfoPage(
-                  appId: appinfo.id,
+      child: Container(
+        height: 150,
+        width: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Syscolor.isBlack(context)
+                  ? Colors.grey.shade800
+                  : Colors.grey.shade200,
+        ),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: InkWell(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.fade,
+                  duration: const Duration(milliseconds: 100),
+                  reverseDuration: const Duration(milliseconds: 130),
+                  child: AppInfoPage(
+                    appId: appinfo.id,
+                  ),
                 ),
-              ),
-            );
-          },
-          child: Container(
-            height: 150,
-            width: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Syscolor.isBlack(context)
-                      ? Colors.grey.shade800
-                      : Colors.grey.shade200,
-            ),
+              );
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

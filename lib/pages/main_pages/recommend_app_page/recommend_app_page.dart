@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:linglong_store_flutter/check_update.dart';
+import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/pages/install_linyaps_page/install_linyaps_page.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
@@ -201,27 +202,46 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                   children: [
                     Stack(
                       children: [
-                        SizedBox(
-                          width: width*0.8,
-                          height: height*0.3,
-                          child: CarouselSlider(
-                            carouselController: carousel_controller,
-                            items: List.generate(
-                              RecommendAppsList.length, 
-                              (index) => RecommendAppSliderItem(
-                                curAppInfo: RecommendAppsList[index],
-                                height: height,
-                                width: width,
+                        CarouselSlider(
+                          carouselController: carousel_controller,
+                          items: List.generate(
+                            RecommendAppsList.length, 
+                            (index) => SizedBox(
+                              width: width*0.5,
+                              height: height*0.3,
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: InkWell(
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AppInfoPage(
+                                          appId: RecommendAppsList[index].id,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: RecommendAppSliderItem(
+                                    curAppInfo: RecommendAppsList[index],
+                                    height: height,
+                                    width: width,
+                                  ),
+                                ),
                               ),
                             ),
-                            // 设定连播图详情
-                            options: CarouselOptions(
-                              height: height*0.3,   // 设置高度
-                              autoPlay: true,
-                              autoPlayInterval: Duration(seconds: 7),
-                              autoPlayAnimationDuration: Duration(seconds: 3),
-                              enableInfiniteScroll: true,
-                            ),
+                          ),
+                          // 设定连播图详情
+                          options: CarouselOptions(
+                            height: height*0.3,   // 设置高度
+                            autoPlay: true,
+                            autoPlayInterval: Duration(seconds: 7),
+                            autoPlayAnimationDuration: Duration(seconds: 3),
+                            enableInfiniteScroll: true,
                           ),
                         ),
                     

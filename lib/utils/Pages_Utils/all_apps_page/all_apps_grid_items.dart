@@ -33,31 +33,35 @@ class _AllAppsPage_AppGridItemState extends State<AllAppsPage_AppGridItem> {
     // 从页面父类传入cur_app信息
     LinyapsPackageInfo cur_app = widget.cur_app;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.fade,
-              duration: const Duration(milliseconds: 100),
-              reverseDuration: const Duration(milliseconds: 130),
-              child: AppInfoPage(
-                appId: cur_app.id,
+    return Container(
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Syscolor.isBlack(context)
+               ? Colors.grey.shade800
+               : Colors.grey.shade200,
+      ),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 100),
+                reverseDuration: const Duration(milliseconds: 130),
+                child: AppInfoPage(
+                  appId: cur_app.id,
+                ),
               ),
-            ),
-          );
-        },
-        child: Container(
-          height: 150,
-          width: 150,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Syscolor.isBlack(context)
-                   ? Colors.grey.shade800
-                   : Colors.grey.shade200,
-          ),
+            );
+          },
           child: Padding(
             padding: EdgeInsets.only(top: 30,bottom: 30),
             child: Column(
