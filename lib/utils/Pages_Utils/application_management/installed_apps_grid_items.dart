@@ -114,6 +114,10 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
           onTap: () {
             Navigator.push(
               context,
