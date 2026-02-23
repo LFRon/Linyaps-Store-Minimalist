@@ -14,4 +14,4 @@ Flutter版本: 3.41.2
 
 Dart版本: 3.11.0
 
-宿主Linux发行版: Fedora GNU/Linux 43 x86-64
+宿主Linux发行版: Debian GNU/Linux Testing x86-64
