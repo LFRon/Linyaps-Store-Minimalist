@@ -209,28 +209,26 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                             (index) => SizedBox(
                               width: width*0.5,
                               height: height*0.3,
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: InkWell(
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AppInfoPage(
-                                          appId: RecommendAppsList[index].id,
-                                        ),
+                              child: InkWell(
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                mouseCursor: SystemMouseCursors.click,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AppInfoPage(
+                                        appId: RecommendAppsList[index].id,
                                       ),
-                                    );
-                                  },
-                                  child: RecommendAppSliderItem(
-                                    curAppInfo: RecommendAppsList[index],
-                                    height: height,
-                                    width: width,
-                                  ),
+                                    ),
+                                  );
+                                },
+                                child: RecommendAppSliderItem(
+                                  curAppInfo: RecommendAppsList[index],
+                                  height: height,
+                                  width: width,
                                 ),
                               ),
                             ),

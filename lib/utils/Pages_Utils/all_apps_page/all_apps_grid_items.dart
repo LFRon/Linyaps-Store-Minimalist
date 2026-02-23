@@ -42,85 +42,83 @@ class _AllAppsPage_AppGridItemState extends State<AllAppsPage_AppGridItem> {
                ? Colors.grey.shade800
                : Colors.grey.shade200,
       ),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: InkWell(
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 100),
-                reverseDuration: const Duration(milliseconds: 130),
-                child: AppInfoPage(
-                  appId: cur_app.id,
-                ),
+      child: InkWell(
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        mouseCursor: SystemMouseCursors.click,
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 100),
+              reverseDuration: const Duration(milliseconds: 130),
+              child: AppInfoPage(
+                appId: cur_app.id,
               ),
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.only(top: 30,bottom: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // 先显示图片
-                Hero(
-                  tag: "NewestAppsGridItems_${cur_app.id}",
-                  child: CachedNetworkImage(
-                    imageUrl: cur_app.Icon==null?"":cur_app.Icon!,
-                    placeholder: (context, url) => Center(
-                      child: SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: YaruCircularProgressIndicator(
-                          strokeWidth: 2.5,
-                        ),  // 加载时显示进度条
-                      ),
+            ),
+          );
+        },
+        child: Padding(
+          padding: EdgeInsets.only(top: 30,bottom: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // 先显示图片
+              Hero(
+                tag: "NewestAppsGridItems_${cur_app.id}",
+                child: CachedNetworkImage(
+                  imageUrl: cur_app.Icon==null?"":cur_app.Icon!,
+                  placeholder: (context, url) => Center(
+                    child: SizedBox(
+                      height: 80,
+                      width: 80,
+                      child: YaruCircularProgressIndicator(
+                        strokeWidth: 2.5,
+                      ),  // 加载时显示进度条
                     ),
-                    // 无法显示图片时显示错误
-                    errorWidget: (context, error, stackTrace) => Center(
-                      child: SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: Image(
-                          image: AssetImage(
-                            'assets/images/linyaps-generic-app.png',
-                          ),
+                  ),
+                  // 无法显示图片时显示错误
+                  errorWidget: (context, error, stackTrace) => Center(
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/linyaps-generic-app.png',
                         ),
                       ),
                     ),
-                    height: 80,
-                    width: 80,
                   ),
+                  height: 80,
+                  width: 80,
                 ),
-                // SizedBox(height:height*0.03,),    // 设置控件间间距
-                // 再显示应用名
-                Text(
-                  cur_app.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  // 设置最多只能显示1行
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              ),
+              // SizedBox(height:height*0.03,),    // 设置控件间间距
+              // 再显示应用名
+              Text(
+                cur_app.name,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                // SizedBox(height:height*0.025,),    // 设置控件间间距
-                Text(
-                  "版本号: ${cur_app.version}",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                // 设置最多只能显示1行
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              // SizedBox(height:height*0.025,),    // 设置控件间间距
+              Text(
+                "版本号: ${cur_app.version}",
+                style: TextStyle(
+                  fontSize: 18,
                 ),
-              ],
-            ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ),
       ),

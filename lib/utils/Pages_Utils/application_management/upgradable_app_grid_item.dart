@@ -71,109 +71,106 @@ class _UpgradableAppListItemState extends State<UpgradableAppListItem> {
     
     return Padding(   // 设置上下控件间间距
       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: InkWell(
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          mouseCursor: SystemMouseCursors.click,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 100),
-                reverseDuration: const Duration(milliseconds: 130),
-                child: AppInfoPage(
-                  appId: cur_upgradable_app_info.id,
-                ),
+      child: InkWell(
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        mouseCursor: SystemMouseCursors.click,
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 100),
+              reverseDuration: const Duration(milliseconds: 130),
+              child: AppInfoPage(
+                appId: cur_upgradable_app_info.id,
               ),
-            );
-          }, 
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Syscolor.isBlack(context)
-                             ? Colors.grey.shade800
-                             : Colors.grey.shade200,
-              ),
-            child: Padding(
-              padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 25.0,right: 22.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // 第一个Expanded放应用图标+名字
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: cur_upgradable_app_info.Icon ?? '',
-                          placeholder: (context, url) => Center(
-                            child: SizedBox(
-                              height: 80,
-                              width: 80,
-                              child: YaruCircularProgressIndicator(
-                                strokeWidth:2.5,     // 设置加载条宽度
-                              ),  // 加载时显示进度条
-                            ),
+            ),
+          );
+        }, 
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Syscolor.isBlack(context)
+                           ? Colors.grey.shade800
+                           : Colors.grey.shade200,
+            ),
+          child: Padding(
+            padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 25.0,right: 22.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // 第一个Expanded放应用图标+名字
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: cur_upgradable_app_info.Icon ?? '',
+                        placeholder: (context, url) => Center(
+                          child: SizedBox(
+                            height: 80,
+                            width: 80,
+                            child: YaruCircularProgressIndicator(
+                              strokeWidth:2.5,     // 设置加载条宽度
+                            ),  // 加载时显示进度条
                           ),
-                          // 如果图片无法加载就使用默认玲珑图标
-                          errorWidget: (context, error, stackTrace) => Center(
-                            child: Image(
-                              image: AssetImage(
-                                'assets/images/linyaps-generic-app.png',
-                              ),
-                            ),
-                          ),
-                          height: 70,
-                          width: 70,
                         ),
-                        SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
-                        Text(
-                          cur_upgradable_app_info.name,
+                        // 如果图片无法加载就使用默认玲珑图标
+                        errorWidget: (context, error, stackTrace) => Center(
+                          child: Image(
+                            image: AssetImage(
+                              'assets/images/linyaps-generic-app.png',
+                            ),
+                          ),
+                        ),
+                        height: 70,
+                        width: 70,
+                      ),
+                      SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
+                      Text(
+                        cur_upgradable_app_info.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      Icon(
+                        size: 30,
+                        color: Colors.lightGreen.withValues(alpha: 1.0),
+                        Icons.cloud_upload_outlined,
+                      ),
+                      SizedBox(width: 20,),
+                      SizedBox(
+                        child: Text(
+                          '版本升级信息: ${cur_upgradable_app_info.curOldVersion ?? "未知的旧版本"} -> ${cur_upgradable_app_info.version}',
                           style: TextStyle(
                             fontSize: 20,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        Icon(
-                          size: 30,
-                          color: Colors.lightGreen.withValues(alpha: 1.0),
-                          Icons.cloud_upload_outlined,
-                        ),
-                        SizedBox(width: 20,),
-                        SizedBox(
-                          child: Text(
-                            '版本升级信息: ${cur_upgradable_app_info.curOldVersion ?? "未知的旧版本"} -> ${cur_upgradable_app_info.version}',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                    width: 90,
-                    child: button_upgrade
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 40,
+                  width: 90,
+                  child: button_upgrade
+                ),
+              ],
             ),
           ),
         ),

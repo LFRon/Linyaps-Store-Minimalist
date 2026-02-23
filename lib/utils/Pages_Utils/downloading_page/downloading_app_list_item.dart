@@ -68,123 +68,121 @@ class DownloadingAppListItem extends StatelessWidget {
                ? Colors.grey.shade800
                : Colors.grey.shade200,
       ),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: InkWell(
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 100),
-                reverseDuration: const Duration(milliseconds: 130),
-                child: AppInfoPage(
-                  appId: cur_app_info.id,
+      child: InkWell(
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        mouseCursor: SystemMouseCursors.click,
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 100),
+              reverseDuration: const Duration(milliseconds: 130),
+              child: AppInfoPage(
+                appId: cur_app_info.id,
+              ),
+            ),
+          );
+        },
+        child: Padding(
+          padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 30.0,right: 35.0),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: cur_app_info.Icon ?? '',
+                      placeholder: (context, url) => Center(
+                        child: YaruCircularProgressIndicator(
+                          strokeWidth:2.5,     // 设置加载条宽度
+                        ),
+                      ),
+                      // 如果图片无法加载就使用默认玲珑图标
+                      errorWidget: (context, error, stackTrace) => Center(
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/linyaps-generic-app.png',
+                          ),
+                        ),
+                      ),
+                      height: 70,
+                      width: 70,
+                    ),
+                    SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
+                    Text(
+                      cur_app_info.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.only(top:8.0,bottom: 8.0,left: 30.0,right: 35.0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Row(
+        
+              Expanded(
+                flex: 1,
+                child: Text(
+                  '版本: ${cur_app_info.version}',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              
+              Expanded(
+                flex: 2,
+                child: cur_app_info.downloadState == DownloadState.downloading
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      CachedNetworkImage(
-                        imageUrl: cur_app_info.Icon ?? '',
-                        placeholder: (context, url) => Center(
-                          child: YaruCircularProgressIndicator(
-                            strokeWidth:2.5,     // 设置加载条宽度
-                          ),
+                      SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: YaruCircularProgressIndicator(
+                          strokeWidth: 3.5,
                         ),
-                        // 如果图片无法加载就使用默认玲珑图标
-                        errorWidget: (context, error, stackTrace) => Center(
-                          child: Image(
-                            image: AssetImage(
-                              'assets/images/linyaps-generic-app.png',
-                            ),
-                          ),
-                        ),
-                        height: 70,
-                        width: 70,
                       ),
-                      SizedBox(width: 30,),  // 设置应用图标和名称的横向间距
+                      SizedBox(width: 20,),
                       Text(
-                        cur_app_info.name,
+                        '正在下载',
                         style: TextStyle(
                           fontSize: 20,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                  ),
-                ),
-          
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    '版本: ${cur_app_info.version}',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                
-                Expanded(
-                  flex: 2,
-                  child: cur_app_info.downloadState == DownloadState.downloading
-                    ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: YaruCircularProgressIndicator(
-                            strokeWidth: 3.5,
-                          ),
-                        ),
-                        SizedBox(width: 20,),
-                        Text(
-                          '正在下载',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    )
-                    : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        cur_app_info.downloadState == DownloadState.waiting
-                          ? Row(
-                            children: [
-                              Text(
-                                '正在等待下载',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
+                  )
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      cur_app_info.downloadState == DownloadState.waiting
+                        ? Row(
+                          children: [
+                            Text(
+                              '正在等待下载',
+                              style: TextStyle(
+                                fontSize: 20,
                               ),
-                              const SizedBox(width: 40,),
-                              SizedBox(
-                                width: 100,
-                                height: 40,
-                                child: cancel_waiting_button,
-                              )
-                            ],
-                          )
-                          : SizedBox(),
-                      ],
-                    ),
-                ),
-              ],
-            ),
+                            ),
+                            const SizedBox(width: 40,),
+                            SizedBox(
+                              width: 100,
+                              height: 40,
+                              child: cancel_waiting_button,
+                            )
+                          ],
+                        )
+                        : SizedBox(),
+                    ],
+                  ),
+              ),
+            ],
           ),
         ),
       ),
