@@ -152,11 +152,14 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 若不在,则认定为是用户本地安装的非商店版本
     // 并在加入至应用信息列表时开启本地安装标识
     if (app_local_info != null) {
-      LinyapsPackageInfo? is_app_local_info_in_store = cur_app_info_list!
-                                                       .firstWhereOrNull(
-                                                          (app) => app.id == appId && 
-                                                          app.version == app_local_info.version,
-                                                       );
+      LinyapsPackageInfo? is_app_local_info_in_store;
+      if (cur_app_info_list != null) {
+        is_app_local_info_in_store = cur_app_info_list!
+                                    .firstWhereOrNull(
+                                      (app) => app.id == appId && 
+                                      app.version == app_local_info.version,
+                                    );
+      }
       if (is_app_local_info_in_store == null) {
         app_local_info.is_app_local_only = true;
         cur_app_info_list!.insert(0, app_local_info);
