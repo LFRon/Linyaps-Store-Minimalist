@@ -231,7 +231,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 开启定时器开始定时更新页面信息
     checkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
       // 加入检查页面是否在加载开关,如果已经在加载则避免无意义的重复加载
-      if (mounted && (WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive || WidgetsBinding.instance.lifecycleState == null)) {
+      if (mounted && WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
         if (!is_installed_apps_loading) {
           await setInstalledAppsLoading();
           bool is_installed_apps_updated = await refreshInstalledApps();
