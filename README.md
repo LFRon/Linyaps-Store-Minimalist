@@ -10,8 +10,8 @@
 
 当前使用的技术栈:
 
-Flutter版本: 3.41.2
+Flutter版本: 3.41.3
 
-Dart版本: 3.11.0
+Dart版本: 3.11.1
 
 宿主Linux发行版: Debian GNU/Linux Testing x86-64
