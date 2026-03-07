@@ -46,7 +46,10 @@ dependencies:
   get: ^4.7.3
   flutter_single_instance: ^1.7.0
   args: ^2.7.0
-  yaru: ^9.0.1
+  yaru:
+    git: 
+      url: https://github.com/ubuntu/yaru.dart.git
+      ref: main
   page_transition: ^2.2.1
 
 dev_dependencies:

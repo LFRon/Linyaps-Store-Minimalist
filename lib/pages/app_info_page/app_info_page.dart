@@ -388,6 +388,8 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
         }
       }
     });
+
+    return;
   }
 
   @override
