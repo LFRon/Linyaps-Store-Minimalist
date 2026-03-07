@@ -79,9 +79,8 @@ class _AllAppsPageState extends State<AllAppsPage> with AutomaticKeepAliveClient
     cur_app_list = [];
 
     // 清理图片缓存
-    await CachedNetworkImageProvider.defaultCacheManager.dispose();
     PaintingBinding.instance.imageCache.clear();
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    await CachedNetworkImageProvider.defaultCacheManager.emptyCache();
     
     // 先重置页面加载状态
     await resetPageStatus();
