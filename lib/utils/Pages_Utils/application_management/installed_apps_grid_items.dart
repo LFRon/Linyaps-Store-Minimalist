@@ -3,7 +3,7 @@
 // 关闭VSCode的非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_function_literals_in_foreach_calls, curly_braces_in_flow_control_structures, use_build_context_synchronously
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
@@ -152,7 +152,7 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
                     ),
                   );
                 },
-                errorWidget: (context, error, stackTrace) => Center(
+                errorBuilder: (context, error, stackTrace) => Center(
                   child: Image(
                     image: AssetImage(
                       'assets/images/linyaps-generic-app.png',

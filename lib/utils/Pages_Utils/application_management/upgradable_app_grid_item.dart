@@ -3,7 +3,7 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/utils.dart';
@@ -120,7 +120,7 @@ class _UpgradableAppListItemState extends State<UpgradableAppListItem> {
                           ),
                         ),
                         // 如果图片无法加载就使用默认玲珑图标
-                        errorWidget: (context, error, stackTrace) => Center(
+                        errorBuilder: (context, error, stackTrace) => Center(
                           child: Image(
                             image: AssetImage(
                               'assets/images/linyaps-generic-app.png',

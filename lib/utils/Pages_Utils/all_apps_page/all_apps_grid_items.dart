@@ -3,7 +3,7 @@
 // 关闭VSCode的非必要报错
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, avoid_function_literals_in_foreach_calls
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -82,7 +82,7 @@ class _AllAppsPage_AppGridItemState extends State<AllAppsPage_AppGridItem> {
                     ),
                   ),
                   // 无法显示图片时显示错误
-                  errorWidget: (context, error, stackTrace) => Center(
+                  errorBuilder: (context, error, stackTrace) => Center(
                     child: SizedBox(
                       width: 80,
                       height: 80,

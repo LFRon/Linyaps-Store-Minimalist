@@ -3,6 +3,7 @@
 // 关闭VSCode非必要报错
 // ignore_for_file: curly_braces_in_flow_control_structures, non_constant_identifier_names, avoid_function_literals_in_foreach_calls
 
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -76,6 +77,12 @@ class _AllAppsPageState extends State<AllAppsPage> with AutomaticKeepAliveClient
     // 先重置curPage迭代器,cur_app_list列表里的应用信息
     curPageStart = 1;
     cur_app_list = [];
+
+    // 清理图片缓存
+    await CachedNetworkImageProvider.defaultCacheManager.dispose();
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
+    
     // 先重置页面加载状态
     await resetPageStatus();
     // 重新执行加载页面函数

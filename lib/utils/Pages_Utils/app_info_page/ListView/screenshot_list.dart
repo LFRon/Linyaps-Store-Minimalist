@@ -1,7 +1,7 @@
 // 显示应用截图的控件
 // ignore_for_file: must_be_immutable
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/widgets.dart';
 
@@ -29,7 +29,7 @@ class AppInfo_SCapList {
             ),
           ),
           // 无法显示图片时显示错误
-          errorWidget:(
+          errorBuilder:(
             context,
             error,
             stackTrace,
