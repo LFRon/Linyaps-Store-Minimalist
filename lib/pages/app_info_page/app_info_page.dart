@@ -379,8 +379,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
 
     // 开启定时器定时检查
     checkTimer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
-      if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused ||
-          WidgetsBinding.instance.lifecycleState != AppLifecycleState.inactive) {
+      if (mounted && WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
         if (is_page_loaded && !is_app_local_info_loading) {
           // 进行刷新本地安装的应用信息
           await appState.updateInstalledAppsList_Online();
