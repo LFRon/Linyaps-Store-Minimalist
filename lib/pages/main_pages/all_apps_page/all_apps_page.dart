@@ -22,7 +22,11 @@ class AllAppsPage extends StatefulWidget {
   State<AllAppsPage> createState() => _AllAppsPageState();
 }
 
-class _AllAppsPageState extends State<AllAppsPage> {
+class _AllAppsPageState extends State<AllAppsPage> with AutomaticKeepAliveClientMixin {
+
+  // 覆写页面希望保持存在状态开关
+  @override
+  bool get wantKeepAlive => true;
 
   // 声明存储当前已加载的所有应用信息列表对象
   List <LinyapsPackageInfo> cur_app_list = [];
@@ -203,6 +207,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
 
     // 获取当前窗口的相对长宽
     // double height = MediaQuery.of(context).size.height;

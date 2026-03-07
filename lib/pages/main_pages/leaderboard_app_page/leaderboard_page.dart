@@ -19,8 +19,12 @@ class LeaderboardPage extends StatefulWidget {
   State<LeaderboardPage> createState() => _LeaderboardPageState();
 }
 
-class _LeaderboardPageState extends State<LeaderboardPage> {
+class _LeaderboardPageState extends State<LeaderboardPage> with AutomaticKeepAliveClientMixin {
 
+  // 覆写页面希望保持存在状态开关
+  @override
+  bool get wantKeepAlive => true; 
+  
   // 声明网络连接状态,默认状态为不好
   bool is_connection_good = false;
 
@@ -97,6 +101,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     
     // 获取当前窗口的相对长宽
     // double height = MediaQuery.of(context).size.height;
