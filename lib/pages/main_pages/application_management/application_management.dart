@@ -36,7 +36,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
   bool get wantKeepAlive => true; 
 
   // 增加页面检查定时器
-  Timer? checkTimer;
+  late Timer checkTimer;
 
   // 检查页面自身是否为打开应用后的第一次加载,初始化为真
   bool _is_page_first_loading = true;
@@ -292,8 +292,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
     // 销毁时移除观察者
     WidgetsBinding.instance.removeObserver(this); 
     // 销毁定时器
-    checkTimer?.cancel();
-    checkTimer = null;
+    checkTimer.cancel();
     super.dispose();
   }
 

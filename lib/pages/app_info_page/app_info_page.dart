@@ -52,7 +52,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
   late MyButton_AppInfoPage_LaunchApp launch_app_button;
 
   // 启用页面监视定时器
-  Timer? checkTimer;
+  late Timer checkTimer;
 
   // 声明网络连接的状态对象,默认状态为连接不好
   bool is_connection_good = false;
@@ -159,10 +159,10 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                       (app) => app.id == appId && 
                                       app.version == app_local_info.version,
                                     );
-      }
-      if (is_app_local_info_in_store == null) {
-        app_local_info.is_app_local_only = true;
-        cur_app_info_list!.insert(0, app_local_info);
+        if (is_app_local_info_in_store == null) {
+          app_local_info.is_app_local_only = true;
+          cur_app_info_list!.insert(0, app_local_info);
+        }
       }
     }
     // 如果应用存在
@@ -404,8 +404,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
     // 在析构函数里移除观察者
     WidgetsBinding.instance.removeObserver(this);
     // 再移除定时器
-    checkTimer?.cancel();
-    checkTimer = null;
+    checkTimer.cancel();
     super.dispose();
   }
 
@@ -441,7 +440,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                   child: MyButton_Back(
                     // 定义返回操作
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, (route) => route.isFirst);
                     },
                     size: 20,
                   ),
@@ -736,7 +735,7 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                   height: 40,
                   child: MyButton_Back(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, (route) => route.isFirst);
                     },
                     size: 20,
                   ),
