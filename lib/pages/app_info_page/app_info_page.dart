@@ -6,6 +6,7 @@
 import 'dart:async';
 import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:linglong_store_flutter/utils/Pages_Utils/app_info_page/ListView/app_info_list_view.dart';
 import 'package:linglong_store_flutter/utils/Check_Connection_Status/check_connection_status.dart';
@@ -479,6 +480,11 @@ class AppInfoPageState extends State<AppInfoPage> with WidgetsBindingObserver {
                                         strokeWidth:2.5, // 设置加载条宽度
                                       ),
                                     ),
+                                    // fallback for .svg
+                                    unsupportedImageBuilder: (context, url, bytes) {
+                                      // `bytes` are the already-cached file bytes.
+                                      return SvgPicture.memory(bytes); // from flutter_svg
+                                    },
                                     // 无法显示图片时显示错误
                                     errorBuilder:(
                                       context,
