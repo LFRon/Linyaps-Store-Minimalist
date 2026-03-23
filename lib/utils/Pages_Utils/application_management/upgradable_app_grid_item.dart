@@ -5,6 +5,7 @@
 
 import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
@@ -119,6 +120,11 @@ class _UpgradableAppListItemState extends State<UpgradableAppListItem> {
                             ),  // 加载时显示进度条
                           ),
                         ),
+                        // fallback for .svg
+                        unsupportedImageBuilder: (context, url, bytes) {
+                          // `bytes` are the already-cached file bytes.
+                          return SvgPicture.memory(bytes); // from flutter_svg
+                        },
                         // 如果图片无法加载就使用默认玲珑图标
                         errorBuilder: (context, error, stackTrace) => Center(
                           child: Image(

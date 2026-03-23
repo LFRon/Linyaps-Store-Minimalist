@@ -5,6 +5,7 @@
 
 import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
@@ -68,34 +69,35 @@ class _AllAppsPage_AppGridItemState extends State<AllAppsPage_AppGridItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // 先显示图片
-              Hero(
-                tag: "NewestAppsGridItems_${cur_app.id}",
-                child: CachedNetworkImage(
-                  imageUrl: cur_app.Icon==null?"":cur_app.Icon!,
-                  placeholder: (context, url) => Center(
-                    child: SizedBox(
-                      height: 80,
-                      width: 80,
-                      child: YaruCircularProgressIndicator(
-                        strokeWidth: 2.5,
-                      ),  // 加载时显示进度条
-                    ),
+              CachedNetworkImage(
+                imageUrl: cur_app.Icon==null ? '' : cur_app.Icon!,
+                placeholder: (context, url) => Center(
+                  child: SizedBox(
+                    height: 80,
+                    width: 80,
+                    child: YaruCircularProgressIndicator(
+                      strokeWidth: 2.5,
+                    ),  // 加载时显示进度条
                   ),
-                  // 无法显示图片时显示错误
-                  errorBuilder: (context, error, stackTrace) => Center(
-                    child: SizedBox(
-                      width: 80,
-                      height: 80,
-                      child: Image(
-                        image: AssetImage(
-                          'assets/images/linyaps-generic-app.png',
-                        ),
+                ),
+                unsupportedImageBuilder: (context, url, bytes) {
+                  // `bytes` are the already-cached file bytes.
+                  return SvgPicture.memory(bytes); // from flutter_svg
+                },
+                // 无法显示图片时显示错误
+                errorBuilder: (context, error, stackTrace) => Center(
+                  child: SizedBox(
+                    width: 80,
+                    height: 80,
+                    child: Image(
+                      image: AssetImage(
+                        'assets/images/linyaps-generic-app.png',
                       ),
                     ),
                   ),
-                  height: 80,
-                  width: 80,
                 ),
+                height: 80,
+                width: 80,
               ),
               // SizedBox(height:height*0.03,),    // 设置控件间间距
               // 再显示应用名

@@ -5,6 +5,7 @@
 
 import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_CLI_Helper_API/linyaps_cli_helper.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
@@ -151,6 +152,11 @@ class _InstalledAppsGridItemsState extends State <InstalledAppsGridItems> {
                       ),  // 加载时显示进度条
                     ),
                   );
+                },
+                // fallback for .svg
+                unsupportedImageBuilder: (context, url, bytes) {
+                  // `bytes` are the already-cached file bytes.
+                  return SvgPicture.memory(bytes); // from flutter_svg
                 },
                 errorBuilder: (context, error, stackTrace) => Center(
                   child: Image(

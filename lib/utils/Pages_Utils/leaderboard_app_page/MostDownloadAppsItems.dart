@@ -5,6 +5,7 @@
 
 import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:linglong_store_flutter/pages/app_info_page/app_info_page.dart';
 import 'package:linglong_store_flutter/utils/Backend_API/Linyaps_Store_API/linyaps_package_info_model/linyaps_package_info.dart';
 import 'package:linglong_store_flutter/utils/GetSystemTheme/syscolor.dart';
@@ -68,30 +69,32 @@ class _MostDownloadAppGridItemState extends State<MostDownloadAppGridItem> {
               Column(
                 children: [
                   // 先显示图片
-                  Hero(
-                    tag: "NewestAppsGridItems_${appinfo.id}_${appinfo.version}",
-                    child: CachedNetworkImage(
-                      imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
-                      placeholder: (context, url) => Center(
-                        child: YaruCircularProgressIndicator(
-                          strokeWidth: 2.5,
-                        ),
+                  CachedNetworkImage(
+                    imageUrl: appinfo.Icon==null?"":appinfo.Icon!,
+                    placeholder: (context, url) => Center(
+                      child: YaruCircularProgressIndicator(
+                        strokeWidth: 2.5,
                       ),
-                      // 无法显示图片时显示错误
-                      errorBuilder: (context, error, stackTrace) => Center(
-                        child: SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: Image(
-                            image: AssetImage(
-                              'assets/images/linyaps-generic-app.png',
-                            ),
+                    ),
+                    // fallback for .svg
+                    unsupportedImageBuilder: (context, url, bytes) {
+                      // `bytes` are the already-cached file bytes.
+                      return SvgPicture.memory(bytes); // from flutter_svg
+                    },
+                    // 无法显示图片时显示错误
+                    errorBuilder: (context, error, stackTrace) => Center(
+                      child: SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/linyaps-generic-app.png',
                           ),
                         ),
                       ),
-                      height: 80,
-                      width: 80,
                     ),
+                    height: 80,
+                    width: 80,
                   ),
                   SizedBox(height: 20,),    // 设置控件间间距
                   // 再显示应用名
