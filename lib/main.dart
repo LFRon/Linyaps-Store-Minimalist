@@ -34,6 +34,9 @@ void main(List<String> args) async {
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
     bool isSingleInstance = await FlutterSingleInstance().isFirstInstance();
     if (!isSingleInstance) exit(0);
+
+    // 监听窗口关闭事件，实现快速退出
+    WindowManager.instance.addListener(_WindowCloseListener());
     
   } else exit(0);
 
@@ -66,6 +69,15 @@ void main(List<String> args) async {
     ),
   );
   
+}
+
+// 窗口关闭监听器 - 实现快速退出
+class _WindowCloseListener with WindowListener {
+  @override
+  void onWindowClose() async {
+    // 阻止默认的关闭行为，直接退出应用
+    exit(0);
+  }
 }
 
 class MyApp extends StatefulWidget {
