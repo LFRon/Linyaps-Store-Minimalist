@@ -23,12 +23,6 @@ void main(List<String> args) async {
 
   if (!kIsWasm && !kIsWeb) {
 
-    final windowManager = WindowManager.instance;
-    final window = windowManager.getCurrent();
-
-    // 设置窗口样式
-    window?.titleBarStyle = TitleBarStyle.normal;
-
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
     bool isSingleInstance = await FlutterSingleInstance().isFirstInstance();
     if (!isSingleInstance) exit(0);
