@@ -27,6 +27,7 @@ class MyButton_Back extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
+      mouseCursor: SystemMouseCursors.click,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

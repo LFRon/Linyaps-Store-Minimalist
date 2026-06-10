@@ -41,6 +41,7 @@ class _MyButton_AppManage_LaunchAppState extends State<MyButton_AppManage_Launch
           shape: RoundedRectangleBorder(  // 设置圆角
               borderRadius: BorderRadius.circular(12),
           ),
+          mouseCursor: SystemMouseCursors.click,
           onPressed: () async {    // 设置按下之后触发的函数(方法)   
             // 防止用户多次同时按下按钮,所以只允许按钮在is_pressed为假时才可以触发执行函数
             if (!value) {

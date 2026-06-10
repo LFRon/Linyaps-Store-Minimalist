@@ -32,6 +32,7 @@ class MyButton_SendWish extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
+      mouseCursor: SystemMouseCursors.click,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

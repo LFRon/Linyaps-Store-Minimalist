@@ -251,6 +251,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                             child: FloatingActionButton(
                               heroTag: "RecommendAppPage_FloatingActionButton_Left",
                               backgroundColor: YaruColors.warmGrey.withValues(alpha: 0.01),
+                              mouseCursor: SystemMouseCursors.click,
                               child: Icon(Icons.keyboard_double_arrow_left),
                               onPressed: () => carousel_controller.previousPage(),
                             ),
@@ -263,6 +264,7 @@ class _RecommendAppPageState extends State<RecommendAppPage> with AutomaticKeepA
                             child: FloatingActionButton(
                               heroTag: "RecommendAppPage_FloatingActionButton_Right",
                               backgroundColor: YaruColors.warmGrey.withValues(alpha: 0.01),
+                              mouseCursor: SystemMouseCursors.click,
                               child: Icon(Icons.keyboard_double_arrow_right),
                               onPressed: () => carousel_controller.nextPage(),
                             ),

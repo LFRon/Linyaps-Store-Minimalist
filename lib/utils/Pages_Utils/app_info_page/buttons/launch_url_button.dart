@@ -30,6 +30,7 @@ class MyButton_LaunchUrl extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         elevation: 0,
+        enabledMouseCursor: SystemMouseCursors.click,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
