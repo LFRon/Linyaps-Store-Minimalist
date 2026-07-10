@@ -13,7 +13,6 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/utils.dart';
 import 'package:linglong_store_flutter/pages/main_pages/main_middle_page.dart';
 import 'package:linglong_store_flutter/utils/Global_Variables/global_application_state.dart';
-import 'package:nativeapi/nativeapi.dart';
 import 'package:toastification/toastification.dart';
 import 'package:yaru/yaru.dart';
 
@@ -26,11 +25,6 @@ void main(List<String> args) async {
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
     bool isSingleInstance = await FlutterSingleInstance().isFirstInstance();
     if (!isSingleInstance) exit(0);
-
-    // 监听窗口关闭事件，实现快速退出
-    WindowManager.instance.setWillHideHook((windowId) {
-      exit(0);
-    });
     
   } else exit(0);
 
