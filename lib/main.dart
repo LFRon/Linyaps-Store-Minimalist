@@ -4,10 +4,13 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously, curly_braces_in_flow_control_structures
 
 import 'dart:io';
+import 'dart:ui';
 import 'package:args/args.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_single_instance/flutter_single_instance.dart';
+import 'package:flutter_window_close/flutter_window_close.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/utils.dart';
@@ -18,8 +21,6 @@ import 'package:yaru/yaru.dart';
 
 void main(List<String> args) async {
 
-  WidgetsFlutterBinding.ensureInitialized();   // 确保程序主窗口已加载
-
   if (!kIsWasm && !kIsWeb) {
 
     // 再检查当前应用实例是否为单实例 (也就是只打开了一个app没打开第二个), 若不是直接退出程序
@@ -27,6 +28,13 @@ void main(List<String> args) async {
     if (!isSingleInstance) exit(0);
     
   } else exit(0);
+
+  // 实现监听窗口关闭行为, 实现快速且正常的关闭窗口按钮按下时的退出行为
+  await FlutterWindowClose.setWindowShouldCloseHandler(() async {
+    await ServicesBinding.instance.exitApplication(AppExitType.required);
+    return false;
+  });
+  WidgetsFlutterBinding.ensureInitialized();   // 确保程序主窗口已加载
 
   // 创建GetX管理共享的ApplicationState实例
   Get.put(ApplicationState());
