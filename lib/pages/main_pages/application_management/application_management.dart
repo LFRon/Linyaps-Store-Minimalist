@@ -205,6 +205,7 @@ class AppsManagementPageState extends State<AppsManagementPage> with AutomaticKe
       _is_page_first_loading = false;
       // 先暴力异步加载页面信息
       Future.microtask(() async {
+        await Future.delayed(Duration(milliseconds: 1100));
         // 更新已安装的应用信息
         await updateInstalledAppsList();
         // 再更新网络连接状态
